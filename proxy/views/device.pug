@@ -1,0 +1,25 @@
+mixin devicesForStore(id)
+  p Devices within Store 
+    code 
+      strong urn:ngsi-ld:Store:#{id}
+  ul.devices
+    li.device(style="background-image: url('/img/door-locked.svg')")
+      code
+        strong door#{id}
+        | &nbsp;
+        span(id=`door${id}`)
+    li.device(style="background-image: url('/img/bell-off.svg')")
+      code 
+        strong bell#{id}
+        | &nbsp;
+        span(id=`bell${id}`)
+    li.device(style="background-image: url('/img/motion-sensor.svg')")
+      code 
+        strong motion#{id}
+        | &nbsp;
+        span(id=`motion${id}`)
+    li.device(style="background-image: url('/img/lamp-off.svg')")
+      code 
+        strong lamp#{id}
+        | &nbsp;
+        span(id=`lamp${id}`)
