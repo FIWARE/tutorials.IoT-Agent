@@ -1,6 +1,7 @@
 ![FIWARE Banner](https://fiware.github.io/tutorials.IoT-Agent/img/fiware.png)
 
-[![NGSI v2](https://img.shields.io/badge/Ultralight-2.0-pink.svg)](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
+[![NGSI v2](https://img.shields.io/badge/NGSI-v2-blue.svg)](http://fiware.github.io/context.Orion/api/v2/stable/)
+[![UltraLight 2.0](https://img.shields.io/badge/Ultralight-2.0-pink.svg)](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 
 
 This tutorial introduces the concept of an **IoT Agent** and wires up the dummy [UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) IoT devices created in the
@@ -21,6 +22,17 @@ The Orion Context Broker exclusively uses [NGSI](https://fiware.github.io/specif
 of its interactions. Each IoT Agent provides a **North Port** [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)  
 interface which is used for context broker interactions and all interactions beneath this port occur using the native protocol
 of the attached devices. 
+
+In effect, this brings a standard interface to all IoT interactions at the context information management level. 
+Each group of IoT devices are able to use their own propriatory protocols and disparate transport mechanisms under
+the hood whilst the associated IoT Agent offers a facade pattern to handle this complexity 
+
+IoT Agents already exist or are in development for many common protocols. Examples include the following: 
+
+* [IoTAgent-JSON](http://fiware-iotagent-json.readthedocs.io/en/latest/) (HTTP/MQTT transport) - a bridge between an HTTP/MQTT+JSON based protocol and [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
+* [IoTAgent-LWM2M](http://fiware-iotagent-lwm2m.readthedocs.io/en/latest)  (CoaP transport) - a bridge between the Lightweight M2M protocol and [NGSI]
+* [IoTAgent-UL](http://fiware-iotagent-ul.readthedocs.io/en/latest) (HTTP/MQTT transport) -  a bridge between the UltraLight2.0 protocol and [NGSI] 
+* [IoTagent-LoraWAN](http://fiware-lorawan.readthedocs.io/en/latest) (CoaP transport) -  a bridge between the LoraWAN protocol and [NGSI] 
 
 ## Southbound Traffic (Commands)
 
@@ -79,7 +91,7 @@ protocols, there will a large degree of similarity between IoT agents.
 * Holding a list of devices and mapping context data attributes to device syntax
 * Security Authorization
 
-This base functionality has been abstracted out into a [common library](https://fiware-iotagent-node-lib.readthedocs.org)
+This base functionality has been abstracted out into a common [IoT Agent framework library](https://fiware-iotagent-node-lib.readthedocs.org)
 
 #### Device Monitor
 
@@ -97,8 +109,8 @@ Both the Orion Context Broker and the IoT Agent rely on open source [MongoDB](ht
 
 Therefore the overall architecture will consist of the following elements:
 
-* The FIWARE [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) which will receive requests using [NGSI](http://fiware.github.io/specifications/ngsiv2/latest/)
-* The FIWARE [IoT Agent for UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/) which will receive southbound requests using [NGSI](http://fiware.github.io/specifications/ngsiv2/latest/) and convert them to  [UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) commands for the devices
+* The FIWARE [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) which will receive requests using [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
+* The FIWARE [IoT Agent for UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/) which will receive southbound requests using [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) and convert them to  [UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) commands for the devices
 * The underlying [MongoDB](https://www.mongodb.com/) database :
   + Used by the **Orion Context Broker** to hold context data information such as data entities, subscriptions and registrations
   + Used by the **IoT Agent** to hold device information such as device URLs and Keys
@@ -158,7 +170,7 @@ The `context-provider` container is driven by environment variables as shown:
 |IOTA_HTTP_HOST|`iot-agent`| The host name of the IoT Agent for UltraLight 2.0 - see below | 
 |IOTA_HTTP_PORT|`7896` | The port that the IoT Agent for UltraLight 2.0 will be listening on. `7896` is a common default for UltraLight over HTTP |
 |DUMMY_DEVICES_PORT|`3001`|Port used by the dummy IoT devices to receive commands |
-|DUMMY_DEVICES_API_KEY|`4jggokgpepnvsb2uv4s40d59ov`| Random security key used for UltraLight interactions - used to ensure the integrity of interactions between the devices and the missing IoT Agent |
+|DUMMY_DEVICES_API_KEY|`4jggokgpepnvsb2uv4s40d59ov`| Random security key used for UltraLight interactions - used to ensure the integrity of interactions between the devices and the IoT Agent |
 
 The other `context-provider` container configuration values described in the YAML file are not used in this tutorial.
 
@@ -217,7 +229,7 @@ The `iot-agent` container is driven by environment variables as shown:
 |IOTA_MONGO_HOST|`context-db`| The host name of mongoDB - used for holding device information |
 |IOTA_MONGO_PORT|`27017`| The port mongoDB is listening on |
 |IOTA_MONGO_DB|`iotagentul`| The name of the database used in mongoDB |
-|IOTA_HTTP_PORT|`7896`| The port where th IoT Agent listens for IoT device traffic over HTTP |
+|IOTA_HTTP_PORT|`7896`| The port where the IoT Agent listens for IoT device traffic over HTTP |
 |IOTA_PROVIDER_URL|`http://iot-agent:4041`| URL passed to the Context Broker when commands are registered, used as a forwarding URL location when the Context Broker issues a command to a device | 
 
 # Provisioning an IoT Agent
