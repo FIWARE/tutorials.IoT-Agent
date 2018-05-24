@@ -6,326 +6,604 @@
 	},
 	"item": [
 		{
-			"name": "Obtaining Version Information",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": ""
+			"name": "Context Broker",
+			"description": "",
+			"item": [
+				{
+					"name": "Obtain Device Context Data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "openiot"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://{{orion}}/v2/entities/",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"v2",
+								"entities",
+								""
+							]
+						},
+						"description": "This example returns the data of all `Store` entities within the context data"
+					},
+					"response": []
 				},
-				"description": "Once the IoT Agent is running, You can check the status by making an HTTP request to the exposed port. \nIf the response is blank, this is usually because the MongoDB database holding the context information is not running or not connected.\n\n>**Troubleshooting:** What if the response is blank ?\n>\n> * To check that a docker container is running try\n>\n>```bash\n>docker ps\n>```\n>\n>You should see several containers running. If `iot-agent` is not running, you can restart the containers as necessary."
-			},
-			"response": []
+				{
+					"name": "v2 - Register Bell ringing command",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "fiware-service",
+								"value": "openiot"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Bell Commands\",\n  \"dataProvided\": {\n    \"entities\": [\n      {\n        \"id\": \"urn:ngsi-ld:Bell:001\",\n        \"type\": \"Bell\"\n      }\n    ],\n    \"attrs\": [\n      \"ring\"\n    ]\n  },\n  \"provider\": {\n    \"http\": {\n      \"url\": \"http://orion:1026/v1\"\n    },\n     \"legacyForwarding\": true\n  }\n}"
+						},
+						"url": {
+							"raw": "http://{{orion}}/v2/registrations",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"v2",
+								"registrations"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "Store",
+									"description": "Entity type, to avoid ambiguity in case there are several entities with the same entity id",
+									"disabled": true
+								},
+								{
+									"key": "attrs",
+									"value": "name",
+									"description": "Ordered list of attribute names to display",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This example registers the Random Data Context Provider with the Orion Context Broker.\n\nThe body of the request states that: *\"The URL* `http://context-provider:3000/proxy/v1/random/weatherConditions` *is capable of providing* `relativeHumidity`  and `temperature` *data for the entity called* `id=urn:ngsi-ld:Store:001`.*\"*\n\nThe values are **never** held within Orion, it is always requested on demand from the registered context provider. Orion merely holds the registration information about which context providers can offer context data.\n\nThe presence of the flag `\"legacyForwarding\": true` indicates that the registered context provider offers an NGSI v1 interface - therefore Orion  will make POST request for data on `http://context-provider:3000/proxy/v1/random/weatherConditions/queryContext` using the NGSI v1 format for the body, and expect to receive data in the NGSI v1 format in return.\n\nThis request will return with a **201 - Created** response code. The `Location` Header of the response contains a path to the registration record held in Orion.\n\n>*Note:* if you have registered with the Weather API, you can retrieve live values for `temperature` and `relativeHumidity` in Berlin by placing the following `url` in the `provider`:\n>\n> * `http://context-provider:3000/proxy/v1/weather/weatherConditions`\n>"
+					},
+					"response": []
+				},
+				{
+					"name": "v1 - Register Bell ringing command",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "fiware-service",
+								"value": "openiot"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"contextRegistrations\": [\n        {\n            \"entities\": [\n                {\n                    \"type\": \"Bell\",\n                    \"isPattern\": \"false\",\n                    \"id\": \"urn:ngsi-ld:Bell:001\"\n                }\n            ],\n            \"attributes\": [\n                {\n                    \"name\": \"ring\",\n                    \"type\": \"command\",\n                    \"isDomain\": \"false\"\n                }\n            ],\n            \"providingApplication\": \"http://orion:1026\"\n        }\n    ],\n    \"duration\": \"P1M\"\n}"
+						},
+						"url": {
+							"raw": "http://{{orion}}/v1/registry/registerContext",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"v1",
+								"registry",
+								"registerContext"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "Store",
+									"description": "Entity type, to avoid ambiguity in case there are several entities with the same entity id",
+									"disabled": true
+								},
+								{
+									"key": "attrs",
+									"value": "name",
+									"description": "Ordered list of attribute names to display",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This example registers the Random Data Context Provider with the Orion Context Broker.\n\nThe body of the request states that: *\"The URL* `http://context-provider:3000/proxy/v1/random/weatherConditions` *is capable of providing* `relativeHumidity`  and `temperature` *data for the entity called* `id=urn:ngsi-ld:Store:001`.*\"*\n\nThe values are **never** held within Orion, it is always requested on demand from the registered context provider. Orion merely holds the registration information about which context providers can offer context data.\n\nThe presence of the flag `\"legacyForwarding\": true` indicates that the registered context provider offers an NGSI v1 interface - therefore Orion  will make POST request for data on `http://context-provider:3000/proxy/v1/random/weatherConditions/queryContext` using the NGSI v1 format for the body, and expect to receive data in the NGSI v1 format in return.\n\nThis request will return with a **201 - Created** response code. The `Location` Header of the response contains a path to the registration record held in Orion.\n\n>*Note:* if you have registered with the Weather API, you can retrieve live values for `temperature` and `relativeHumidity` in Berlin by placing the following `url` in the `provider`:\n>\n> * `http://context-provider:3000/proxy/v1/weather/weatherConditions`\n>"
+					},
+					"response": []
+				},
+				{
+					"name": "v1 - Bell Ring (Context Broker)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "openiot"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"contextElements\": [\n        {\n            \"type\": \"Bell\",\n            \"isPattern\": \"false\",\n            \"id\": \"urn:ngsi-ld:Bell:001\",\n            \"attributes\": [\n                {\n                    \"name\": \"ring\",\n                    \"type\": \"command\",\n                    \"value\": \"\"\n                }\n            ]\n        }\n    ],\n    \"updateAction\": \"UPDATE\"\n}"
+						},
+						"url": {
+							"raw": "http://{{orion}}/v1/updateContext",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"v1",
+								"updateContext"
+							]
+						},
+						"description": "This example returns the data of all `Store` entities within the context data"
+					},
+					"response": []
+				},
+				{
+					"name": "v2 - Bell Ring (Context Broker)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "openiot"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"ring\": {\n    \t\"type\" : \"command\",\n    \t\"value\" : \"\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://{{orion}}/v2/entities/urn:ngsi-ld:Bell:001/attrs",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"v2",
+								"entities",
+								"urn:ngsi-ld:Bell:001",
+								"attrs"
+							]
+						},
+						"description": "This example returns the data of all `Store` entities within the context data"
+					},
+					"response": []
+				},
+				{
+					"name": "Bell Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "openiot"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"ring\": {\n    \t\"type\" : \"command\",\n    \t\"value\" : \"\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://{{orion}}/v2/entities/urn:ngsi-ld:Bell:001",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"v2",
+								"entities",
+								"urn:ngsi-ld:Bell:001"
+							]
+						},
+						"description": "This example returns the data of all `Store` entities within the context data"
+					},
+					"response": []
+				},
+				{
+					"name": "Bell Ring Status",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "openiot"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://{{orion}}/v2/entities/urn:ngsi-ld:Bell:001/",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"v2",
+								"entities",
+								"urn:ngsi-ld:Bell:001",
+								""
+							]
+						},
+						"description": "This example returns the data of all `Store` entities within the context data"
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"name": "Register a service API key",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "fiware-service",
-						"value": "openiot"
-					},
-					{
-						"key": "fiware-servicepath",
-						"value": "/"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n \"services\": [\n   {\n     \"apikey\":      \"4jggokgpepnvsb2uv4s40d59ov\",\n     \"cbroker\":     \"http://orion:1026\",\n     \"entity_type\": \"Thing\",\n     \"resource\":    \"/iot/d\"\n   }\n ]\n}"
-				},
-				"url": {
-					"raw": "http://{{iot-agent}}/iot/services",
-					"protocol": "http",
-					"host": [
-						"{{iot-agent}}"
-					],
-					"path": [
-						"iot",
-						"services"
-					]
-				},
-				"description": "xxx"
-			},
-			"response": []
-		},
-		{
-			"name": "Get list of regsitered services",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "fiware-service",
-						"value": "openiot"
-					},
-					{
-						"key": "fiware-servicepath",
-						"value": "/"
-					}
-				],
-				"body": {},
-				"url": {
-					"raw": "http://{{iot-agent}}/iot/services",
-					"protocol": "http",
-					"host": [
-						"{{iot-agent}}"
-					],
-					"path": [
-						"iot",
-						"services"
-					]
-				},
-				"description": "Once the IoT Agent is running, You can check the status by making an HTTP request to the exposed port. \nIf the response is blank, this is usually because the MongoDB database holding the context information is not running or not connected.\n\n>**Troubleshooting:** What if the response is blank ?\n>\n> * To check that a docker container is running try\n>\n>```bash\n>docker ps\n>```\n>\n>You should see several containers running. If `iot-agent` is not running, you can restart the containers as necessary."
-			},
-			"response": []
-		},
-		{
-			"name": "Register a motion sensor device",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "fiware-service",
-						"value": "openiot"
-					},
-					{
-						"key": "fiware-servicepath",
-						"value": "/"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n \"devices\": [\n   {\n     \"device_id\":   \"motion01\",\n     \"entity_name\": \"urn:ngsd-ld:Motion:001\",\n     \"entity_type\": \"Motion\",\n     \"protocol\":    \"PDI-IoTA-UltraLight\",\n     \"timezone\":    \"Europe/Madrid\",\n     \"attributes\": [\n       {\n         \"object_id\": \"c\",\n         \"name\":      \"count\",\n         \"type\":      \"Integer\"\n       }\n     ]\n   }\n ]\n}\n"
-				},
-				"url": {
-					"raw": "http://{{iot-agent}}/iot/devices",
-					"protocol": "http",
-					"host": [
-						"{{iot-agent}}"
-					],
-					"path": [
-						"iot",
-						"devices"
-					]
-				},
-				"description": "xxx"
-			},
-			"response": []
-		},
-		{
-			"name": "Register a bell device",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "fiware-service",
-						"value": "openiot"
-					},
-					{
-						"key": "fiware-servicepath",
-						"value": "/"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"bell001\",\n      \"entity_name\": \"urn:ngsi-ld:Bell:001\",\n      \"entity_type\": \"Bell\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"resource\": \"/iot/d\",\n      \"commands\": [ \n          { \"object_id\": \"ring\", \"name\": \"ring\", \"type\": \"string\" }\n       ],\n       \"static_attributes\": [\n          { \"name\": \"serialID\", \"type\": \"02598347\" }\n    \t]\n    }\n  ]\n}\n"
-				},
-				"url": {
-					"raw": "http://{{iot-agent}}/iot/devices",
-					"protocol": "http",
-					"host": [
-						"{{iot-agent}}"
-					],
-					"path": [
-						"iot",
-						"devices"
-					]
-				},
-				"description": "xxx"
-			},
-			"response": []
-		},
-		{
-			"name": "Get list of regsitered devices",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "fiware-service",
-						"value": "openiot"
-					},
-					{
-						"key": "fiware-servicepath",
-						"value": "/"
-					}
-				],
-				"body": {},
-				"url": {
-					"raw": "http://{{iot-agent}}/iot/devices",
-					"protocol": "http",
-					"host": [
-						"{{iot-agent}}"
-					],
-					"path": [
-						"iot",
-						"devices"
-					]
-				},
-				"description": "Once the IoT Agent is running, You can check the status by making an HTTP request to the exposed port. \nIf the response is blank, this is usually because the MongoDB database holding the context information is not running or not connected.\n\n>**Troubleshooting:** What if the response is blank ?\n>\n> * To check that a docker container is running try\n>\n>```bash\n>docker ps\n>```\n>\n>You should see several containers running. If `iot-agent` is not running, you can restart the containers as necessary."
-			},
-			"response": []
-		},
-		{
-			"name": "Obtain Entity Data by type Copy Copy",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "text/plain"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "t|39#l|1200"
-				},
-				"url": {
-					"raw": "http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=my_device_01",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "7896",
-					"path": [
-						"iot",
-						"d"
-					],
-					"query": [
+			"name": "IoT Agent",
+			"description": "",
+			"item": [
+				{
+					"name": "Service Provisioning",
+					"description": "",
+					"item": [
 						{
-							"key": "k",
-							"value": "4jggokgpepnvsb2uv4s40d59ov"
+							"name": "Register a Service API key",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "fiware-service",
+										"value": "openiot"
+									},
+									{
+										"key": "fiware-servicepath",
+										"value": "/"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n \"services\": [\n   {\n     \"apikey\":      \"4jggokgpepnvsb2uv4s40d59ov\",\n     \"cbroker\":     \"http://orion:1026\",\n     \"entity_type\": \"Thing\",\n     \"resource\":    \"/iot/d\"\n   }\n ]\n}"
+								},
+								"url": {
+									"raw": "http://{{iot-agent}}/iot/services",
+									"protocol": "http",
+									"host": [
+										"{{iot-agent}}"
+									],
+									"path": [
+										"iot",
+										"services"
+									]
+								},
+								"description": "xxx"
+							},
+							"response": []
 						},
 						{
-							"key": "i",
-							"value": "my_device_01"
+							"name": "List all Registered Services",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "fiware-service",
+										"value": "openiot"
+									},
+									{
+										"key": "fiware-servicepath",
+										"value": "/"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "http://{{iot-agent}}/iot/services",
+									"protocol": "http",
+									"host": [
+										"{{iot-agent}}"
+									],
+									"path": [
+										"iot",
+										"services"
+									]
+								},
+								"description": "Once the IoT Agent is running, You can check the status by making an HTTP request to the exposed port. \nIf the response is blank, this is usually because the MongoDB database holding the context information is not running or not connected.\n\n>**Troubleshooting:** What if the response is blank ?\n>\n> * To check that a docker container is running try\n>\n>```bash\n>docker ps\n>```\n>\n>You should see several containers running. If `iot-agent` is not running, you can restart the containers as necessary."
+							},
+							"response": []
 						}
-					]
+					],
+					"_postman_isSubFolder": true
 				},
-				"description": "This example returns the data of all `Store` entities within the context data"
-			},
-			"response": []
+				{
+					"name": "Device Provisioning",
+					"description": "",
+					"item": [
+						{
+							"name": "Register a motion sensor device",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "fiware-service",
+										"value": "openiot"
+									},
+									{
+										"key": "fiware-servicepath",
+										"value": "/"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n \"devices\": [\n   {\n     \"device_id\":   \"motion001\",\n     \"entity_name\": \"urn:ngsd-ld:Motion:001\",\n     \"entity_type\": \"Motion\",\n     \"protocol\":    \"PDI-IoTA-UltraLight\",\n     \"timezone\":    \"Europe/Berlin\",\n     \"attributes\": [\n       {\n         \"object_id\": \"c\",\n         \"name\":      \"count\",\n         \"type\":      \"Integer\"\n       }\n     ]\n   }\n ]\n}\n"
+								},
+								"url": {
+									"raw": "http://{{iot-agent}}/iot/devices",
+									"protocol": "http",
+									"host": [
+										"{{iot-agent}}"
+									],
+									"path": [
+										"iot",
+										"devices"
+									]
+								},
+								"description": "xxx"
+							},
+							"response": []
+						},
+						{
+							"name": "Register a bell device",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "fiware-service",
+										"value": "openiot"
+									},
+									{
+										"key": "fiware-servicepath",
+										"value": "/"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"bell001\",\n      \"entity_name\": \"urn:ngsi-ld:Bell:001\",\n      \"entity_type\": \"Bell\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/bell001\",\n      \"commands\": [ \n        {\n          \"name\": \"ring\",\n          \"type\": \"command\"\n        }\n       ],\n       \"static_attributes\": [\n          { \"name\": \"serialID\", \"type\": \"02598347\" }\n    \t]\n    }\n  ]\n}\n"
+								},
+								"url": {
+									"raw": "http://{{iot-agent}}/iot/devices",
+									"protocol": "http",
+									"host": [
+										"{{iot-agent}}"
+									],
+									"path": [
+										"iot",
+										"devices"
+									]
+								},
+								"description": "xxx"
+							},
+							"response": []
+						},
+						{
+							"name": "List all Registered IoT Devices",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "fiware-service",
+										"value": "openiot"
+									},
+									{
+										"key": "fiware-servicepath",
+										"value": "/"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "http://{{iot-agent}}/iot/devices",
+									"protocol": "http",
+									"host": [
+										"{{iot-agent}}"
+									],
+									"path": [
+										"iot",
+										"devices"
+									]
+								},
+								"description": "Once the IoT Agent is running, You can check the status by making an HTTP request to the exposed port. \nIf the response is blank, this is usually because the MongoDB database holding the context information is not running or not connected.\n\n>**Troubleshooting:** What if the response is blank ?\n>\n> * To check that a docker container is running try\n>\n>```bash\n>docker ps\n>```\n>\n>You should see several containers running. If `iot-agent` is not running, you can restart the containers as necessary."
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Obtaining Version Information",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://{{iot-agent}}/iot/about",
+							"protocol": "http",
+							"host": [
+								"{{iot-agent}}"
+							],
+							"path": [
+								"iot",
+								"about"
+							]
+						},
+						"description": "Once the IoT Agent is running, You can check the status by making an HTTP request to the exposed port. \nIf the response is blank, this is usually because the MongoDB database holding the context information is not running or not connected.\n\n>**Troubleshooting:** What if the response is blank ?\n>\n> * To check that a docker container is running try\n>\n>```bash\n>docker ps\n>```\n>\n>You should see several containers running. If `iot-agent` is not running, you can restart the containers as necessary."
+					},
+					"response": []
+				},
+				{
+					"name": "Ring Bell (IoT Agent)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "openiot"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"contextElements\": [\n        {\n            \"type\": \"Bell\",\n            \"isPattern\": \"false\",\n            \"id\": \"urn:ngsi-ld:Bell:001\",\n            \"attributes\": [\n                {\n                    \"name\": \"ring\",\n                    \"type\": \"command\",\n                    \"value\": \"\"\n                }\n            ]\n        }\n    ],\n    \"updateAction\": \"UPDATE\"\n}"
+						},
+						"url": {
+							"raw": "http://{{iot-agent}}/v1/updateContext",
+							"protocol": "http",
+							"host": [
+								"{{iot-agent}}"
+							],
+							"path": [
+								"v1",
+								"updateContext"
+							]
+						},
+						"description": "This example returns the data of all `Store` entities within the context data"
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"name": "Get list of sensors Copy",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "fiware-service",
-						"value": "openiot"
+			"name": "Dummy Device",
+			"description": "",
+			"item": [
+				{
+					"name": "Measure Motion (UltraLight)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/plain"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "c|1"
+						},
+						"url": {
+							"raw": "http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=motion001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7896",
+							"path": [
+								"iot",
+								"d"
+							],
+							"query": [
+								{
+									"key": "k",
+									"value": "4jggokgpepnvsb2uv4s40d59ov"
+								},
+								{
+									"key": "i",
+									"value": "motion001"
+								}
+							]
+						},
+						"description": "This example returns the data of all `Store` entities within the context data"
 					},
-					{
-						"key": "fiware-servicepath",
-						"value": "/"
-					}
-				],
-				"body": {},
-				"url": {
-					"raw": "http://{{iot-agent}}/iot/devices",
-					"protocol": "http",
-					"host": [
-						"{{iot-agent}}"
-					],
-					"path": [
-						"iot",
-						"devices"
-					]
+					"response": []
 				},
-				"description": "Once the IoT Agent is running, You can check the status by making an HTTP request to the exposed port. \nIf the response is blank, this is usually because the MongoDB database holding the context information is not running or not connected.\n\n>**Troubleshooting:** What if the response is blank ?\n>\n> * To check that a docker container is running try\n>\n>```bash\n>docker ps\n>```\n>\n>You should see several containers running. If `iot-agent` is not running, you can restart the containers as necessary."
-			},
-			"response": []
-		},
-		{
-			"name": "Get a list of available services",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "fiware-service",
-						"value": "store"
+				{
+					"name": "Ring  a Bell (UltraLight)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "urn:ngsi-ld:Bell:001@ring"
+						},
+						"url": {
+							"raw": "{{ultralight}}/iot/bell001",
+							"host": [
+								"{{ultralight}}"
+							],
+							"path": [
+								"iot",
+								"bell001"
+							]
+						},
+						"description": "This example shows how the IoT broker sends commands to an actuator. The **Bell** has supplied an endpoint\n`/iot/bell001` where it is listening for commands.\n\nThe body of the request is in Ultralight syntax and consists of the `id` of the device (`urn:ngsi-ld:Bell:001`)\nas held in the Context Broker and the name of the command (`ring`) to invoke on the device.\n\nThe response returns the command and the result of the action.\n\nIf you are viewing the device monitor page, you can see the state of the bell change.\n\n![](https://fiware.github.io/tutorials.IoT-Sensors//img/bell-ring.gif)"
 					},
-					{
-						"key": "fiware-servicepath",
-						"value": "/motion"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"MQTT_2\",\n      \"entity_name\": \"Second MQTT Device\",\n      \"entity_type\": \"AnMQTTDevice\",\n      \"timezone\": \"America/Santiago\",\n      \"protocol\": \"MQTT_UL\",\n      \"transport\": \"MQTT\",\n      \"commands\": [\n        {\n          \"name\": \"PING\",\n          \"type\": \"command\"\n        }\n      ]\n    }\n  ]\n}\n"
-				},
-				"url": {
-					"raw": "http://{{iot-agent}}/iot/services",
-					"protocol": "http",
-					"host": [
-						"{{iot-agent}}"
-					],
-					"path": [
-						"iot",
-						"services"
-					]
-				},
-				"description": "xxx"
-			},
-			"response": []
-		},
-		{
-			"name": "Obtain Entity Data by type Copy",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "fiware-service",
-						"value": "openiot"
-					},
-					{
-						"key": "fiware-servicepath",
-						"value": "/"
-					}
-				],
-				"body": {},
-				"url": {
-					"raw": "http://{{orion}}/v2/entities/",
-					"protocol": "http",
-					"host": [
-						"{{orion}}"
-					],
-					"path": [
-						"v2",
-						"entities",
-						""
-					]
-				},
-				"description": "This example returns the data of all `Store` entities within the context data"
-			},
-			"response": []
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -352,16 +630,23 @@
 	],
 	"variable": [
 		{
-			"id": "2474f6b4-9656-4c86-836d-96074b666504",
+			"id": "1d23ef12-3e20-45f0-8328-f17930526d27",
 			"key": "iot-agent",
 			"value": "localhost:4041",
 			"type": "string",
 			"description": ""
 		},
 		{
-			"id": "d330b720-5938-46da-8927-13f9c1b1c735",
+			"id": "a1223f54-d892-4d85-aff3-1ce18ebbef4c",
 			"key": "orion",
 			"value": "localhost:1026",
+			"type": "string",
+			"description": ""
+		},
+		{
+			"id": "8e50d22e-2867-4a8b-bf96-7899f7a102bd",
+			"key": "ultralight",
+			"value": "localhost:3001",
 			"type": "string",
 			"description": ""
 		}

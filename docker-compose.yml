@@ -45,7 +45,6 @@ services:
     environment:
         - "IOTA_CB_HOST=orion" # name of the context broker to update context
         - "IOTA_CB_PORT=1026" # port the context broker listens on to update context
-        - "IOTA_PROVIDER_URL=http://localhost:4041" # URL for IoT updates
         - "IOTA_NORTH_PORT=4041"
         - "IOTA_REGISTRY_TYPE=mongodb" #Whether to hold IoT device info in memory or in a database
         - "IOTA_LOG_LEVEL=DEBUG" #The log level of the IoT Agent
@@ -54,6 +53,7 @@ services:
         - "IOTA_MONGO_PORT=27017" # The port mongoDB is listening on
         - "IOTA_MONGO_DB=iotagentul" # The name of the database used in mongoDB
         - "IOTA_HTTP_PORT=7896" # The port used for device traffic over HTTP
+        - "IOTA_PROVIDER_URL=http://iot-agent:4041"
 
   context-provider:
     image: fiware/cp-web-app:latest
