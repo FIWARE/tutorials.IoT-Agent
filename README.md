@@ -21,7 +21,7 @@ Both the Orion Context Broker and the IoT Agent rely on open source [MongoDB](ht
 
 Therefore the overall architecture will consist of the following elements:
 
-* The FIWARE [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/)which will receive requests using [NGSI](http://fiware.github.io/specifications/ngsiv2/latest/)
+* The FIWARE [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) which will receive requests using [NGSI](http://fiware.github.io/specifications/ngsiv2/latest/)
 * The FIWARE [IoT Agent for UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/) which will receive southbound requests using [NGSI](http://fiware.github.io/specifications/ngsiv2/latest/) and convert them to  [UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) commands for the devices
 * The underlying [MongoDB](https://www.mongodb.com/) database :
   + Used by the **Orion Context Broker** to hold context data information such as data entities, subscriptions and registrations
@@ -39,3 +39,19 @@ Therefore the overall architecture will consist of the following elements:
 Since all interactions between the elements are initiated by HTTP requests, the entities can be containerized and run from exposed ports. 
 
 ![](https://fiware.github.io/tutorials.IoT-Agent/img/architecture.png)
+
+
+# Next Steps
+
+Want to learn how to add more complexity to your application by adding advanced features?
+You can find out by reading the other tutorials in this series:
+
+&nbsp; 101. [Getting Started](https://github.com/Fiware/tutorials.Getting-Started)<br/>
+&nbsp; 102. [Entity Relationships](https://github.com/Fiware/tutorials.Entity-Relationships/)<br/>
+&nbsp; 103. [CRUD Operations](https://github.com/Fiware/tutorials.CRUD-Operations/)<br/>
+&nbsp; 104. [Context Providers](https://github.com/Fiware/tutorials.Context-Providers/)<br/>
+&nbsp; 105. [Altering the Context Programmatically](https://github.com/Fiware/tutorials.Accessing-Context/)<br/> 
+&nbsp; 106. [Subscribing to Changes in Context](https://github.com/Fiware/tutorials.Subscriptions/)<br/>
+
+&nbsp; 201. [Introduction to IoT Sensors](https://github.com/Fiware/tutorials.IoT-Sensors/)<br/>
+&nbsp; 202. [Provisioning an IoT Agent](https://github.com/Fiware/tutorials.IoT-Agent/)<br/>
