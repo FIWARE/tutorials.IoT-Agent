@@ -81,7 +81,7 @@ For example for a real-life **Motion Sensor** to send a count measurement the fo
 * Requests between **Iot-Device** and **IoT-Agent** use native protocols
 * Requests between **Iot-Agent** and **Context-Broker** use NGSI
 
-> **Note** Other more complex interactions are also ßpossible, but this overview is sufficient to understand the basic
+> **Note** Other more complex interactions are also possible, but this overview is sufficient to understand the basic
 > principles of an IoT Agent.
 
 ## Common Functionality
@@ -242,37 +242,91 @@ To follow the tutorial correctly please ensure you have the device monitor page 
 #### Device Monitor
 The device monitor can be found at: `http://localhost:3000/device/monitor`
 
+
+## Checking the IoT Agent Service Health
+ 
+You can check if the IoT Agent is running by making an HTTP request to the exposed port:
+
+```console
+curl -X GET http://localhost:4041/iot/about
+```
+
+The response will look similar to the following:
+
+```json
+{
+    "libVersion": "2.6.0-next",
+    "port": "4041",
+    "baseRoot": "/",
+    "version": "1.6.0-next"
+}
+```
+
+
+>**What if I get a `Failed to connect to localhost port 4041: Connection refused` Response?**
+>
+> If you get a `Connection refused` response, the IoT Agent cannot be found where expected
+> for this tutorial  - you will need to substitute the URL and port in each cUrl command with the 
+> corrected IP address. All the cUrl commands tutorial assume that the IoT Agent is available on `localhost:4041`. 
+> 
+>Try the following remedies:
+> * To check that the docker containers are running try the following:
+>
+>```console
+>docker ps
+>```
+>
+>You should see four containers running. If the IoT Agent is not running, you can restart the containers as necessary. 
+>This command will also display open port information.
+>
+> * If you have installed [`docker-machine`](https://docs.docker.com/machine/) and [Virtual Box](https://www.virtualbox.org/), the
+> context broker, IoT Agent and Dummy Device docker containers may be running from another IP address -  you will need 
+> to retrieve the virtual host IP as shown:
+>
+>```console
+>curl -X GET http://$(docker-machine ip default):4041/version
+>```
+>
+> Alternatively run all your curl commands from within the container network:
+>
+>```console
+>docker run --network fiware_default --rm appropriate/curl -s \
+>  -X GET http://iot-agent:4041/iot/about
+>```
+
+
 ## Connecting IoT Devices
 
-Invoking group provision is always the the first step in connecting devices since the IoT Agent 
-it is always necessary to supply an authentication key with each measurement and the IoT Agent
-will not initially know which URL the context broker is responding on.
+The IoT Agent acts as a middleware between the IoT devices and the context broker. It therefore
+needs to be able to create context data entities with unique ids.  Once a service has been provisioned
+and an unknown device makes a measurement the IoT Agent add this to the context using the supplied
+`<device-id>` (unless the device is recognized and can be mapped to a known id.
 
-It is possible to set up default commands and attributes for all devices as well, but this
+There is no guarantee that every supplied IoT device `<device-id>` will always be unique, therefore 
+all provisioning requests to the IoT Agent require two mandatory headers:
+
+* `fiware-service` header is defined so that entities for a given service can be held in a separate mongoDB database.
+* `fiware-servicepath` can be used to differenciate between arrays of devices. 
+
+For example within a smart city application you would expect different `fiware-service` headers for different
+departments (e.g. parks, transport, refuse collection etc.) and each `fiware-servicepath`  would refer to specific park 
+and so on. This would mean that data and devices for each service can be identified and separated as needed, but the
+data would not be siloed - for example data from a  **Smart Bin** within a park can be combined with the **GPS Unit** 
+of a refuse truck to alter the route of the truck in an efficient manner. 
+
+The **Smart Bin** and **GPS Unit** are likely to come from different manufacturers and it cannot be 
+guaranteed that that there is no overlap within `<device-ids>`s used. The use of the  `fiware-service` and
+`fiware-servicepath` headers can ensure that this is always the case, and allows the context broker to identify
+the original source of the context data.
+
+### Provisioning a Service Group
+
+Invoking group provision is always the the first step in connecting devices since it is always necessary to
+supply an authentication key with each measurement and the IoT Agent will not initially know which URL the 
+context broker is responding on.
+
+It is also possible to set up default commands and attributes for all anonymous devices as well, but this
 is not done within this tutorial as we will be provisioning each device separately.
-
-If a service group has been provisioned and an anonymous device makes a measurement request to a
-serviced endpoint, then the `<device-id>` of the IoT device will be used to create an entity 
-within the context broker e.g.:
-
-```
-http://iot-agent:7896/<resource>?i=<device-id>&k=<apikey>
-```
-
-Even if different services are using different `<resource>` endpoints there is no guarantee that 
-every `<device-id>` will always be unique, therefore  all provisioning requests require two mandatory 
-headers. `fiware-service` and `fiware-servicepath` to ensure uniqueness when storing the service information.
-
-The `fiware-service` header defined so that entities for this service a held in a separate mongoDB database.
-The `fiware-servicepath` can be used to differenciate arrays of devices. For example within a smart city
-application you would expect different `firware-service` headers for different departments (e.g. parks,
-transport, refuse collection etc.) and each `fiware-servicepath`  would refer to specific park and so on.
-
-This would mean that data and devices for each service can be identified and separated as needed, but data would 
-not be siloed - for example data from a  **Smart Bin** within a park can be combined with the GPS of a refuse truck to
-alter the route of the truck in an efficient manner.
-
-### Provisioning a Service
 
 This example provisions an anonymous group of devices. It tells the IoT Agent that a series of devices
 will be sending messages to the `IOTA_HTTP_PORT` (where the IoT Agent is listening for **Northbound** communications)
@@ -282,9 +336,7 @@ will be sending messages to the `IOTA_HTTP_PORT` (where the IoT Agent is listeni
 ```console
 curl -X POST \
   'http://{{iot-agent}}/iot/services' \
-  -H 'Cache-Control: no-cache' \
   -H 'Content-Type: application/json' \
-  -H 'Postman-Token: 133dfc62-f76c-41af-a1c7-657e3bd36bb2' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
   -d '{
@@ -307,17 +359,218 @@ be sending GET or POST requests to:
 http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov
 ```
 
-Which should be familiar UltraLight 2.0 syntax from the previous tutorial.
+Which should be familiar UltraLight 2.0 syntax from the [previous tutorial](https://github.com/Fiware/tutorials.IoT-Sensors).
 
-When a request is received on this url it needs to be interpreted and passed to the context broker. The `entity_type` attribute provides a default `type` for each device which has made a request (in this case anonymous devices will be known as `Thing`
-entities. Furthermore the location of the context broker is required, so that the IoT Agent can pass on any measurements 
-received.
-
-Invoking group provision is always the the first step in connecting devices since the IoT Agent it is always necessary to
-supply an authentication key with each measurement and the IoT Agent will not initially know which URL the context broker
-is responding on.
+When a measurement from an IoT device is received on the resource url it needs to be interpreted and passed
+to the context broker. The `entity_type` attribute provides a default `type` for each device which has made a 
+request (in this case anonymous devices will be known as `Thing` entities. Furthermore the location of the 
+context broker is required, so that the IoT Agent can pass on any measurements received to the correct location.
 
 
+### Provisioning a Sensor
+
+It is common good practice to use URNs following the NGSI-LD [draft recommendation](https://docbox.etsi.org/ISG/CIM/Open/ISG_CIM_NGSI-LD_API_Draft_for_public_review.pdf) when creating entities. Furthermore it is easier to understand
+meaningful names when defining data attributes. These mappings can be defined by provisioning a device individually.
+
+Three types of meaasurement attributes can be provisioned:
+
+* `attributes` are active readings from the device
+* `lazy` attributes are only sent on request -  The IoT Agent will inform the device to return the measurement
+* `static_attributes` are as the name suggests static data about the device (such as relationships) passed on 
+  to the context broker.
+
+>**Note**: in the case where individual `id`s are not required, or aggregated data is sufficient 
+> the `attributes` can be defined within the provisioning service rather than individually.
+
+#### Request:
+
+```console
+curl -X POST \
+  'http://{{iot-agent}}/iot/devices' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+ "devices": [
+   {
+     "device_id":   "motion001",
+     "entity_name": "urn:ngsd-ld:Motion:001",
+     "entity_type": "Motion",
+     "protocol":    "PDI-IoTA-UltraLight",
+     "timezone":    "Europe/Berlin",
+     "attributes": [
+       { "object_id": "c", "name": "count", "type": "Integer" }
+     ],
+     "static_attributes": [
+       { "name":"refStore", "type": "Relationship", "value": "urn:ngsi-ld:Store:001"}
+     ]
+   }
+ ]
+}
+'
+```
+In the request we are assiociating the device `motion001` with the URN `urn:ngsd-ld:Motion:001`
+and mapping the device reading `c` with the context attribute `count` (which is defined as an `Integer`)
+A `refStore` is defined as a `static_attribute`, placing the device within **Store** `urn:ngsi-ld:Store:001`
+
+You can simulate a dummy IoT device measurement coming from the **Motion Sensor** device `motion001`, by 
+making the following request
+
+#### Request:
+
+```console
+curl -X POST \
+  'http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=motion001' \
+  -H 'Content-Type: text/plain' \
+  -d 'c|1'
+```
+
+A similar request was made in the previous tutorial (before the IoT Agent was connected)
+when the door was unlocked, you will have seen the state of each motion sensor changing
+and a Northbound request will be logged in the device monitor.
+
+Now the IoT Agent is connected, the service group has defined the resource upon which the
+IoT Agent is listening (`iot/d`) and the API key used to authenticate the request (`4jggokgpepnvsb2uv4s40d59ov`).
+Since both of these are recognized, the measurement is valid.
+
+Because we have specifically provisioned the device (`motion001`) - the IoT Agent is able to map attributes
+before raising a request with the Orion Context Broker.
+
+You can see that a measurement has been recorded, by retrieving the entity data from the context broker.
+Don't forget to add the `fiware-service` and `fiware-service-path` headers.
+
+#### Request:
+
+```console
+curl -X GET \
+  'http://{{orion}}/v2/entities/urn:ngsd-ld:Motion:001' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /'
+```
+
+#### Response:
+
+```json
+{
+    "id": "urn:ngsd-ld:Motion:001", "type": "Motion",
+    "TimeInstant": {
+        "type": "ISO8601","value": "2018-05-25T10:51:32.00Z", 
+        "metadata": {}
+    },
+    "count": {
+        "type": "Integer","value": "1",
+        "metadata": {
+            "TimeInstant": {"type": "ISO8601","value": "2018-05-25T10:51:32.646Z"}
+        }
+    }
+}
+```
+
+The response shows that the **Motion Sensor** device with `id=motion001` has been successfully identifed by the
+IoT Agent and mapped to the entity `id=urn:ngsd-ld:Motion:001`. This new entity has been created within the context data.
+The `c`  attribute from the dummy device measurement request has been mapped to the more meaningful `count` attribute
+within the context. As you will notice, a `TimeInstant` attribute has been added to both the entity and the
+meta data of the attribute - this represents the last time the entity and attribute have been updated, and is
+automatically added to each new entity because the `IOTA_TIMESTAMP`  environment variable was set when the
+IoT Agent was started up.
+
+
+### Provisioning an Actuator
+
+Provisioning an actuator is similar to provisioning a sensor. This time an `endpoint` attribute holds
+the location where the IoT Agent needs to send the UltraLight command and the `commands` array includes
+a list of each command that can be invoked. The example below provisions a bell with the `deviceId=bell001`.
+The endpoint is `http://context-provider:3001/iot/bell001` and it can accept the `ring` command.
+
+#### Request:
+
+```console
+curl -X POST \
+  'http://{{iot-agent}}/iot/devices' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "devices": [
+    {
+      "device_id": "bell001",
+      "entity_name": "urn:ngsi-ld:Bell:001",
+      "entity_type": "Bell",
+      "protocol": "PDI-IoTA-UltraLight",
+      "transport": "HTTP",
+      "endpoint": "http://context-provider:3001/iot/bell001",
+      "commands": [ 
+        { "name": "ring", "type": "command" }
+       ],
+       "static_attributes": [
+         {"name":"refStore", "type": "Relationship","value": "urn:ngsi-ld:Store:001"}
+      ]
+    }
+  ]
+}
+'
+```
+
+A command can be invoked within IoT Agent by amending the context of the device using the NGSI v1 `/v1/updateContext` endpoint.
+This will endpoint will eventually be invoked by the context broker once we have wired it up. To test the configuration you
+can run the command directly as shown:
+
+#### Request:
+
+```console
+curl -X POST \
+  'http://{{iot-agent}}/v1/updateContext' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+    "contextElements": [
+        {
+            "type": "Bell",
+            "isPattern": "false",
+            "id": "urn:ngsi-ld:Bell:001",
+            "attributes": [
+                { "name": "ring", "type": "command", "value": "" }
+            ],
+            "static_attributes": [
+               {"name":"refStore", "type": "Relationship","value": "urn:ngsi-ld:Store:001"}
+            ]
+        }
+    ],
+    "updateAction": "UPDATE"
+}'
+```
+
+#### Response:
+
+```json
+{
+    "contextResponses": [
+        {
+            "contextElement": {
+                "attributes": [
+                    {
+                        "name": "ring",
+                        "type": "command",
+                        "value": ""
+                    }
+                ],
+                "id": "urn:ngsi-ld:Bell:001",
+                "isPattern": false,
+                "type": "Bell"
+            },
+            "statusCode": {
+                "code": 200,
+                "reasonPhrase": "OK"
+            }
+        }
+    ]
+}
+```
+
+If you are viewing the device monitor page, you can also see the state of the bell change.
+
+![](https://fiware.github.io/tutorials.IoT-Agent/img/bell-ring.gif)
 
 
 ## Enabling Context Broker Commands
@@ -329,7 +582,7 @@ xxxxxx
 xxxxxx
 
 
-# Service Group  CRUD Actions
+# Service Group CRUD Actions
 
 The **CRUD** operations for subscriptions map on to the expected HTTP verbs under the `/iot/services` endpoint
 
@@ -489,8 +742,9 @@ Use the `<device-id>` to uniquely identify a device.
 
 ### Creating a Provisioned Device
 
-This example provisions an anonymous group of devices. It tells the IoT Agent that a series of devices
-will be sending messages to the `IOTA_HTTP_PORT` (where the IoT Agent is listening for **Northbound** communications)
+This example provisions an individual device. It maps the `device_id=bell002` to the entity URN `urn:ngsi-ld:Bell:002` and gives the
+entity a type `Bell`. The IoT Agent has been informed that the device offers a single `ring` `command` and is listening on 
+`http://context-provider:3001/iot/bell002` using HTTP. `attributes`, `lazy` attributes and `static_attributes` can also be provisioned.
 
 #### Request:
 
