@@ -5,7 +5,7 @@
 
 
 This tutorial introduces the concept of an **IoT Agent** and wires up the dummy [UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) IoT devices created in the
-[previous tutorial](https://github.com/Fiware/tutorials.Context-Providers/) so that measurements can be read 
+[previous tutorial](https://github.com/Fiware/tutorials.IoT-Sensors) so that measurements can be read 
 and commands can be sent using [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) requests sent to the [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/).
 
 The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also available as [Postman documentation](http://fiware.github.io/tutorials.IoT-Agent/)
@@ -19,20 +19,20 @@ using their own native protocols. IoT Agents should also be able to deal with se
 platform (authentication and authorization of the channel) and provide other common services to the device programmer.
 
 The Orion Context Broker exclusively uses [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) requests for all
-of its interactions. Each IoT Agent provides a **North Port** [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)  
-interface which is used for context broker interactions and all interactions beneath this port occur using the native protocol
+of its interactions. Each IoT Agent provides a **North Port** [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
+interface which is used for context broker interactions and all interactions beneath this port occur using the **native protocol**
 of the attached devices. 
 
 In effect, this brings a standard interface to all IoT interactions at the context information management level. 
 Each group of IoT devices are able to use their own propriatory protocols and disparate transport mechanisms under
-the hood whilst the associated IoT Agent offers a facade pattern to handle this complexity 
+the hood whilst the associated IoT Agent offers a facade pattern to handle this complexity.
 
-IoT Agents already exist or are in development for many common protocols. Examples include the following: 
+IoT Agents already exist or are in development for many common transports and protocols. Examples include the following: 
 
-* [IoTAgent-JSON](http://fiware-iotagent-json.readthedocs.io/en/latest/) (HTTP/MQTT transport) - a bridge between an HTTP/MQTT+JSON based protocol and [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
-* [IoTAgent-LWM2M](http://fiware-iotagent-lwm2m.readthedocs.io/en/latest)  (CoaP transport) - a bridge between the Lightweight M2M protocol and [NGSI]
-* [IoTAgent-UL](http://fiware-iotagent-ul.readthedocs.io/en/latest) (HTTP/MQTT transport) -  a bridge between the UltraLight2.0 protocol and [NGSI] 
-* [IoTagent-LoraWAN](http://fiware-lorawan.readthedocs.io/en/latest) (CoaP transport) -  a bridge between the LoraWAN protocol and [NGSI] 
+* [IoTAgent-JSON](http://fiware-iotagent-json.readthedocs.io/en/latest/) (HTTP/MQTT transport) - a bridge between an HTTP/MQTT+JSON based protocol and NGSI
+* [IoTAgent-LWM2M](http://fiware-iotagent-lwm2m.readthedocs.io/en/latest)  (CoaP transport) - a bridge between the Lightweight M2M protocol and NGSI
+* [IoTAgent-UL](http://fiware-iotagent-ul.readthedocs.io/en/latest) (HTTP/MQTT transport) -  a bridge between the UltraLight2.0 protocol and NGSI 
+* [IoTagent-LoraWAN](http://fiware-lorawan.readthedocs.io/en/latest) (CoaP transport) -  a bridge between the LoraWAN protocol and NGSI
 
 ## Southbound Traffic (Commands)
 
@@ -81,6 +81,9 @@ For example for a real-life **Motion Sensor** to send a count measurement the fo
 * Requests between **Iot-Device** and **IoT-Agent** use native protocols
 * Requests between **Iot-Agent** and **Context-Broker** use NGSI
 
+> **Note** Other more complex interactions are also ßpossible, but this overview is sufficient to understand the basic
+> principles of an IoT Agent.
+
 ## Common Functionality
 
 As can be seen from the previous sections, although each IoT Agent will be unique since they interpret different
@@ -122,7 +125,7 @@ Therefore the overall architecture will consist of the following elements:
   + Display store information
   + Show which products can be bought at each store
   + Allow users to "buy" products and reduce the stock count.
-* A webserver acting as set of dummy IoT devices using the [UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) protocol running over HTTP.
+* A webserver acting as set of [dummy IoT devices]](https://github.com/Fiware/tutorials.IoT-Sensors) using the [UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) protocol running over HTTP.
 
 Since all interactions between the elements are initiated by HTTP requests, the entities can be containerized and run from exposed ports. 
 
@@ -239,15 +242,426 @@ To follow the tutorial correctly please ensure you have the device monitor page 
 #### Device Monitor
 The device monitor can be found at: `http://localhost:3000/device/monitor`
 
-## Service
+## Connecting IoT Devices
 
-## Device
+Invoking group provision is always the the first step in connecting devices since the IoT Agent 
+it is always necessary to supply an authentication key with each measurement and the IoT Agent
+will not initially know which URL the context broker is responding on.
+
+It is possible to set up default commands and attributes for all devices as well, but this
+is not done within this tutorial as we will be provisioning each device separately.
+
+If a service group has been provisioned and an anonymous device makes a measurement request to a
+serviced endpoint, then the `<device-id>` of the IoT device will be used to create an entity 
+within the context broker e.g.:
+
+```
+http://iot-agent:7896/<resource>?i=<device-id>&k=<apikey>
+```
+
+Even if different services are using different `<resource>` endpoints there is no guarantee that 
+every `<device-id>` will always be unique, therefore  all provisioning requests require two mandatory 
+headers. `fiware-service` and `fiware-servicepath` to ensure uniqueness when storing the service information.
+
+The `fiware-service` header defined so that entities for this service a held in a separate mongoDB database.
+The `fiware-servicepath` can be used to differenciate arrays of devices. For example within a smart city
+application you would expect different `firware-service` headers for different departments (e.g. parks,
+transport, refuse collection etc.) and each `fiware-servicepath`  would refer to specific park and so on.
+
+This would mean that data and devices for each service can be identified and separated as needed, but data would 
+not be siloed - for example data from a  **Smart Bin** within a park can be combined with the GPS of a refuse truck to
+alter the route of the truck in an efficient manner.
+
+### Provisioning a Service
+
+This example provisions an anonymous group of devices. It tells the IoT Agent that a series of devices
+will be sending messages to the `IOTA_HTTP_PORT` (where the IoT Agent is listening for **Northbound** communications)
+
+#### Request:
+
+```console
+curl -X POST \
+  'http://{{iot-agent}}/iot/services' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Content-Type: application/json' \
+  -H 'Postman-Token: 133dfc62-f76c-41af-a1c7-657e3bd36bb2' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+ "services": [
+   {
+     "apikey":      "4jggokgpepnvsb2uv4s40d59ov",
+     "cbroker":     "http://orion:1026",
+     "entity_type": "Thing",
+     "resource":    "/iot/d"
+   }
+ ]
+}'
+```
+
+In the example the IoT Agent is informed that the `/iot/d` endpoint will be used and that devices will authenticate
+themselves by including the token `4jggokgpepnvsb2uv4s40d59ov`. For an UltraLight IoT Agent this means devices will
+be sending GET or POST requests to: 
+
+```
+http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov
+```
+
+Which should be familiar UltraLight 2.0 syntax from the previous tutorial.
+
+When a request is received on this url it needs to be interpreted and passed to the context broker. The `entity_type` attribute provides a default `type` for each device which has made a request (in this case anonymous devices will be known as `Thing`
+entities. Furthermore the location of the context broker is required, so that the IoT Agent can pass on any measurements 
+received.
+
+Invoking group provision is always the the first step in connecting devices since the IoT Agent it is always necessary to
+supply an authentication key with each measurement and the IoT Agent will not initially know which URL the context broker
+is responding on.
+
+
+
+
+## Enabling Context Broker Commands
 
 
 xxxxxx
 xxxxxx
 xxxxxx
 xxxxxx
+
+
+# Service Group  CRUD Actions
+
+The **CRUD** operations for subscriptions map on to the expected HTTP verbs under the `/iot/services` endpoint
+
+* **Create** - HTTP POST
+* **Read** - HTTP GET
+* **Update** - HTTP PUT
+* **Delete** - HTTP DELETE
+
+Use the `resource` and `apikey` parameters to uniquely identify a service group.
+
+
+### Creating a Service Group
+
+This example provisions an anonymous group of devices. It tells the IoT Agent that a series of devices
+will be sending messages to the `IOTA_HTTP_PORT` (where the IoT Agent is listening for **Northbound** communications)
+
+#### Request:
+
+```console
+curl -X POST \
+  'http://{{iot-agent}}/iot/services' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+ "services": [
+   {
+     "apikey":      "4jggokgpepnvsb2uv4s40d59ov",
+     "cbroker":     "http://orion:1026",
+     "entity_type": "Thing",
+     "resource":    "/iot/d"
+   }
+ ]
+}'
+```
+
+### Read Service Group Details
+
+This example obtains the full details of a provisioned service with a given `resource` path.
+
+Service group details can be read by making a GET request to the `/iot/services` endpoint and providing a `resource` parameter.
+
+#### Request:
+
+```console
+curl -X GET \
+  'http://{{iot-agent}}/iot/services?resource=/iot/d' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /'
+```
+
+#### Response:
+
+```json
+{
+    "_id": "5b07b2c3d7eec57836ecfed4",
+    "subservice": "/",
+    "service": "openiot",
+    "apikey": "4jggokgpepnvsb2uv4s40d59ov",
+    "resource": "/iot/d",
+    "attributes": [],
+    "lazy": [],
+    "commands": [],
+    "entity_type": "Thing",
+    "internal_attributes": [],
+    "static_attributes": []
+}
+```
+
+The response includes all the defaults associated with each service group such as the `entity_type` and any default commands or attribute mappings.
+
+
+### List all Service Groups
+
+This example lists all provisioned services by making a GET request to the `/iot/services` endpoint.
+
+#### Request:
+
+```console
+curl -X GET \
+  'http://{{iot-agent}}/iot/services' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /'
+```
+
+#### Response:
+
+```json
+{
+    "_id": "5b07b2c3d7eec57836ecfed4",
+    "subservice": "/",
+    "service": "openiot",
+    "apikey": "4jggokgpepnvsb2uv4s40d59ov",
+    "resource": "/iot/d",
+    "attributes": [],
+    "lazy": [],
+    "commands": [],
+    "entity_type": "Thing",
+    "internal_attributes": [],
+    "static_attributes": []
+}
+```
+
+The response includes all the defaults associated with each service group such as the `entity_type` and any default commands or attribute mappings.
+
+### Update a Service Group
+
+This example updates an existing service group with a given `resource` path and `apikey`
+
+Service group details can be updated by making a PUT request to the `/iot/services` endpoint 
+and providing a `resource` and `apikey` parameters.
+
+
+#### Request:
+
+```console
+curl -X PUT \
+  'http://{{iot-agent}}/iot/services?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "entity_type": "IoT-Device"
+}'
+```
+
+### Delete a Service Group
+
+This example removes a provisioned service group by making a DELETE request to the `/iot/services/` endpoint.
+
+It means that requests to `http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov`
+(where the IoT Agent is listening for **Northbound** communications) should no longer be processed by the IoT Agent. 
+The `apiKey` and `resource` parameters must be supplied in order to identify the service group to be deleted.
+
+
+#### Request:
+
+```console
+curl -X DELETE \
+  'http://{{iot-agent}}/iot/services/?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /'
+```
+
+
+# Device CRUD Actions
+
+The **CRUD** operations for subscriptions map on to the expected HTTP verbs under the `/iot/devices` endpoint
+
+* **Create** - HTTP POST
+* **Read** - HTTP GET
+* **Update** - HTTP PUT
+* **Delete** - HTTP DELETE
+
+Use the `<device-id>` to uniquely identify a device.
+
+
+### Creating a Provisioned Device
+
+This example provisions an anonymous group of devices. It tells the IoT Agent that a series of devices
+will be sending messages to the `IOTA_HTTP_PORT` (where the IoT Agent is listening for **Northbound** communications)
+
+#### Request:
+
+```console
+curl -X POST \
+  'http://{{iot-agent}}/iot/devices' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "devices": [
+    {
+      "device_id": "bell002",
+      "entity_name": "urn:ngsi-ld:Bell:002",
+      "entity_type": "Bell",
+      "protocol": "PDI-IoTA-UltraLight",
+      "transport": "HTTP",
+      "endpoint": "http://context-provider:3001/iot/bell002",
+      "commands": [ 
+        {
+          "name": "ring",
+          "type": "command"
+        }
+       ],
+       "static_attributes": [
+         {"name":"refStore", "type": "Relationship","value": "urn:ngsi-ld:Store:002"}
+      ]
+    }
+  ]
+```
+
+### Read Provisioned Device Details
+
+This example obtains the full details of a provisioned device with a given `<device-id>` path.
+
+Provisioned Device details can be read by making a GET request to the `/iot/devices/<device-id>` endpoint.
+
+#### Request:
+
+```console
+curl -X GET \
+  'http://{{iot-agent}}/iot/devices/bell002' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /'
+```
+
+#### Response:
+
+The response includes all the commands and attributes mappings associated with the device
+
+```json
+{
+    "device_id": "bell002",
+    "service": "openiot",
+    "service_path": "/",
+    "entity_name": "urn:ngsi",
+    "entity_type": "Bell",
+    "endpoint": "http://context-provider:3001/iot/bell002",
+    "transport": "HTTP",
+    "attributes": [],
+    "lazy": [],
+    "commands": [
+        {
+            "object_id": "ring",
+            "name": "ring",
+            "type": "command"
+        }
+    ],
+    "static_attributes": [
+        {
+            "name": "refStore",
+            "type": "Relationship",
+            "value": "urn:ngsi-ld:Store:002"
+        }
+    ],
+    "protocol": "PDI-IoTA-UltraLight"
+}
+```
+
+
+### List all Provisioned Devices
+
+This example lists all provisioned devices by making a GET request to the `/iot/devices` endpoint.
+
+#### Request:
+
+```console
+curl -X GET \
+  'http://{{iot-agent}}/iot/devices' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /'
+```
+
+#### Response:
+
+The response includes all the commands and attributes mappings associated with all devices
+
+```json
+{
+    "count": 5,
+    "devices": [
+      {
+          "device_id": "bell002",
+          "service": "openiot",
+          "service_path": "/",
+          "entity_name": "urn:ngsi",
+          "entity_type": "Bell",
+          "endpoint": "http://context-provider:3001/iot/bell002",
+          "transport": "HTTP",
+          "attributes": [],
+          "lazy": [],
+          "commands": [
+              {
+                  "object_id": "ring",
+                  "name": "ring",
+                  "type": "command"
+              }
+          ],
+          "static_attributes": [
+              {
+                  "name": "refStore",
+                  "type": "Relationship",
+                  "value": "urn:ngsi-ld:Store:002"
+              }
+          ],
+          "protocol": "PDI-IoTA-UltraLight"
+      },
+      etc...
+    ]
+}
+```
+
+
+### Update a Provisioned Device
+
+This example updates an existing provisioned device by making a PUT request to the
+ `/iot/devices/<device-id>` endpoint.
+
+
+#### Request:
+
+```console
+curl -X PUT \
+  'http://{{iot-agent}}/iot/services?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "entity_type": "IoT-Device"
+}'
+```
+
+### Delete a Provisioned Device
+
+This example removes a provisioned device by making a DELETE request to the `/iot/services/<device-id>` endpoint.
+
+The device attributes will no longer be mapped and commands can no longer be sent to the device.
+If the device is making active measurements, they will still be handled with default values
+if the associated service has not been deleted.
+
+#### Request:
+
+```console
+curl -X DELETE \
+  'http://{{iot-agent}}/iot/services/?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /'
+```
+
+
+
 
 
 # Next Steps
