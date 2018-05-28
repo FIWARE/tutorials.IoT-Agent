@@ -969,7 +969,7 @@
 		},
 		{
 			"name": "Service Group CRUD Actions",
-			"description": "The **CRUD** operations for subscriptions map on to the expected HTTP verbs under the `/iot/services` endpoint\n\n* **Create** - HTTP POST\n* **Read** - HTTP GET\n* **Update** - HTTP PUT\n* **Delete** - HTTP DELETE\n\nUse the `resource` and `apikey` parameters to uniquely identify a service group.",
+			"description": "The **CRUD** operations for a service group map on to the expected HTTP verbs under the `/iot/services` endpoint\n\n* **Create** - HTTP POST\n* **Read** - HTTP GET\n* **Update** - HTTP PUT\n* **Delete** - HTTP DELETE\n\nUse the `resource` and `apikey` parameters to uniquely identify a service group.",
 			"item": [
 				{
 					"name": "Create a Service Group",
@@ -1192,7 +1192,7 @@
 		},
 		{
 			"name": "Device CRUD Actions",
-			"description": "The **CRUD** operations for subscriptions map on to the expected HTTP verbs under the `/iot/devices` endpoint\n\n* **Create** - HTTP POST\n* **Read** - HTTP GET\n* **Update** - HTTP PUT\n* **Delete** - HTTP DELETE\n\nUse the `<device-id>` to uniquely identify a device.",
+			"description": "The **CRUD** operations for an individual device map on to the expected HTTP verbs under the `/iot/devices` endpoint\n\n* **Create** - HTTP POST\n* **Read** - HTTP GET\n* **Update** - HTTP PUT\n* **Delete** - HTTP DELETE\n\nUse the `<device-id>` to uniquely identify a device.",
 			"item": [
 				{
 					"name": "Create a Provisioned Device",

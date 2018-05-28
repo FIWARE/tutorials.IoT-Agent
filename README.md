@@ -766,7 +766,7 @@ If you are viewing the device monitor page, you can also see the state of the be
 ![](https://fiware.github.io/tutorials.IoT-Agent/img/bell-ring.gif)
 
 Note that the response returns a **404** since the context broker was unable to update the
-attribuet directly - it was fowarded to the IoT Agent.
+attribute directly - it was fowarded to the IoT Agent.
 
 
 ### Registering Smart Door Commands
@@ -881,7 +881,7 @@ curl -X PATCH \
 
 # Service Group CRUD Actions
 
-The **CRUD** operations for subscriptions map on to the expected HTTP verbs under the `/iot/services` endpoint
+The **CRUD** operations for provisoning a service group map on to the expected HTTP verbs under the `/iot/services` endpoint
 
 * **Create** - HTTP POST
 * **Read** - HTTP GET
@@ -1027,7 +1027,7 @@ curl -X DELETE \
 
 # Device CRUD Actions
 
-The **CRUD** operations for subscriptions map on to the expected HTTP verbs under the `/iot/devices` endpoint
+The **CRUD** operations for provisioning individual devices map on to the expected HTTP verbs under the `/iot/devices` endpoint
 
 * **Create** - HTTP POST
 * **Read** - HTTP GET
