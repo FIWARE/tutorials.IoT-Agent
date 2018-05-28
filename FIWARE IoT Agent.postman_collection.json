@@ -252,7 +252,47 @@
 								"updateContext"
 							]
 						},
-						"description": "This example returns the data of all `Store` entities within the context data"
+						"description": "A command can be invoked within IoT Agent by amending the context of the device using the NGSI v1 `/v1/updateContext` endpoint. This will endpoint will eventually be invoked by the context broker once we have wired it up. To test the configuration you can run the command directly as shown.\n\nIf you are viewing the device monitor page, you can also see the state of the bell change.\n\n![](https://fiware.github.io/tutorials.IoT-Agent/img/bell-ring.gif)"
+					},
+					"response": []
+				},
+				{
+					"name": "Context Broker - Read the Command Result",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "openiot"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{orion}}/v2/entities/urn:ngsi-ld:Bell:001?options=keyValues",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"v2",
+								"entities",
+								"urn:ngsi-ld:Bell:001"
+							],
+							"query": [
+								{
+									"key": "options",
+									"value": "keyValues"
+								}
+							]
+						},
+						"description": "The result of the command to ring the bell can be read by querying the entity within the Orion Context Broker. \n\nThe `TimeInstant` shows last the time any command associated with the entity has been invoked. the result of `ring` command can be see in the value of the `ring_info` attribute"
 					},
 					"response": []
 				},
@@ -289,7 +329,7 @@
 								"devices"
 							]
 						},
-						"description": "xxx"
+						"description": "Provisioning  a device which offers both commands and measurements is merely a matter of making an HTTP POST request\nwith both `attributes` and `command` attributes in the body of the request.\n\nThis example provisions a smart door with four commands `lock`, `unlock`, `open` and `close` and maps a single attribute."
 					},
 					"response": []
 				},
@@ -326,7 +366,7 @@
 								"devices"
 							]
 						},
-						"description": "xxx"
+						"description": "Provisioning  a device which offers both commands and measurements is merely a matter of making an HTTP POST request\nwith both `attributes` and `command` attributes in the body of the request.\n\nThis example provisions a smart door with two commands `on` and `off` and maps two attributes."
 					},
 					"response": []
 				},
@@ -359,7 +399,7 @@
 								"devices"
 							]
 						},
-						"description": "Once the IoT Agent is running, You can check the status by making an HTTP request to the exposed port. \nIf the response is blank, this is usually because the MongoDB database holding the context information is not running or not connected.\n\n>**Troubleshooting:** What if the response is blank ?\n>\n> * To check that a docker container is running try\n>\n>```bash\n>docker ps\n>```\n>\n>You should see several containers running. If `iot-agent` is not running, you can restart the containers as necessary."
+						"description": "This example lists all provisioned devices by making a GET request to the `/iot/devices` endpoint.\n\nThe response includes all the commands and attributes mappings associated with all provisioned IoT devices."
 					},
 					"response": []
 				}
@@ -389,11 +429,11 @@
 		},
 		{
 			"name": "Enabling Context Broker Commands",
-			"description": null,
+			"description": "Having connected up the IoT Agent to the IoT devices, we now need to inform the Orion Context Broker that the commands\nare available. In other words we need to register the IoT Agent as a [Context Provider](https://github.com/Fiware/tutorials.Context-Providers/) for the command attributes.\n\nOnce the commands have been registered it will be possible to ring the **Bell**, open and close the **Smart Door** and\nswitch the **Smart Lamp** on and off by sending requests to the Orion Context Broker, rather than sending UltraLight 2.0\nrequests directly t the IoT devices as we did in the [previous tutorial](https://github.com/Fiware/tutorials.IoT-Sensors)",
 			"item": [
 				{
 					"name": "Bell Commands",
-					"description": null,
+					"description": "The **Bell** entity has been mapped to `id=\"urn:ngsi-ld:Bell:001\"` with an entity `type=\"Bell\"`",
 					"item": [
 						{
 							"name": "Register Bell Commands",
@@ -415,10 +455,10 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"description\": \"Bell Commands\",\n  \"dataProvided\": {\n    \"entities\": [\n      {\n        \"id\": \"urn:ngsi-ld:Bell:001\",\n        \"type\": \"Bell\"\n      }\n    ],\n    \"attrs\": [\n      \"ring\"\n    ]\n  },\n  \"provider\": {\n    \"http\": {\n      \"url\": \"http://orion:1026/v1\"\n    },\n     \"legacyForwarding\": true\n  }\n}"
+									"raw": "{\n  \"description\": \"Bell Commands\",\n  \"dataProvided\": {\n    \"entities\": [\n      {\n        \"id\": \"urn:ngsi-ld:Bell:001\", \"type\": \"Bell\"\n      }\n    ],\n    \"attrs\": [\"ring\"]\n  },\n  \"provider\": {\n    \"http\": {\"url\": \"http://orion:1026/v1\"},\n    \"legacyForwarding\": true\n  }\n}"
 								},
 								"url": {
-									"raw": "http://{{orion}}/v2/registrations?",
+									"raw": "http://{{orion}}/v2/registrations",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -442,7 +482,7 @@
 										}
 									]
 								},
-								"description": "This example registers the Random Data Context Provider with the Orion Context Broker.\n\nThe body of the request states that: *\"The URL* `http://context-provider:3000/proxy/v1/random/weatherConditions` *is capable of providing* `relativeHumidity`  and `temperature` *data for the entity called* `id=urn:ngsi-ld:Store:001`.*\"*\n\nThe values are **never** held within Orion, it is always requested on demand from the registered context provider. Orion merely holds the registration information about which context providers can offer context data.\n\nThe presence of the flag `\"legacyForwarding\": true` indicates that the registered context provider offers an NGSI v1 interface - therefore Orion  will make POST request for data on `http://context-provider:3000/proxy/v1/random/weatherConditions/queryContext` using the NGSI v1 format for the body, and expect to receive data in the NGSI v1 format in return.\n\nThis request will return with a **201 - Created** response code. The `Location` Header of the response contains a path to the registration record held in Orion.\n\n>*Note:* if you have registered with the Weather API, you can retrieve live values for `temperature` and `relativeHumidity` in Berlin by placing the following `url` in the `provider`:\n>\n> * `http://context-provider:3000/proxy/v1/weather/weatherConditions`\n>"
+								"description": "This example registers the `ring` command for the entity with the `id=\"urn:ngsi-ld:Bell:001\"`\n\nTo register the command we need to inform Orion that the URL `http://orion:1026/v1` is able to provide\nthe missing `ring` attribute. This will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 \nendpoint and therefore the `legacyForwarding` attribute must also be set."
 							},
 							"response": []
 						},
@@ -482,7 +522,7 @@
 										"attrs"
 									]
 								},
-								"description": "This example returns the data of all `Store` entities within the context data"
+								"description": "To invoke the `ring` command, the `ring` attribute must be updated in the context.\n\nIf you are viewing the device monitor page, you can also see the state of the bell change.\n\n![](https://fiware.github.io/tutorials.IoT-Agent/img/bell-ring.gif)\n\nNote that the response returns a **404** since the context broker was unable to update the\nattribute directly - it was fowarded to the Iot Agent."
 							},
 							"response": []
 						},
@@ -505,7 +545,7 @@
 									"raw": "{\n\t\"ring\": {\n    \t\"type\" : \"command\",\n    \t\"value\" : \"\"\n\t}\n}"
 								},
 								"url": {
-									"raw": "http://{{orion}}/v2/entities/urn:ngsi-ld:Bell:001",
+									"raw": "http://{{orion}}/v2/entities/urn:ngsi-ld:Bell:001?options=keyValues",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -514,18 +554,46 @@
 										"v2",
 										"entities",
 										"urn:ngsi-ld:Bell:001"
+									],
+									"query": [
+										{
+											"key": "options",
+											"value": "keyValues"
+										}
 									]
 								},
-								"description": "This example returns the data of all `Store` entities within the context data"
+								"description": "The result of the command to ring the bell can be read by querying the entity within the Orion Context Broker. \n\nThe `TimeInstant` shows last the time any command associated with the entity has been invoked. the result of `ring` command can be see in the value of the `ring_info` attribute"
 							},
 							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "03f1d3da-6cdb-4a0a-bc49-3d970f1c4a06",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "4b157849-2b5c-42a6-b5f3-786fe212a846",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
 						}
 					],
 					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Smart Door Commands",
-					"description": null,
+					"description": "The **Smart Door** entity has been mapped to `id=\"urn:ngsi-ld:Door:001\"` with an entity `type=\"Door\"`",
 					"item": [
 						{
 							"name": "Register Smart Door Commands",
@@ -547,10 +615,10 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"description\": \"Door Commands\",\n  \"dataProvided\": {\n    \"entities\": [\n      {\n        \"id\": \"urn:ngsi-ld:Door:001\",\n        \"type\": \"Door\"\n      }\n    ],\n    \"attrs\": [\n      \"lock\", \"unlock\", \"open\", \"close\"\n    ]\n  },\n  \"provider\": {\n    \"http\": {\n      \"url\": \"http://orion:1026/v1\"\n    },\n     \"legacyForwarding\": true\n  }\n}"
+									"raw": "{\n  \"description\": \"Door Commands\",\n  \"dataProvided\": {\n    \"entities\": [\n      {\n        \"id\": \"urn:ngsi-ld:Door:001\", \"type\": \"Door\"\n      }\n    ],\n    \"attrs\": [ \"lock\", \"unlock\", \"open\", \"close\"]\n  },\n  \"provider\": {\n    \"http\": {\"url\": \"http://orion:1026/v1\"},\n    \"legacyForwarding\": true\n  }\n}"
 								},
 								"url": {
-									"raw": "http://{{orion}}/v2/registrations?",
+									"raw": "http://{{orion}}/v2/registrations",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -574,7 +642,7 @@
 										}
 									]
 								},
-								"description": "This example registers the Random Data Context Provider with the Orion Context Broker.\n\nThe body of the request states that: *\"The URL* `http://context-provider:3000/proxy/v1/random/weatherConditions` *is capable of providing* `relativeHumidity`  and `temperature` *data for the entity called* `id=urn:ngsi-ld:Store:001`.*\"*\n\nThe values are **never** held within Orion, it is always requested on demand from the registered context provider. Orion merely holds the registration information about which context providers can offer context data.\n\nThe presence of the flag `\"legacyForwarding\": true` indicates that the registered context provider offers an NGSI v1 interface - therefore Orion  will make POST request for data on `http://context-provider:3000/proxy/v1/random/weatherConditions/queryContext` using the NGSI v1 format for the body, and expect to receive data in the NGSI v1 format in return.\n\nThis request will return with a **201 - Created** response code. The `Location` Header of the response contains a path to the registration record held in Orion.\n\n>*Note:* if you have registered with the Weather API, you can retrieve live values for `temperature` and `relativeHumidity` in Berlin by placing the following `url` in the `provider`:\n>\n> * `http://context-provider:3000/proxy/v1/weather/weatherConditions`\n>"
+								"description": "This example registers the `lock`, `unlock`, `open` and `close` commands for the entity with\nthe `id=\"urn:ngsi-ld:Door:001\"`\n\nTo register the commands we need to inform Orion that the URL `http://orion:1026/v1` is able to provide\nthe missing  attributes. This will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 \nendpoint and therefore the `legacyForwarding` attribute must also be set."
 							},
 							"response": []
 						},
@@ -613,7 +681,7 @@
 										"attrs"
 									]
 								},
-								"description": "This example returns the data of all `Store` entities within the context data"
+								"description": "To invoke the `open` command, the `open` attribute must be updated in the context.\n\nNote that the response returns a **404** since the context broker was unable to update the\nattribute directly - it was fowarded to the IoT Agent."
 							},
 							"response": []
 						},
@@ -636,7 +704,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "http://{{orion}}/v2/entities/urn:ngsi-ld:Door:001/",
+									"raw": "http://{{orion}}/v2/entities/urn:ngsi-ld:Door:001?options=keyValues",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -644,20 +712,47 @@
 									"path": [
 										"v2",
 										"entities",
-										"urn:ngsi-ld:Door:001",
-										""
+										"urn:ngsi-ld:Door:001"
+									],
+									"query": [
+										{
+											"key": "options",
+											"value": "keyValues"
+										}
 									]
 								},
-								"description": "This example returns the data of all `Store` entities within the context data"
+								"description": "The result of the invocation of **Smart Door** commands can be read by querying the entity within the Orion Context Broker. \n\nThe `TimeInstant` shows last the time any command associated with the entity has been invoked. \n\n* The result of `open` command can be see in the value of the `open_info` attribute\n* The result of `close` command can be see in the value of the `close_info` attribute\n* The result of `lock` command can be see in the value of the `lock_info` attribute\n* The result of `unlock` command can be see in the value of the `unlock_info` attribute"
 							},
 							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "bd93a337-b87f-4f47-9aca-604325c80bec",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "062e5306-e534-49d9-ac6c-df5d71317195",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
 						}
 					],
 					"_postman_isSubFolder": true
 				},
 				{
 					"name": "Smart Lamp",
-					"description": null,
+					"description": "The **Smart Lamp** entity has been mapped to `id=\"urn:ngsi-ld:Lamp:001\"` with an entity `type=\"Lamp\"`",
 					"item": [
 						{
 							"name": "Register Smart Lamp Commands",
@@ -679,10 +774,10 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"description\": \"Lamp Commands\",\n  \"dataProvided\": {\n    \"entities\": [\n      {\n        \"id\": \"urn:ngsi-ld:Lamp:001\",\n        \"type\": \"Lamp\"\n      }\n    ],\n    \"attrs\": [\n      \"on\", \"off\"\n    ]\n  },\n  \"provider\": {\n    \"http\": {\n      \"url\": \"http://orion:1026/v1\"\n    },\n     \"legacyForwarding\": true\n  }\n}"
+									"raw": "{\n  \"description\": \"Lamp Commands\",\n  \"dataProvided\": {\n    \"entities\": [\n      {\n        \"id\": \"urn:ngsi-ld:Lamp:001\",\"type\": \"Lamp\"\n      }\n    ],\n    \"attrs\": [ \"on\", \"off\" ]\n  },\n  \"provider\": {\n    \"http\": {\"url\": \"http://orion:1026/v1\"},\n    \"legacyForwarding\": true\n  }\n}"
 								},
 								"url": {
-									"raw": "http://{{orion}}/v2/registrations?",
+									"raw": "http://{{orion}}/v2/registrations",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -706,7 +801,7 @@
 										}
 									]
 								},
-								"description": "This example registers the Random Data Context Provider with the Orion Context Broker.\n\nThe body of the request states that: *\"The URL* `http://context-provider:3000/proxy/v1/random/weatherConditions` *is capable of providing* `relativeHumidity`  and `temperature` *data for the entity called* `id=urn:ngsi-ld:Store:001`.*\"*\n\nThe values are **never** held within Orion, it is always requested on demand from the registered context provider. Orion merely holds the registration information about which context providers can offer context data.\n\nThe presence of the flag `\"legacyForwarding\": true` indicates that the registered context provider offers an NGSI v1 interface - therefore Orion  will make POST request for data on `http://context-provider:3000/proxy/v1/random/weatherConditions/queryContext` using the NGSI v1 format for the body, and expect to receive data in the NGSI v1 format in return.\n\nThis request will return with a **201 - Created** response code. The `Location` Header of the response contains a path to the registration record held in Orion.\n\n>*Note:* if you have registered with the Weather API, you can retrieve live values for `temperature` and `relativeHumidity` in Berlin by placing the following `url` in the `provider`:\n>\n> * `http://context-provider:3000/proxy/v1/weather/weatherConditions`\n>"
+								"description": "This example registers the `on` and `off` commands for the entity with\nthe `id=\"urn:ngsi-ld:Lamp:001\"`\n\nTo register the commands we need to inform Orion that the URL `http://orion:1026/v1` is able to provide\nthe missing  attributes. This will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 \nendpoint and therefore the `legacyForwarding` attribute must also be set."
 							},
 							"response": []
 						},
@@ -733,7 +828,7 @@
 									"raw": "{\n\t\"open\": {\n    \t\"type\" : \"command\",\n    \t\"value\" : \"\"\n\t}\n}"
 								},
 								"url": {
-									"raw": "http://{{orion}}/v2/entities/urn:ngsi-ld:Door:001/attrs",
+									"raw": "http://{{orion}}/v2/entities/urn:ngsi-ld:Lamp:001/attrs",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -741,11 +836,11 @@
 									"path": [
 										"v2",
 										"entities",
-										"urn:ngsi-ld:Door:001",
+										"urn:ngsi-ld:Lamp:001",
 										"attrs"
 									]
 								},
-								"description": "This example returns the data of all `Store` entities within the context data"
+								"description": "To switch on the **Smart Lamp**, the `on` attribute must be updated in the context.\n\nNote that the response returns a **404** since the context broker was unable to update the\nattribute directly - it was fowarded to the IoT Agent."
 							},
 							"response": []
 						},
@@ -768,7 +863,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "http://{{orion}}/v2/entities/urn:ngsi-ld:Door:001/",
+									"raw": "http://{{orion}}/v2/entities/urn:ngsi-ld:Lamp:001?options=keyValues",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -776,13 +871,40 @@
 									"path": [
 										"v2",
 										"entities",
-										"urn:ngsi-ld:Door:001",
-										""
+										"urn:ngsi-ld:Lamp:001"
+									],
+									"query": [
+										{
+											"key": "options",
+											"value": "keyValues"
+										}
 									]
 								},
-								"description": "This example returns the data of all `Store` entities within the context data"
+								"description": "The result of the invocation of **Smart Lamp** commands can be read by querying the entity within the Orion Context Broker. \n\nThe `TimeInstant` shows last the time any command associated with the entity has been invoked. \n\n* The result of `on` command can be see in the value of the `on_info` attribute\n* The result of `off` command can be see in the value of the `off_info` attribute"
 							},
 							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "5d5cbd31-cc55-4abd-a3b5-90be1a06ebad",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "aebaf411-d20a-4580-aee9-8484def536ad",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
 						}
 					],
 					"_postman_isSubFolder": true
@@ -820,6 +942,28 @@
 						"description": "This example returns the data of all `Store` entities within the context data"
 					},
 					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e5aa0b75-9618-464b-9547-bccf5360d530",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "862fb9fb-be99-4b36-bb84-8ec7f5638ede",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		},

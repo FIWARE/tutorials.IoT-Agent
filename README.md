@@ -10,7 +10,7 @@ and commands can be sent using [NGSI](https://fiware.github.io/specifications/Op
 
 The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also available as [Postman documentation](http://fiware.github.io/tutorials.IoT-Agent/)
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/32975e01a2c250698149)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/2150531e68299d46f937)
 
 # What is an IoT Agent?
 
@@ -335,7 +335,7 @@ will be sending messages to the `IOTA_HTTP_PORT` (where the IoT Agent is listeni
 
 ```console
 curl -X POST \
-  'http://{{iot-agent}}/iot/services' \
+  'http://localhost:4041/iot/services' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -386,7 +386,7 @@ Three types of meaasurement attributes can be provisioned:
 
 ```console
 curl -X POST \
-  'http://{{iot-agent}}/iot/devices' \
+  'http://localhost:4041/iot/devices' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -443,7 +443,7 @@ Don't forget to add the `fiware-service` and `fiware-service-path` headers.
 
 ```console
 curl -X GET \
-  'http://{{orion}}/v2/entities/urn:ngsd-ld:Motion:001' \
+  'http://localhost:1026/v2/entities/urn:ngsd-ld:Motion:001' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
 ```
@@ -486,7 +486,7 @@ The endpoint is `http://context-provider:3001/iot/bell001` and it can accept the
 
 ```console
 curl -X POST \
-  'http://{{iot-agent}}/iot/devices' \
+  'http://localhost:4041/iot/devices' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -519,7 +519,7 @@ can run the command directly as shown:
 
 ```console
 curl -X POST \
-  'http://{{iot-agent}}/v1/updateContext' \
+  'http://localhost:4041/v1/updateContext' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -573,13 +573,310 @@ If you are viewing the device monitor page, you can also see the state of the be
 ![](https://fiware.github.io/tutorials.IoT-Agent/img/bell-ring.gif)
 
 
+The result of the command to ring the bell can be read by querying the entity within the Orion Context Broker. 
+
+#### Request:
+
+```console
+curl -X GET \
+  'http://localhost:1026/v2/entities/urn:ngsi-ld:Bell:001?options=keyValues' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /'
+```
+
+#### Response:
+
+```json
+{
+    "id": "urn:ngsi-ld:Bell:001",
+    "type": "Bell",
+    "TimeInstant": "2018-05-25T20:06:28.00Z",
+    "refStore": "urn:ngsi-ld:Store:001",
+    "ring_info": " ring OK",
+    "ring_status": "OK",
+    "ring": ""
+}
+```
+
+The `TimeInstant` shows last the time any command associated with the entity has been invoked. the result of `ring` command can be see in the value of the `ring_info` attribute.
+
+
+### Provisioning a Smart Door
+
+Provisioning  a device which offers both commands and measurements is merely a matter of making an HTTP POST request
+with both `attributes` and `command` attributes in the body of the request.
+
+#### Request:
+
+```console
+curl -X POST \
+  'http://localhost:4041/iot/devices' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "devices": [
+    {
+      "device_id": "door001",
+      "entity_name": "urn:ngsi-ld:Door:001",
+      "entity_type": "Door",
+      "protocol": "PDI-IoTA-UltraLight",
+      "transport": "HTTP",
+      "endpoint": "http://context-provider:3001/iot/door001",
+      "commands": [ 
+        {"name": "unlock","type": "command"},
+        {"name": "open","type": "command"},
+        {"name": "close","type": "command"},
+        {"name": "lock","type": "command"}
+       ],
+       "attributes": [
+        {"object_id": "s", "name": "state", "type":"Text"}
+       ],
+       "static_attributes": [
+         {"name":"refStore", "type": "Relationship","value": "urn:ngsi-ld:Store:001"}
+       ]
+    }
+  ]
+}
+'
+```
+
+
+
+
+### Provisioning a Smart Lamp
+
+Similarly, a **Smart Lamp** with two commands (`on` and `off`)  and two attributes 
+can be provisioned as follows:
+
+
+#### Request:
+
+```console
+curl -X POST \
+  'http://localhost:4041/iot/devices' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "devices": [
+    {
+      "device_id": "lamp001",
+      "entity_name": "urn:ngsi-ld:Lamp:001",
+      "entity_type": "Lamp",
+      "protocol": "PDI-IoTA-UltraLight",
+      "transport": "HTTP",
+      "endpoint": "http://context-provider:3001/iot/lamp001",
+      "commands": [ 
+        {"name": "on","type": "command"},
+        {"name": "off","type": "command"}
+       ],
+       "attributes": [
+        {"object_id": "s", "name": "state", "type":"Text"},
+        {"object_id": "l", "name": "luminosity", "type":"Integer"}
+       ],
+       "static_attributes": [
+         {"name":"refStore", "type": "Relationship","value": "urn:ngsi-ld:Store:001"}
+      ]
+    }
+  ]
+}
+'
+```
+
+
+The full list of provisioned devices can be obtained by making a GET request to the `/iot/devices` endpoint.
+
+#### Request:
+
+```console
+curl -X GET \
+  'http://localhost:4041/iot/devices' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /'
+```
+
+
 ## Enabling Context Broker Commands
 
+Having connected up the IoT Agent to the IoT devices, we now need to inform the Orion Context Broker that the commands
+are available. In other words we need to register the IoT Agent as a [Context Provider](https://github.com/Fiware/tutorials.Context-Providers/) for the command attributes.
 
-xxxxxx
-xxxxxx
-xxxxxx
-xxxxxx
+Once the commands have been registered it will be possible to ring the **Bell**, open and close the **Smart Door** and
+switch the **Smart Lamp** on and off by sending requests to the Orion Context Broker, rather than sending UltraLight 2.0
+requests directly t the IoT devices as we did in the [previous tutorial](https://github.com/Fiware/tutorials.IoT-Sensors)
+
+
+
+### Registering a Bell Command
+
+The **Bell** entity has been mapped to `id="urn:ngsi-ld:Bell:001"` with an entity `type="Bell"`. To register the command
+we need to inform Orion that the URL `http://orion:1026/v1` is able to provide the missing `ring` attribute. This
+will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 endpoint and therefore the `legacyForwarding`
+attribute must also be set.
+
+#### Request:
+
+```console
+curl -X POST \
+  'http://localhost:1026/v2/registrations' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "description": "Bell Commands",
+  "dataProvided": {
+    "entities": [
+      {
+        "id": "urn:ngsi-ld:Bell:001", "type": "Bell"
+      }
+    ],
+    "attrs": ["ring"]
+  },
+  "provider": {
+    "http": {"url": "http://orion:1026/v1"},
+    "legacyForwarding": true
+  }
+}'
+```
+
+
+### Ringing the Bell
+
+To invoke the `ring` command, the `ring` attribute must be updated in the context.
+
+#### Request:
+
+```console
+curl -X PATCH \
+  'http://localhost:1026/v2/entities/urn:ngsi-ld:Lamp:001/attrs' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "open": {
+      "type" : "command",
+      "value" : ""
+  }
+}'
+```
+
+If you are viewing the device monitor page, you can also see the state of the bell change.
+
+![](https://fiware.github.io/tutorials.IoT-Agent/img/bell-ring.gif)
+
+Note that the response returns a **404** since the context broker was unable to update the
+attribuet directly - it was fowarded to the IoT Agent.
+
+
+### Registering Smart Door Commands
+
+The **Smart Door** entity has been mapped to `id="urn:ngsi-ld:Door:001"` with an entity `type="Door"`
+To register the commands we need to inform Orion that the URL `http://orion:1026/v1` is able to provide
+the missing  attributes. This will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 
+endpoint and therefore the `legacyForwarding` attribute must also be set.
+
+### Request:
+
+```console
+curl -X POST \
+  'http://localhost:1026/v2/registrations' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "description": "Door Commands",
+  "dataProvided": {
+    "entities": [
+      {
+        "id": "urn:ngsi-ld:Door:001", "type": "Door"
+      }
+    ],
+    "attrs": [ "lock", "unlock", "open", "close"]
+  },
+  "provider": {
+    "http": {"url": "http://orion:1026/v1"},
+    "legacyForwarding": true
+  }
+```
+
+### Opening the Smart Door
+
+To invoke the `open` command, the `open` attribute must be updated in the context.
+
+Note that the response returns a **404** since the context broker was unable to update the
+attribute directly - it was fowarded to the IoT Agent.
+
+#### Request:
+
+```console
+curl -X PATCH \
+  'http://localhost:1026/v2/entities/urn:ngsi-ld:Lamp:001/attrs' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "open": {
+      "type" : "command",
+      "value" : ""
+  }
+}'
+```
+
+### Registering Smart Lamp Commands
+
+The **Smart Lamp** entity has been mapped to `id="urn:ngsi-ld:Lamp:001"` with an entity `type="Lamp"`.
+To register the commands we need to inform Orion that the URL `http://orion:1026/v1` is able to provide
+the missing  attributes. This will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 
+endpoint and therefore the `legacyForwarding` attribute must also be set.
+
+#### Request:
+
+```console
+curl -X POST \
+  'http://localhost:1026/v2/registrations' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "description": "Lamp Commands",
+  "dataProvided": {
+    "entities": [
+      {
+        "id": "urn:ngsi-ld:Lamp:001","type": "Lamp"
+      }
+    ],
+    "attrs": [ "on", "off" ]
+  },
+  "provider": {
+    "http": {"url": "http://orion:1026/v1"},
+    "legacyForwarding": true
+  }
+}'
+```
+
+### Switching on the Smart Lamp
+
+To switch on the **Smart Lamp**, the `on` attribute must be updated in the context.
+
+Note that the response returns a **404** since the context broker was unable to update the
+attribute directly - it was fowarded to the IoT Agent.
+
+#### Request:
+
+```console
+curl -X PATCH \
+  'http://localhost:1026/v2/entities/urn:ngsi-ld:Lamp:001/attrs' \
+  -H 'Content-Type: application/json' \
+  -H 'fiware-service: openiot' \
+  -H 'fiware-servicepath: /' \
+  -d '{
+  "open": {
+      "type" : "command",
+      "value" : ""
+  }
+}'
+```
 
 
 # Service Group CRUD Actions
@@ -603,7 +900,7 @@ will be sending messages to the `IOTA_HTTP_PORT` (where the IoT Agent is listeni
 
 ```console
 curl -X POST \
-  'http://{{iot-agent}}/iot/services' \
+  'http://localhost:4041/iot/services' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -629,7 +926,7 @@ Service group details can be read by making a GET request to the `/iot/services`
 
 ```console
 curl -X GET \
-  'http://{{iot-agent}}/iot/services?resource=/iot/d' \
+  'http://localhost:4041/iot/services?resource=/iot/d' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
 ```
@@ -663,7 +960,7 @@ This example lists all provisioned services by making a GET request to the `/iot
 
 ```console
 curl -X GET \
-  'http://{{iot-agent}}/iot/services' \
+  'http://localhost:4041/iot/services' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
 ```
@@ -700,7 +997,7 @@ and providing a `resource` and `apikey` parameters.
 
 ```console
 curl -X PUT \
-  'http://{{iot-agent}}/iot/services?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
+  'http://localhost:4041/iot/services?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -722,7 +1019,7 @@ The `apiKey` and `resource` parameters must be supplied in order to identify the
 
 ```console
 curl -X DELETE \
-  'http://{{iot-agent}}/iot/services/?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
+  'http://localhost:4041/iot/services/?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
 ```
@@ -750,7 +1047,7 @@ entity a type `Bell`. The IoT Agent has been informed that the device offers a s
 
 ```console
 curl -X POST \
-  'http://{{iot-agent}}/iot/devices' \
+  'http://localhost:4041/iot/devices' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -786,7 +1083,7 @@ Provisioned Device details can be read by making a GET request to the `/iot/devi
 
 ```console
 curl -X GET \
-  'http://{{iot-agent}}/iot/devices/bell002' \
+  'http://localhost:4041/iot/devices/bell002' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
 ```
@@ -833,7 +1130,7 @@ This example lists all provisioned devices by making a GET request to the `/iot/
 
 ```console
 curl -X GET \
-  'http://{{iot-agent}}/iot/devices' \
+  'http://localhost:4041/iot/devices' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
 ```
@@ -888,7 +1185,7 @@ This example updates an existing provisioned device by making a PUT request to t
 
 ```console
 curl -X PUT \
-  'http://{{iot-agent}}/iot/services?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
+  'http://localhost:4041/iot/services?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -909,12 +1206,10 @@ if the associated service has not been deleted.
 
 ```console
 curl -X DELETE \
-  'http://{{iot-agent}}/iot/services/?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
+  'http://localhost:4041/iot/services/?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
 ```
-
-
 
 
 
