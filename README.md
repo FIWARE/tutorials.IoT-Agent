@@ -12,6 +12,44 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/2150531e68299d46f937)
 
+# Contents
+
+- [What is an IoT Agent?](#what-is-an-iot-agent)
+  * [Southbound Traffic (Commands)](#southbound-traffic-commands)
+  * [Northbound Traffic (Measurements)](#northbound-traffic-measurements)
+  * [Common Functionality](#common-functionality)
+- [Architecture](#architecture)
+  * [Dummy IoT Devices Configuration](#dummy-iot-devices-configuration)
+  * [IoT Agent for UltraLight 2.0 Configuration](#iot-agent-for-ultralight-20-configuration)
+- [Provisioning an IoT Agent](#provisioning-an-iot-agent)
+  * [Checking the IoT Agent Service Health](#checking-the-iot-agent-service-health)
+  * [Connecting IoT Devices](#connecting-iot-devices)
+    + [Provisioning a Service Group](#provisioning-a-service-group)
+    + [Provisioning a Sensor](#provisioning-a-sensor)
+    + [Provisioning an Actuator](#provisioning-an-actuator)
+    + [Provisioning a Smart Door](#provisioning-a-smart-door)
+    + [Provisioning a Smart Lamp](#provisioning-a-smart-lamp)
+  * [Enabling Context Broker Commands](#enabling-context-broker-commands)
+    + [Registering a Bell Command](#registering-a-bell-command)
+    + [Ringing the Bell](#ringing-the-bell)
+    + [Registering Smart Door Commands](#registering-smart-door-commands)
+    + [Opening the Smart Door](#opening-the-smart-door)
+    + [Registering Smart Lamp Commands](#registering-smart-lamp-commands)
+    + [Switching on the Smart Lamp](#switching-on-the-smart-lamp)
+- [Service Group CRUD Actions](#service-group-crud-actions)
+    + [Creating a Service Group](#creating-a-service-group)
+    + [Read Service Group Details](#read-service-group-details)
+    + [List all Service Groups](#list-all-service-groups)
+    + [Update a Service Group](#update-a-service-group)
+    + [Delete a Service Group](#delete-a-service-group)
+- [Device CRUD Actions](#device-crud-actions)
+    + [Creating a Provisioned Device](#creating-a-provisioned-device)
+    + [Read Provisioned Device Details](#read-provisioned-device-details)
+    + [List all Provisioned Devices](#list-all-provisioned-devices)
+    + [Update a Provisioned Device](#update-a-provisioned-device)
+    + [Delete a Provisioned Device](#delete-a-provisioned-device)
+- [Next Steps](#next-steps)
+
 # What is an IoT Agent?
 
 An IoT Agent is a component that lets a group of devices send their data to and be managed from a Context Broker
@@ -776,7 +814,7 @@ To register the commands we need to inform Orion that the URL `http://orion:1026
 the missing  attributes. This will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 
 endpoint and therefore the `legacyForwarding` attribute must also be set.
 
-### Request:
+#### Request:
 
 ```console
 curl -X POST \
