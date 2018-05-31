@@ -54,6 +54,12 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
 
 # What is an IoT Agent?
 
+> "In every operation there is an above the line and a below the line.
+> Above the line is what you do by the book. Below the line is how you
+> do the job."
+>
+> — John le Carré (A Perfect Spy)
+
 An IoT Agent is a component that lets a group of devices send their data to and be managed from a Context Broker
 using their own native protocols. IoT Agents should also be able to deal with security aspects of the FIWARE 
 platform (authentication and authorization of the channel) and provide other common services to the device programmer.
