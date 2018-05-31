@@ -787,12 +787,12 @@ To invoke the `ring` command, the `ring` attribute must be updated in the contex
 
 ```console
 curl -X PATCH \
-  'http://localhost:1026/v2/entities/urn:ngsi-ld:Lamp:001/attrs' \
+  'http://localhost:1026/v2/entities/urn:ngsi-ld:Bell:001/attrs' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
   -d '{
-  "open": {
+  "ring": {
       "type" : "command",
       "value" : ""
   }
@@ -909,7 +909,7 @@ curl -X PATCH \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
   -d '{
-  "open": {
+  "on": {
       "type" : "command",
       "value" : ""
   }
