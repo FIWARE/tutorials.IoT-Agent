@@ -55,7 +55,7 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
 # What is an IoT Agent?
 
 An IoT Agent is a component that lets a group of devices send their data to and be managed from a Context Broker
-using their own native protocols. IoT Agents should also be able to deal with security aspects of the Fiware 
+using their own native protocols. IoT Agents should also be able to deal with security aspects of the FIWARE 
 platform (authentication and authorization of the channel) and provide other common services to the device programmer.
 
 The Orion Context Broker exclusively uses [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) requests for all
@@ -118,8 +118,8 @@ For example for a real-life **Motion Sensor** to send a count measurement the fo
 
 ![](https://fiware.github.io/tutorials.IoT-Agent/img/measurement-swimlane.png)
 
-* Requests between **Iot-Device** and **IoT-Agent** use native protocols
-* Requests between **Iot-Agent** and **Context-Broker** use NGSI
+* Requests between **IoT-Device** and **IoT-Agent** use native protocols
+* Requests between **IoT-Agent** and **Context-Broker** use NGSI
 
 > **Note** Other more complex interactions are also possible, but this overview is sufficient to understand the basic
 > principles of an IoT Agent.
@@ -412,7 +412,7 @@ context broker is required, so that the IoT Agent can pass on any measurements r
 It is common good practice to use URNs following the NGSI-LD [draft recommendation](https://docbox.etsi.org/ISG/CIM/Open/ISG_CIM_NGSI-LD_API_Draft_for_public_review.pdf) when creating entities. Furthermore it is easier to understand
 meaningful names when defining data attributes. These mappings can be defined by provisioning a device individually.
 
-Three types of meaasurement attributes can be provisioned:
+Three types of measurement attributes can be provisioned:
 
 * `attributes` are active readings from the device
 * `lazy` attributes are only sent on request -  The IoT Agent will inform the device to return the measurement
@@ -449,7 +449,7 @@ curl -X POST \
 }
 '
 ```
-In the request we are assiociating the device `motion001` with the URN `urn:ngsd-ld:Motion:001`
+In the request we are associating the device `motion001` with the URN `urn:ngsd-ld:Motion:001`
 and mapping the device reading `c` with the context attribute `count` (which is defined as an `Integer`)
 A `refStore` is defined as a `static_attribute`, placing the device within **Store** `urn:ngsi-ld:Store:001`
 
@@ -806,7 +806,7 @@ If you are viewing the device monitor page, you can also see the state of the be
 ![](https://fiware.github.io/tutorials.IoT-Agent/img/bell-ring.gif)
 
 Note that the response returns a **404** since the context broker was unable to update the
-attribute directly - it was fowarded to the IoT Agent.
+attribute directly - it was forwarded to the IoT Agent.
 
 
 ### Registering Smart Door Commands
@@ -845,7 +845,7 @@ curl -X POST \
 To invoke the `open` command, the `open` attribute must be updated in the context.
 
 Note that the response returns a **404** since the context broker was unable to update the
-attribute directly - it was fowarded to the IoT Agent.
+attribute directly - it was forwarded to the IoT Agent.
 
 #### Request:
 
@@ -900,7 +900,7 @@ curl -X POST \
 To switch on the **Smart Lamp**, the `on` attribute must be updated in the context.
 
 Note that the response returns a **404** since the context broker was unable to update the
-attribute directly - it was fowarded to the IoT Agent.
+attribute directly - it was forwarded to the IoT Agent.
 
 #### Request:
 
@@ -921,7 +921,7 @@ curl -X PATCH \
 
 # Service Group CRUD Actions
 
-The **CRUD** operations for provisoning a service group map on to the expected HTTP verbs under the `/iot/services` endpoint
+The **CRUD** operations for provisioning a service group map on to the expected HTTP verbs under the `/iot/services` endpoint
 
 * **Create** - HTTP POST
 * **Read** - HTTP GET
