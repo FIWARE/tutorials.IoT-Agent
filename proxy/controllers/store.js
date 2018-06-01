@@ -11,6 +11,7 @@ const NgsiV2 = require('ngsi_v2');
 const defaultClient = NgsiV2.ApiClient.instance;
 const debug = require('debug')('proxy:server');
 const monitor = require('../lib/monitoring');
+const request = require("request");
 
 // The basePath must be set - this is the location of the Orion
 // context broker. It is best to do this with an environment
@@ -116,9 +117,50 @@ function displayWarehouseInfo(req, res) {
 	res.render('warehouse', { id: req.params.storeId });
 }
 
+// This function allows a Bell, Door or Lamp command to be sent to the Dummy IoT devices
+// via the Orion Context Broker and the UltraLight IoT Agent.
+function sendCommand(req, res) {
+	let id = req.params.storeId.split(":").pop();
+	const action = req.body.action;
+	const payload = {};
+
+	payload[req.body.action] = {
+    	"type" : "command",
+    	"value" : ""
+	};
+
+	if (action === "ring"){
+		id =  'urn:ngsi-ld:Bell:' + id;
+	} else if (action === "on" || action === "off" ){
+		id =  'urn:ngsi-ld:Lamp:' + id;
+	} else {
+		id =  'urn:ngsi-ld:Door:' + id;
+	}
+
+	const options = { method: 'PATCH',
+		url: defaultClient.basePath + '/entities/' + id + '/attrs',
+		headers: { 
+			'Content-Type': 'application/json',
+		 	'fiware-servicepath': '/',
+		 	'fiware-service': 'openiot' },
+		body: payload,
+		json: true 
+	};
+
+	request(options,  error  => {
+		if (error) { 
+			debug(error);
+		}
+	});
+
+	res.render('warehouse', { id: req.params.storeId });
+	
+}
+
 // This is a promise to make an HTTP PATCH request to the /v2/entities/<entity-id>/attr end point
-function updateExistingEntityAttributes(entityId, body, opts) {
+function updateExistingEntityAttributes(entityId, body, opts, headers = {}) {
 	return new Promise(function(resolve, reject) {
+		defaultClient.defaultHeaders = headers;
 		const apiInstance = new NgsiV2.EntitiesApi();
 		apiInstance.updateExistingEntityAttributes(entityId, body, opts, (error, data) => {
 			return error ? reject(error) : resolve(data);
@@ -128,8 +170,9 @@ function updateExistingEntityAttributes(entityId, body, opts) {
 
 
 // This is a promise to make an HTTP GET request to the /v2/entities/<entity-id> end point
-function retrieveEntity(entityId, opts) {
+function retrieveEntity(entityId, opts, headers = {}) {
 	return new Promise(function(resolve, reject) {
+		defaultClient.defaultHeaders = headers;
 		const apiInstance = new NgsiV2.EntitiesApi();
 		apiInstance.retrieveEntity(entityId, opts, (error, data) => {
 			return error ? reject(error) : resolve(data);
@@ -138,8 +181,9 @@ function retrieveEntity(entityId, opts) {
 }
 
 // This is a promise to make an HTTP GET request to the /v2/entities end point
-function listEntities(opts) {
+function listEntities(opts, headers = {}) {
 	return new Promise(function(resolve, reject) {
+		defaultClient.defaultHeaders = headers;
 		const apiInstance = new NgsiV2.EntitiesApi();
 		apiInstance.listEntities(opts, (error, data) => {
 			return error ? reject(error) : resolve(data);
@@ -152,4 +196,5 @@ module.exports = {
 	displayStore,
 	displayTillInfo,
 	displayWarehouseInfo,
+	sendCommand
 };
