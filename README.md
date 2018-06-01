@@ -70,15 +70,15 @@ interface which is used for context broker interactions and all interactions ben
 of the attached devices. 
 
 In effect, this brings a standard interface to all IoT interactions at the context information management level. 
-Each group of IoT devices are able to use their own propriatory protocols and disparate transport mechanisms under
+Each group of IoT devices are able to use their own proprietary protocols and disparate transport mechanisms under
 the hood whilst the associated IoT Agent offers a facade pattern to handle this complexity.
 
 IoT Agents already exist or are in development for many common transports and protocols. Examples include the following: 
 
 * [IoTAgent-JSON](http://fiware-iotagent-json.readthedocs.io/en/latest/) (HTTP/MQTT transport) - a bridge between an HTTP/MQTT+JSON based protocol and NGSI
-* [IoTAgent-LWM2M](http://fiware-iotagent-lwm2m.readthedocs.io/en/latest)  (CoaP transport) - a bridge between the Lightweight M2M protocol and NGSI
+* [IoTAgent-LWM2M](http://fiware-iotagent-lwm2m.readthedocs.io/en/latest)  (CoAP transport) - a bridge between the Lightweight M2M protocol and NGSI
 * [IoTAgent-UL](http://fiware-iotagent-ul.readthedocs.io/en/latest) (HTTP/MQTT transport) -  a bridge between the UltraLight2.0 protocol and NGSI 
-* [IoTagent-LoraWAN](http://fiware-lorawan.readthedocs.io/en/latest) (CoaP transport) -  a bridge between the LoraWAN protocol and NGSI
+* [IoTagent-LoRaWAN](http://fiware-lorawan.readthedocs.io/en/latest) (CoAP transport) -  a bridge between the LoRaWAN protocol and NGSI
 
 ## Southbound Traffic (Commands)
 
@@ -165,13 +165,13 @@ Therefore the overall architecture will consist of the following elements:
   + Used by the **IoT Agent** to hold device information such as device URLs and Keys
 * The **Context Provider NGSI** proxy is not used in this tutorial. It does the following:
   + receive requests using [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
-  + makes requests to publicly available data sources using their own APIs in a proprietory format 
+  + makes requests to publicly available data sources using their own APIs in a proprietary format 
   + returns context data back to the Orion Context Broker in [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) format.
 * The **Stock Management Frontend**  is not used in this tutorial will it does the following:
   + Display store information
   + Show which products can be bought at each store
   + Allow users to "buy" products and reduce the stock count.
-* A webserver acting as set of [dummy IoT devices]](https://github.com/Fiware/tutorials.IoT-Sensors) using the [UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) protocol running over HTTP.
+* A webserver acting as set of [dummy IoT devices](https://github.com/Fiware/tutorials.IoT-Sensors) using the [UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) protocol running over HTTP.
 
 Since all interactions between the elements are initiated by HTTP requests, the entities can be containerized and run from exposed ports. 
 
@@ -225,7 +225,7 @@ The other `context-provider` container configuration values described in the YAM
 
 ## IoT Agent for UltraLight 2.0 Configuration
 
-The [IoT Agent for UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/)  can be instantiated within a Docker container. An offical Docker image is available from [Docker Hub](https://hub.docker.com/r/fiware/iotagent-ul/) tagged `fiware/iotagent-ul`. The 
+The [IoT Agent for UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/)  can be instantiated within a Docker container. An official Docker image is available from [Docker Hub](https://hub.docker.com/r/fiware/iotagent-ul/) tagged `fiware/iotagent-ul`. The 
 necessary configuration can be seen below:
 
 ```yaml
@@ -352,7 +352,7 @@ There is no guarantee that every supplied IoT device `<device-id>` will always b
 all provisioning requests to the IoT Agent require two mandatory headers:
 
 * `fiware-service` header is defined so that entities for a given service can be held in a separate mongoDB database.
-* `fiware-servicepath` can be used to differenciate between arrays of devices. 
+* `fiware-servicepath` can be used to differentiate between arrays of devices. 
 
 For example within a smart city application you would expect different `fiware-service` headers for different
 departments (e.g. parks, transport, refuse collection etc.) and each `fiware-servicepath`  would refer to specific park 
@@ -361,13 +361,13 @@ data would not be siloed - for example data from a  **Smart Bin** within a park 
 of a refuse truck to alter the route of the truck in an efficient manner. 
 
 The **Smart Bin** and **GPS Unit** are likely to come from different manufacturers and it cannot be 
-guaranteed that that there is no overlap within `<device-ids>`s used. The use of the  `fiware-service` and
+guaranteed that that there is no overlap within `<device-id>`s used. The use of the  `fiware-service` and
 `fiware-servicepath` headers can ensure that this is always the case, and allows the context broker to identify
 the original source of the context data.
 
 ### Provisioning a Service Group
 
-Invoking group provision is always the the first step in connecting devices since it is always necessary to
+Invoking group provision is always the first step in connecting devices since it is always necessary to
 supply an authentication key with each measurement and the IoT Agent will not initially know which URL the 
 context broker is responding on.
 
@@ -512,7 +512,7 @@ curl -X GET \
 }
 ```
 
-The response shows that the **Motion Sensor** device with `id=motion001` has been successfully identifed by the
+The response shows that the **Motion Sensor** device with `id=motion001` has been successfully identified by the
 IoT Agent and mapped to the entity `id=urn:ngsd-ld:Motion:001`. This new entity has been created within the context data.
 The `c`  attribute from the dummy device measurement request has been mapped to the more meaningful `count` attribute
 within the context. As you will notice, a `TimeInstant` attribute has been added to both the entity and the
@@ -750,7 +750,7 @@ are available. In other words we need to register the IoT Agent as a [Context Pr
 
 Once the commands have been registered it will be possible to ring the **Bell**, open and close the **Smart Door** and
 switch the **Smart Lamp** on and off by sending requests to the Orion Context Broker, rather than sending UltraLight 2.0
-requests directly t the IoT devices as we did in the [previous tutorial](https://github.com/Fiware/tutorials.IoT-Sensors)
+requests directly the IoT devices as we did in the [previous tutorial](https://github.com/Fiware/tutorials.IoT-Sensors)
 
 
 
@@ -817,7 +817,7 @@ attribute directly - it was forwarded to the IoT Agent.
 
 ### Registering Smart Door Commands
 
-The **Smart Door** entity has been mapped to `id="urn:ngsi-ld:Door:001"` with an entity `type="Door"`
+The **Smart Door** entity has been mapped to `id="urn:ngsi-ld:Door:001"` with an entity `type="Door"`.
 To register the commands we need to inform Orion that the URL `http://orion:1026/v1` is able to provide
 the missing  attributes. This will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 
 endpoint and therefore the `legacyForwarding` attribute must also be set.
@@ -844,6 +844,7 @@ curl -X POST \
     "http": {"url": "http://orion:1026/v1"},
     "legacyForwarding": true
   }
+}'
 ```
 
 ### Opening the Smart Door
@@ -1117,6 +1118,7 @@ curl -X POST \
       ]
     }
   ]
+}'
 ```
 
 ### Read Provisioned Device Details
@@ -1136,7 +1138,7 @@ curl -X GET \
 
 #### Response:
 
-The response includes all the commands and attributes mappings associated with the device
+The response includes all the commands and attributes mappings associated with the device.
 
 ```json
 {
@@ -1183,7 +1185,7 @@ curl -X GET \
 
 #### Response:
 
-The response includes all the commands and attributes mappings associated with all devices
+The response includes all the commands and attributes mappings associated with all devices.
 
 ```json
 {
