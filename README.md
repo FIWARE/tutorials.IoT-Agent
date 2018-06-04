@@ -140,7 +140,7 @@ protocols, there will a large degree of similarity between IoT agents.
 * Holding a list of devices and mapping context data attributes to device syntax
 * Security Authorization
 
-This base functionality has been abstracted out into a common [IoT Agent framework library](https://fiware-iotagent-node-lib.readthedocs.org)
+This base functionality has been abstracted out into a common [IoT Agent framework library](https://iotagent-node-lib.readthedocs.io/)
 
 #### Device Monitor
 

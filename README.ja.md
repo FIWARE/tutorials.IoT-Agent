@@ -124,7 +124,7 @@ IoT デバイスから生成され、IoT Agent を介して、Context Broker に
 * デバイスのリストを保持し、コンテキスト・データ属性をデバイス構文にマッピング
 * セキュリティ認証
 
-この基本機能は、一般的な [IoT Agent framework library](https://fiware-iotagent-node-lib.readthedocs.org) に抽象化されています。
+この基本機能は、一般的な [IoT Agent framework library](https://iotagent-node-lib.readthedocs.io/) に抽象化されています。
 
 #### デバイス・モニタ
 
