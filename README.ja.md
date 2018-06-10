@@ -212,10 +212,9 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
   iot-agent:
     image: fiware/iotagent-ul:latest
     hostname: iot-agent
-    container_name: iot-agent
+    container_name: fiware-iot-agent
     depends_on:
-      - context-db
-      - orion
+      - mongo-db
     networks:
         - default
     expose:
@@ -231,7 +230,7 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
         - "IOTA_REGISTRY_TYPE=mongodb"
         - "IOTA_LOG_LEVEL=DEBUG"
         - "IOTA_TIMESTAMP=true"
-        - "IOTA_MONGO_HOST=context-db"
+        - "IOTA_MONGO_HOST=mongo-db"
         - "IOTA_MONGO_PORT=27017"
         - "IOTA_MONGO_DB=iotagentul"
         - "IOTA_HTTP_PORT=7896"
@@ -1189,3 +1188,5 @@ curl -X DELETE \
 
 &nbsp; 201. [Introduction to IoT Sensors](https://github.com/Fiware/tutorials.IoT-Sensors/)<br/>
 &nbsp; 202. [Provisioning an IoT Agent](https://github.com/Fiware/tutorials.IoT-Agent/)<br/>
+
+&nbsp; 301. [Persisting Context Data](https://github.com/Fiware/tutorials.Historic-Context/)<br/>
