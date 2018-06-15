@@ -119,22 +119,25 @@ function displayWarehouseInfo(req, res) {
 
 // This function allows a Bell, Door or Lamp command to be sent to the Dummy IoT devices
 // via the Orion Context Broker and the UltraLight IoT Agent.
-function sendCommand(req, res) {
-	let id = req.params.storeId.split(":").pop();
+function sendCommand(req) {
+
+
+	
+	let id = req.body.id.split(":").pop();
 	const action = req.body.action;
 	const payload = {};
 
-	payload[req.body.action] = {
+	payload[action] = {
     	"type" : "command",
     	"value" : ""
 	};
 
 	if (action === "ring"){
-		id =  'urn:ngsi-ld:Bell:' + id;
+		id =  'Bell:' + id;
 	} else if (action === "on" || action === "off" ){
-		id =  'urn:ngsi-ld:Lamp:' + id;
+		id =  'Lamp:' + id;
 	} else {
-		id =  'urn:ngsi-ld:Door:' + id;
+		id =  'Door:' + id;
 	}
 
 	const options = { method: 'PATCH',
@@ -151,10 +154,7 @@ function sendCommand(req, res) {
 		if (error) { 
 			debug(error);
 		}
-	});
-
-	res.render('warehouse', { id: req.params.storeId });
-	
+	});	
 }
 
 // This is a promise to make an HTTP PATCH request to the /v2/entities/<entity-id>/attr end point

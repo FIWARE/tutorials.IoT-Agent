@@ -38,7 +38,7 @@ const DOOR_CLOSED = 's|CLOSED';
 const BELL_OFF = 's|OFF';
 const BELL_ON = 's|ON';
 
-const LAMP_ON = 's|ON|l|2000';
+const LAMP_ON = 's|ON|l|1750';
 const LAMP_OFF = 's|OFF|l|0';
 
 const INITIAL_COUNT = 'c|0';
@@ -250,10 +250,46 @@ setTimeout (() =>{
 initSensorState ();
 
 
+let isRunningDoor = false;
 let isRunning = false;
 
 
 // Every few seconds, update the state of the dummy devices in a 
+// semi-random fashion. 
+setInterval(function(){
+    if(!isRunningDoor){
+        isRunningDoor = true;
+
+        const deviceIds = myCache.keys();
+
+		_.forEach(deviceIds, function(deviceId) {
+			const state = getDeviceState(deviceId);
+			const isSensor = true;
+
+			switch (deviceId.replace(/\d/g, '')){
+				case "door":
+					//  The door is OPEN or CLOSED or LOCKED,
+					if(state.s !== 'LOCKED'){
+						// Randomly open and close the door if not locked.
+						// lower the rate if the lamp is off.
+						const rate = (getLampState (deviceId, 'door') === 'ON') ? 3 : 6;
+						state.s = (getRandom() > rate) ? 'OPEN' : 'CLOSED';
+					}
+					setDeviceState(deviceId, toUltraLight(state), isSensor);
+				break;
+			}
+
+			
+		});
+		
+       isRunningDoor = false;
+    }
+}, 5000);
+
+
+
+
+// Every seconds, update the state of the dummy devices in a 
 // semi-random fashion. 
 setInterval(function(){
     if(!isRunning){
@@ -266,39 +302,50 @@ setInterval(function(){
 			let isSensor = true;
 
 			switch (deviceId.replace(/\d/g, '')){
-				case "door":
-					//  The door is OPEN or CLOSED or LOCKED,
-					if(state.s !== 'LOCKED'){
-						// Randomly open and close the door if not locked.
-						// lower the rate if the lamp is off.
-						const rate = (getLampState (deviceId, 'door') === 'ON') ? 4 : 7;
-						state.s = (getRandom() > rate) ? 'OPEN' : 'CLOSED';
-					}
-					break;
+				
 				case "bell":
 					// ON or OFF - Switch off the bell if it is still ringing
 					if(state.s === 'ON'){
 						state.s = 'OFF';
 					}
 					isSensor = false;	
-					break;				
-				case "motion":
-					// If the door is OPEN, randomly increment the count of the motion sensor
-					if(getDoorState (deviceId, 'motion') === 'OPEN'){
-						state.c =  parseInt(state.c) + ((getRandom() > 3) ? 1 : 0);
-					}
 					break;
+
+				case "motion":
+					// If the door is OPEN, randomly switch the count of the motion sensor
+					if(getDoorState (deviceId, 'motion') === 'OPEN'){
+						if (state.c === 1 ){
+							state.c = 0;
+						} else {
+							state.c =  ((getRandom() > 3) ? 1 : 0);
+						}
+					} else	{
+						state.c = 0;
+					}
+					setDeviceState(deviceId, toUltraLight(state), isSensor);
+					break;			
+
 
 				case "lamp":
 					if(state.s === 'OFF'){
 						state.l = 0;
 					} else if(getDoorState (deviceId, 'lamp') === 'OPEN'){
 						// if the door is open set the light to full power
-						state.l =  2000;
+						state.l = parseInt(state.l) || 1000;
+						state.l = state.l + (getRandom() * getRandom() );
+						if (state.l < 1900){
+							state.l = state.l + 30 + (getRandom() * getRandom() );
+						}
+						if (state.l > 2000){
+							state.l = 2000;
+						}
 					} else if (state.l > 1000){
 						// if the door is closed dim the light
 						state.l = parseInt(state.l) || 2000;
-						state.l = state.l - 100;
+						if  (getRandom() > 3) {
+							state.l = state.l - 30 - (getRandom() * getRandom() );
+						}
+						state.l = state.l + getRandom();
 					}
 					break;	
 			}
@@ -308,10 +355,9 @@ setInterval(function(){
 		
        isRunning = false;
     }
-}, 3000);
+}, 1000);
 
-}, 
-	3000 );
+}, 3000);
 
 
 

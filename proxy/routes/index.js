@@ -34,6 +34,8 @@ router.get('/device/monitor', function(req, res) {
 	res.render('device-monitor', { title: 'UltraLight IoT Devices' });
 });
 
+router.post('/device/command', Store.sendCommand);
+
 router.get('/app/monitor', function(req, res) {
 	res.render('monitor', { title: 'Event Monitor' });
 });
@@ -44,7 +46,7 @@ router.get('/app/store/:storeId/till', Store.displayTillInfo);
 router.get('/app/store/:storeId/warehouse', Store.displayWarehouseInfo);
 // Buy something.
 router.post('/app/inventory/:inventoryId', catchErrors(Store.buyItem));
-router.post('/app/store/:storeId/warehouse', Store.sendCommand);
+
 
 // Whenever a subscription is received, display it on the monitor
 // and notify any interested parties using Socket.io

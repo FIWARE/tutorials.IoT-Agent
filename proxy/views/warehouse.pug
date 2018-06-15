@@ -3,8 +3,8 @@ extends layout
 block content
 
   b Actions
-  form(action=`/app/store/${id}/warehouse` method="POST")
-
+  form.device(action="/device/command")
+    input(type="text" style="display:none"  name="id" value=`${id}`)
     select(name="action")
       option(value="ring") Ring Bell
       option(value="unlock") Unlock Door
@@ -13,16 +13,11 @@ block content
       option(value="lock") Lock Door
       option(value="on") Lamp On
       option(value="off") Lamp Off
-
     | &nbsp;
     input(type="submit" value=`Send` class="button")
 
   h2 Warehouse Notifications
   ul(id="notifications" data-id=`${id}`)
-
-
-
-
 
   script(src='https://cdn.socket.io/socket.io-1.2.0.js')
   script(src='https://code.jquery.com/jquery-1.11.1.js')
@@ -36,5 +31,14 @@ block content
             if($('#notifications li').size() > 5){
                 $('#notifications li').first().remove();
             }
+        });
+        $("form.device").submit(function(event){
+          event.preventDefault();
+          var serializedData = $(this).serialize();
+          $.ajax({
+              url: "/device/command",
+              type: "post",
+              data: serializedData
+          });
         });
     });
