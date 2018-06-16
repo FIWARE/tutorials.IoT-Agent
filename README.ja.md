@@ -128,7 +128,7 @@ IoT デバイスから生成され、IoT Agent を介して、Context Broker に
 
 #### デバイス・モニタ
 
-このチュートリアルの目的のために、一連のダミーの IoT デバイスを作成し、Context Broker に接続します。各デバイスの状態は、次の UltraLight2.0 デバイスのモニタ Web ページで確認できます : `http://localhost:3000/device/monitor`
+このチュートリアルの目的のために、一連のダミーの IoT デバイスを作成し、Context Broker に接続します。使用するアーキテクチャとプロトコルの詳細については、[IoT Sensors tutorial](https://github.com/Fiware/tutorials.IoT-Sensors) を参照してください。各デバイスの状態は、次の UltraLight2.0 デバイスのモニタ Web ページで確認できます : `http://localhost:3000/device/monitor`
 
 ![FIWARE Monitor](https://fiware.github.io/tutorials.IoT-Agent/img/device-monitor.png)
 
