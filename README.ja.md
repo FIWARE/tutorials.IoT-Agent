@@ -341,7 +341,7 @@ IoT Agent は、IoT デバイスと Context Broker との間のミドルウェ�
 #### リクエスト:
 
 ```console
-curl -X POST \
+curl -iX POST \
   'http://localhost:4041/iot/services' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -384,7 +384,7 @@ IoT デバイスからの測定値がリソース url で受信されると、�
 #### リクエスト:
 
 ```console
-curl -X POST \
+curl -iX POST \
   'http://localhost:4041/iot/devices' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -415,7 +415,7 @@ curl -X POST \
 #### リクエスト:
 
 ```console
-curl -X POST \
+curl -iX POST \
   'http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=motion001' \
   -H 'Content-Type: text/plain' \
   -d 'c|1'
@@ -466,7 +466,7 @@ curl -X GET \
 #### リクエスト:
 
 ```console
-curl -X POST \
+curl -iX POST \
   'http://localhost:4041/iot/devices' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -497,7 +497,7 @@ curl -X POST \
 #### リクエスト:
 
 ```console
-curl -X POST \
+curl -iX POST \
   'http://localhost:4041/v1/updateContext' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -587,7 +587,7 @@ curl -X GET \
 #### リクエスト:
 
 ```console
-curl -X POST \
+curl -iX POST \
   'http://localhost:4041/iot/devices' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -630,7 +630,7 @@ curl -X POST \
 #### リクエスト:
 
 ```console
-curl -X POST \
+curl -iX POST \
   'http://localhost:4041/iot/devices' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -688,7 +688,7 @@ IoT Agent を IoT デバイスに接続したら、コマンドが利用可能�
 #### リクエスト:
 
 ```console
-curl -X POST \
+curl -iX POST \
   'http://localhost:1026/v2/registrations' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -718,7 +718,7 @@ curl -X POST \
 #### リクエスト:
 
 ```console
-curl -X PATCH \
+curl -iX PATCH \
   'http://localhost:1026/v2/entities/urn:ngsi-ld:Bell:001/attrs' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -745,7 +745,7 @@ Context Broker は属性を直接更新できず、IoT Agent に転送される�
 #### リクエスト:
 
 ```console
-curl -X POST \
+curl -iX POST \
   'http://localhost:1026/v2/registrations' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -777,7 +777,7 @@ Context Broker は属性を直接更新できず、IoT Agent に転送される�
 #### リクエスト:
 
 ```console
-curl -X PATCH \
+curl -iX PATCH \
   'http://localhost:1026/v2/entities/urn:ngsi-ld:Lamp:001/attrs' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -798,7 +798,7 @@ curl -X PATCH \
 #### リクエスト:
 
 ```console
-curl -X POST \
+curl -iX POST \
   'http://localhost:1026/v2/registrations' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -830,7 +830,7 @@ Context Broker は属性を直接更新できず、IoT Agent に転送される�
 #### リクエスト:
 
 ```console
-curl -X PATCH \
+curl -iX PATCH \
   'http://localhost:1026/v2/entities/urn:ngsi-ld:Lamp:001/attrs' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -863,7 +863,7 @@ curl -X PATCH \
 #### リクエスト:
 
 ```console
-curl -X POST \
+curl -iX POST \
   'http://localhost:4041/iot/services' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -961,7 +961,7 @@ curl -X GET \
 #### リクエスト:
 
 ```console
-curl -X PUT \
+curl -iX PUT \
   'http://localhost:4041/iot/services?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -982,7 +982,7 @@ curl -X PUT \
 #### リクエスト:
 
 ```console
-curl -X DELETE \
+curl -iX DELETE \
   'http://localhost:4041/iot/services/?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
@@ -1008,7 +1008,7 @@ curl -X DELETE \
 #### リクエスト:
 
 ```console
-curl -X POST \
+curl -iX POST \
   'http://localhost:4041/iot/devices' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -1147,7 +1147,7 @@ curl -X GET \
 #### リクエスト:
 
 ```console
-curl -X PUT \
+curl -iX PUT \
   'http://localhost:4041/iot/services?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
@@ -1167,7 +1167,7 @@ curl -X PUT \
 #### リクエスト:
 
 ```console
-curl -X DELETE \
+curl -iX DELETE \
   'http://localhost:4041/iot/services/?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
