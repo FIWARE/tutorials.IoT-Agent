@@ -273,7 +273,8 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
 IoT Agent が動作しているかどうかは、公開されているポートに対して HTTP リクエストを行うことで確認できます:
 
 ```console
-curl -X GET http://localhost:4041/iot/about
+curl -X GET \
+  'http://localhost:4041/iot/about'
 ```
 
 レスポンスは次のようになります:
@@ -304,14 +305,15 @@ curl -X GET http://localhost:4041/iot/about
 > * [`docker-machine`](https://docs.docker.com/machine/) と [Virtual Box](https://www.virtualbox.org/) をインストールした場合、Context Broker, IoT Agent, IoT Agnet とダミー・デバイスの Docker コンテナが別の IP アドレスから実行されている可能性があります:
 >
 >```console
->curl -X GET http://$(docker-machine ip default):4041/version
+>curl -X GET \
+>  'http://$(docker-machine ip default):4041/version'
 >```
 >
 > または、コンテナ・ネットワーク内からすべての curl コマンドを実行します:
 >
 >```console
 >docker run --network fiware_default --rm appropriate/curl -s \
->  -X GET http://iot-agent:4041/iot/about
+>  -X GET 'http://iot-agent:4041/iot/about'
 >```
 
 

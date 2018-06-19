@@ -293,7 +293,8 @@ The device monitor can be found at: `http://localhost:3000/device/monitor`
 You can check if the IoT Agent is running by making an HTTP request to the exposed port:
 
 ```console
-curl -X GET http://localhost:4041/iot/about
+curl -X GET \
+  'http://localhost:4041/iot/about'
 ```
 
 The response will look similar to the following:
@@ -329,14 +330,15 @@ The response will look similar to the following:
 > to retrieve the virtual host IP as shown:
 >
 >```console
->curl -X GET http://$(docker-machine ip default):4041/version
+>curl -X GET \
+  'http://$(docker-machine ip default):4041/version'
 >```
 >
 > Alternatively run all your curl commands from within the container network:
 >
 >```console
 >docker run --network fiware_default --rm appropriate/curl -s \
->  -X GET http://iot-agent:4041/iot/about
+>  -X GET 'http://iot-agent:4041/iot/about'
 >```
 
 
