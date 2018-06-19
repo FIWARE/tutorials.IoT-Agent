@@ -1130,7 +1130,7 @@ This example obtains the full details of a provisioned device with a given `<dev
 
 Provisioned Device details can be read by making a GET request to the `/iot/devices/<device-id>` endpoint.
 
-#### :two:::four: Request:
+#### :two::four: Request:
 
 ```console
 curl -X GET \
