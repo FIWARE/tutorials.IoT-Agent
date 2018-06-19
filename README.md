@@ -292,6 +292,8 @@ The device monitor can be found at: `http://localhost:3000/device/monitor`
  
 You can check if the IoT Agent is running by making an HTTP request to the exposed port:
 
+#### :one: Request:
+
 ```console
 curl -X GET \
   'http://localhost:4041/iot/about'
@@ -378,7 +380,7 @@ is not done within this tutorial as we will be provisioning each device separate
 This example provisions an anonymous group of devices. It tells the IoT Agent that a series of devices
 will be sending messages to the `IOTA_HTTP_PORT` (where the IoT Agent is listening for **Northbound** communications)
 
-#### Request:
+#### :two: Request:
 
 ```console
 curl -iX POST \
@@ -429,7 +431,7 @@ Three types of measurement attributes can be provisioned:
 >**Note**: in the case where individual `id`s are not required, or aggregated data is sufficient 
 > the `attributes` can be defined within the provisioning service rather than individually.
 
-#### Request:
+#### :three: Request:
 
 ```console
 curl -iX POST \
@@ -463,7 +465,7 @@ A `refStore` is defined as a `static_attribute`, placing the device within **Sto
 You can simulate a dummy IoT device measurement coming from the **Motion Sensor** device `motion001`, by 
 making the following request
 
-#### Request:
+#### :four: Request:
 
 ```console
 curl -iX POST \
@@ -486,11 +488,11 @@ before raising a request with the Orion Context Broker.
 You can see that a measurement has been recorded, by retrieving the entity data from the context broker.
 Don't forget to add the `fiware-service` and `fiware-service-path` headers.
 
-#### Request:
+#### :five: Request:
 
 ```console
 curl -X GET \
-  'http://localhost:1026/v2/entities/urn:ngsd-ld:Motion:001' \
+  'http://localhost:1026/v2/entities/urn:ngsd-ld:Motion:001?type=Motion' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
 ```
@@ -529,7 +531,7 @@ the location where the IoT Agent needs to send the UltraLight command and the `c
 a list of each command that can be invoked. The example below provisions a bell with the `deviceId=bell001`.
 The endpoint is `http://context-provider:3001/iot/bell001` and it can accept the `ring` command.
 
-#### Request:
+#### :six: Request:
 
 ```console
 curl -iX POST \
@@ -562,7 +564,7 @@ A command can be invoked within IoT Agent by amending the context of the device 
 This will endpoint will eventually be invoked by the context broker once we have wired it up. To test the configuration you
 can run the command directly as shown:
 
-#### Request:
+#### :seven: Request:
 
 ```console
 curl -iX POST \
@@ -622,11 +624,11 @@ If you are viewing the device monitor page, you can also see the state of the be
 
 The result of the command to ring the bell can be read by querying the entity within the Orion Context Broker. 
 
-#### Request:
+#### :eight: Request:
 
 ```console
 curl -X GET \
-  'http://localhost:1026/v2/entities/urn:ngsi-ld:Bell:001?options=keyValues' \
+  'http://localhost:1026/v2/entities/urn:ngsi-ld:Bell:001?type=Bell&options=keyValues' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
 ```
@@ -653,7 +655,7 @@ The `TimeInstant` shows last the time any command associated with the entity has
 Provisioning  a device which offers both commands and measurements is merely a matter of making an HTTP POST request
 with both `attributes` and `command` attributes in the body of the request.
 
-#### Request:
+#### :nine: Request:
 
 ```console
 curl -iX POST \
@@ -697,7 +699,7 @@ Similarly, a **Smart Lamp** with two commands (`on` and `off`)  and two attribut
 can be provisioned as follows:
 
 
-#### Request:
+#### :one::zero: Request:
 
 ```console
 curl -iX POST \
@@ -734,7 +736,7 @@ curl -iX POST \
 
 The full list of provisioned devices can be obtained by making a GET request to the `/iot/devices` endpoint.
 
-#### Request:
+#### :one::one: Request:
 
 ```console
 curl -X GET \
@@ -762,7 +764,7 @@ we need to inform Orion that the URL `http://orion:1026/v1` is able to provide t
 will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 endpoint and therefore the `legacyForwarding`
 attribute must also be set.
 
-#### Request:
+#### :one::two: Request:
 
 ```console
 curl -iX POST \
@@ -792,7 +794,7 @@ curl -iX POST \
 
 To invoke the `ring` command, the `ring` attribute must be updated in the context.
 
-#### Request:
+#### :one::three: Request:
 
 ```console
 curl -iX PATCH \
@@ -823,7 +825,7 @@ To register the commands we need to inform Orion that the URL `http://orion:1026
 the missing  attributes. This will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 
 endpoint and therefore the `legacyForwarding` attribute must also be set.
 
-#### Request:
+#### :one::four: Request:
 
 ```console
 curl -iX POST \
@@ -855,7 +857,7 @@ To invoke the `open` command, the `open` attribute must be updated in the contex
 Note that the response returns a **404** since the context broker was unable to update the
 attribute directly - it was forwarded to the IoT Agent.
 
-#### Request:
+#### :one::five: Request:
 
 ```console
 curl -iX PATCH \
@@ -878,7 +880,7 @@ To register the commands we need to inform Orion that the URL `http://orion:1026
 the missing  attributes. This will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 
 endpoint and therefore the `legacyForwarding` attribute must also be set.
 
-#### Request:
+#### :one::six: Request:
 
 ```console
 curl -iX POST \
@@ -910,7 +912,7 @@ To switch on the **Smart Lamp**, the `on` attribute must be updated in the conte
 Note that the response returns a **404** since the context broker was unable to update the
 attribute directly - it was forwarded to the IoT Agent.
 
-#### Request:
+#### :one::seven: Request:
 
 ```console
 curl -iX PATCH \
@@ -944,7 +946,7 @@ Use the `resource` and `apikey` parameters to uniquely identify a service group.
 This example provisions an anonymous group of devices. It tells the IoT Agent that a series of devices
 will be sending messages to the `IOTA_HTTP_PORT` (where the IoT Agent is listening for **Northbound** communications)
 
-#### Request:
+#### :one::eight: Request:
 
 ```console
 curl -iX POST \
@@ -970,7 +972,7 @@ This example obtains the full details of a provisioned service with a given `res
 
 Service group details can be read by making a GET request to the `/iot/services` endpoint and providing a `resource` parameter.
 
-#### Request:
+#### :one::nine: Request:
 
 ```console
 curl -X GET \
@@ -1004,7 +1006,7 @@ The response includes all the defaults associated with each service group such a
 
 This example lists all provisioned services by making a GET request to the `/iot/services` endpoint.
 
-#### Request:
+#### :two::zero: Request:
 
 ```console
 curl -X GET \
@@ -1041,7 +1043,7 @@ Service group details can be updated by making a PUT request to the `/iot/servic
 and providing a `resource` and `apikey` parameters.
 
 
-#### Request:
+#### :two::one: Request:
 
 ```console
 curl -iX PUT \
@@ -1063,7 +1065,7 @@ It means that requests to `http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpe
 The `apiKey` and `resource` parameters must be supplied in order to identify the service group to be deleted.
 
 
-#### Request:
+#### :two::two: Request:
 
 ```console
 curl -iX DELETE \
@@ -1091,7 +1093,7 @@ This example provisions an individual device. It maps the `device_id=bell002` to
 entity a type `Bell`. The IoT Agent has been informed that the device offers a single `ring` `command` and is listening on 
 `http://context-provider:3001/iot/bell002` using HTTP. `attributes`, `lazy` attributes and `static_attributes` can also be provisioned.
 
-#### Request:
+#### :two::three: Request:
 
 ```console
 curl -iX POST \
@@ -1128,7 +1130,7 @@ This example obtains the full details of a provisioned device with a given `<dev
 
 Provisioned Device details can be read by making a GET request to the `/iot/devices/<device-id>` endpoint.
 
-#### Request:
+#### :two:::four: Request:
 
 ```console
 curl -X GET \
@@ -1175,7 +1177,7 @@ The response includes all the commands and attributes mappings associated with t
 
 This example lists all provisioned devices by making a GET request to the `/iot/devices` endpoint.
 
-#### Request:
+#### :two::five: Request:
 
 ```console
 curl -X GET \
@@ -1230,7 +1232,7 @@ This example updates an existing provisioned device by making a PUT request to t
  `/iot/devices/<device-id>` endpoint.
 
 
-#### Request:
+#### :two::six: Request:
 
 ```console
 curl -iX PUT \
@@ -1251,7 +1253,7 @@ The device attributes will no longer be mapped and commands can no longer be sen
 If the device is making active measurements, they will still be handled with default values
 if the associated service has not been deleted.
 
-#### Request:
+#### :two::seven: Request:
 
 ```console
 curl -iX DELETE \
