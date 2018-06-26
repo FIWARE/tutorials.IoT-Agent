@@ -201,6 +201,7 @@ The necessary configuration information for wiring up the IoT devices and the Io
         - "IOTA_HTTP_PORT=7896"
         - "DUMMY_DEVICES_PORT=3001"
         - "DUMMY_DEVICES_API_KEY=4jggokgpepnvsb2uv4s40d59ov"
+        - "DUMMY_DEVICES_TRANSPORT=HTTP"
 ```
 
 The `context-provider` container is listening on two ports: 
@@ -215,11 +216,12 @@ The `context-provider` container is driven by environment variables as shown:
 | Key |Value|Description|
 |-----|-----|-----------|
 |DEBUG|`proxy:*`| Debug flag used for logging |
-|PORT|`3000`|Port used by web-app which displays the dummy device data |
+|WEB_APP_PORT|`3000`|Port used by web-app which displays the dummy device data |
 |IOTA_HTTP_HOST|`iot-agent`| The host name of the IoT Agent for UltraLight 2.0 - see below | 
 |IOTA_HTTP_PORT|`7896` | The port that the IoT Agent for UltraLight 2.0 will be listening on. `7896` is a common default for UltraLight over HTTP |
 |DUMMY_DEVICES_PORT|`3001`|Port used by the dummy IoT devices to receive commands |
 |DUMMY_DEVICES_API_KEY|`4jggokgpepnvsb2uv4s40d59ov`| Random security key used for UltraLight interactions - used to ensure the integrity of interactions between the devices and the IoT Agent |
+|DUMMY_DEVICES_TRANSPORT|`HTTP`| The transport protocol used by the dummy IoT devices |
 
 The other `context-provider` container configuration values described in the YAML file are not used in this tutorial.
 
@@ -530,6 +532,7 @@ Provisioning an actuator is similar to provisioning a sensor. This time an `endp
 the location where the IoT Agent needs to send the UltraLight command and the `commands` array includes
 a list of each command that can be invoked. The example below provisions a bell with the `deviceId=bell001`.
 The endpoint is `http://context-provider:3001/iot/bell001` and it can accept the `ring` command.
+The `transport=HTTP` attribute defines the communications protocol to be used.
 
 #### :six: Request:
 

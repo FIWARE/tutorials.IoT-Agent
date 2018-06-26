@@ -183,6 +183,7 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
         - "IOTA_HTTP_PORT=7896"
         - "DUMMY_DEVICES_PORT=3001"
         - "DUMMY_DEVICES_API_KEY=4jggokgpepnvsb2uv4s40d59ov"
+        - "DUMMY_DEVICES_TRANSPORT=HTTP"
 ```
 
 `context-provider` コンテナは、2つのポートでリッスンしています:
@@ -195,11 +196,12 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
 | キー | 値 | 説明 |
 |-----|-----|-----------|
 |DEBUG|`proxy:*`|ロギングに使用するデバッグ・フラグ |
-|PORT|`3000`|ダミー・デバイスのデータを表示する web-app が使用するポート |
+|WEB_APP_PORT|`3000`|ダミー・デバイスのデータを表示する web-app が使用するポート |
 |IOTA_HTTP_HOST|`iot-agent`|Ultra Light 2.0 用 IoT Agent のホスト名 - 下記を参照 |
 |IOTA_HTTP_PORT|`7896`|Ultra Light 2.0 の IoT Agent がリッスンするポート。`7896` は、Ultra Light over HTTP の一般的なデフォルトです |
 |DUMMY_DEVICES_PORT|`3001`|コマンドを受信するためにダミー IoT デバイスが使用するポート |
 |DUMMY_DEVICES_API_KEY|`4jggokgpepnvsb2uv4s40d59ov`|UltraLight インタラクションに使用されるランダムなセキュリティキー - デバイスと IoT Agent 間のインタラクションの完全性を保証するために使用します |
+|DUMMY_DEVICES_TRANSPORT|`HTTP`| The transport protocol used by the dummy IoT devices |
 
 このチュートリアルでは、YAML ファイルで説明されている他の `context-provider` コンテナの設定値は使用しません。
 
