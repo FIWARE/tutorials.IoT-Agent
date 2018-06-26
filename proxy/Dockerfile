@@ -1,5 +1,9 @@
 FROM node:carbon
 
+ENV WEB_APP_PORT "3000"
+ENV DUMMY_DEVICES_PORT "3001"
+
+
 # Create app directory
 WORKDIR /usr/src/app
 
@@ -15,5 +19,7 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-EXPOSE 3000
+# Ports used by cygnus-ngsi
+EXPOSE ${WEB_APP_PORT} ${DUMMY_DEVICES_PORT}
+
 CMD ["npm", "start" ]
