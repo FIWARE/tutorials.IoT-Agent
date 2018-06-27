@@ -817,9 +817,6 @@ If you are viewing the device monitor page, you can also see the state of the be
 
 ![](https://fiware.github.io/tutorials.IoT-Agent/img/bell-ring.gif)
 
-Note that the response returns a **404** since the context broker was unable to update the
-attribute directly - it was forwarded to the IoT Agent.
-
 
 ### Registering Smart Door Commands
 
@@ -856,9 +853,6 @@ curl -iX POST \
 ### Opening the Smart Door
 
 To invoke the `open` command, the `open` attribute must be updated in the context.
-
-Note that the response returns a **404** since the context broker was unable to update the
-attribute directly - it was forwarded to the IoT Agent.
 
 #### :one::five: Request:
 
@@ -911,9 +905,6 @@ curl -iX POST \
 ### Switching on the Smart Lamp
 
 To switch on the **Smart Lamp**, the `on` attribute must be updated in the context.
-
-Note that the response returns a **404** since the context broker was unable to update the
-attribute directly - it was forwarded to the IoT Agent.
 
 #### :one::seven: Request:
 
