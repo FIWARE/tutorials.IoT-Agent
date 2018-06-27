@@ -2,7 +2,11 @@ const express = require('express');
 const router = express.Router();
 const monitor = require('../lib/monitoring');
 const Store = require('../controllers/store');
+const History = require('../controllers/history');
 const _ = require('lodash');
+
+
+const TRANSPORT = (process.env.DUMMY_DEVICES_TRANSPORT || 'HTTP');
 
 // Error handler for async functions 
 function catchErrors(fn) {
@@ -31,10 +35,14 @@ router.get('/', function(req, res) {
 
 // Render the monitoring page
 router.get('/device/monitor', function(req, res) {
-	res.render('device-monitor', { title: 'UltraLight IoT Devices' });
+	const traffic = (TRANSPORT === 'HTTP' ? 'Northbound Traffic' : 'MQTT Messages');
+	res.render('device-monitor', { title: 'UltraLight IoT Devices', traffic});
 });
 
 router.post('/device/command', Store.sendCommand);
+
+router.get('/device/history/:deviceId', catchErrors(History.readDeviceHistory));
+
 
 router.get('/app/monitor', function(req, res) {
 	res.render('monitor', { title: 'Event Monitor' });

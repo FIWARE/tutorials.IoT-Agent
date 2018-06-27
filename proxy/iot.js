@@ -51,10 +51,8 @@ if (UL_TRANSPORT === 'HTTP') {
 // subscribe to the assoicated topics for each device.
 if (UL_TRANSPORT === 'MQTT') {
 
-
 	const apiKey = process.env.DUMMY_DEVICES_API_KEY || '1234';
 	const topics = '/' + apiKey + '/#';
-
 
 	MQTT_CLIENT.on('connect', () => {
 	  debug('Subscribing to MQTT Broker: ' + mqttBrokerUrl + ' ' + topics);
@@ -63,7 +61,7 @@ if (UL_TRANSPORT === 'MQTT') {
 	});
 
 	mqtt.connect(mqttBrokerUrl);
- 
+	 
 	MQTT_CLIENT.on('message', function (topic, message) {
 	  // message is Buffer
 	  Ultralight.processMqttMessage(topic.toString(), message.toString());
