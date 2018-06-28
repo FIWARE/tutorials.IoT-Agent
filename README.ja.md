@@ -135,7 +135,7 @@ IoT デバイスから生成され、IoT Agent を介して、Context Broker に
 <a name="architecture"></a>
 # アーキテクチャ
 
-このアプリケーションは、[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) と [IoT Agent for UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/) の2つの FIWARE コンポーネントを使用します。アプリケーションが *“Powered by FIWARE”* と認定されるには、Orion Context Broker を使用するだけで十分です。Orion Context Broker と IoT Agent はオープンソースの MongoDB 技術を利用して、保持している情報の永続性を保ちます。[前のチュートリアル](https://github.com/Fiware/tutorials.Context-Providers/)で作成したダミーの IoT デバイスも使用します。
+このアプリケーションは、[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) と [IoT Agent for UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/) の2つの FIWARE コンポーネントを使用します。アプリケーションが *“Powered by FIWARE”* と認定されるには、Orion Context Broker を使用するだけで十分です。Orion Context Broker と IoT Agent はオープンソースの MongoDB 技術を利用して、保持している情報の永続性を保ちます。[以前のチュートリアル](https://github.com/Fiware/tutorials.Context-Providers/)で作成したダミーの IoT デバイスも使用します。
 
 したがって、全体的なアーキテクチャは次の要素で構成されます :
 
@@ -201,7 +201,7 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
 |IOTA_HTTP_PORT|`7896`|Ultra Light 2.0 の IoT Agent がリッスンするポート。`7896` は、Ultra Light over HTTP の一般的なデフォルトです |
 |DUMMY_DEVICES_PORT|`3001`|コマンドを受信するためにダミー IoT デバイスが使用するポート |
 |DUMMY_DEVICES_API_KEY|`4jggokgpepnvsb2uv4s40d59ov`|UltraLight インタラクションに使用されるランダムなセキュリティキー - デバイスと IoT Agent 間のインタラクションの完全性を保証するために使用します |
-|DUMMY_DEVICES_TRANSPORT|`HTTP`| The transport protocol used by the dummy IoT devices |
+|DUMMY_DEVICES_TRANSPORT|`HTTP`| ダミー IoT デバイスによって使用されるトランスポート・プロトコル |
 
 このチュートリアルでは、YAML ファイルで説明されている他の `context-provider` コンテナの設定値は使用しません。
 
@@ -370,7 +370,7 @@ curl -iX POST \
 http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov
 ```
 
-これは、[前のチュートリアル](https://github.com/Fiware/tutorials.IoT-Sensors)で Ultra Light 2.0 の構文に慣れているはずです。
+これは、[以前のチュートリアル](https://github.com/Fiware/tutorials.IoT-Sensors)で Ultra Light 2.0 の構文に慣れているはずです。
 
 IoT デバイスからの測定値がリソース url で受信されると、それを解釈して Context Broker に渡す必要があります。この`entity_type` 属性は、リクエストを行った各装置のデフォルト `type` を提供します。この場合、匿名の装置は `Thing` エンティティと呼ばれます。また、IoT Agent が受信した任意の測定値を正しい場所に渡すことができるように Context Broker の位置が必要でです。
 
@@ -684,7 +684,7 @@ curl -X GET \
 
 IoT Agent を IoT デバイスに接続したら、コマンドが利用可能であることを Orion Context Broker に通知する必要があります。つまり、IoT Agent をコマンド属性の[コンテキストプロバイダ](https://github.com/Fiware/tutorials.Context-Providers/)として登録する必要があります。
 
-コマンドが登録されていたら、[前のチュートリアル](https://github.com/Fiware/tutorials.IoT-Sensors)で行ったように、IoT デバイスから直接 Ultra Light 2.0 リクエストを送信するのではなく、**ベル**に呼び出し音を出したり、**スマート・ドア**を開閉したり、**スイッチスマート・ランプ**をオン/オフに切り替えることができます。
+コマンドが登録されていたら、[以前のチュートリアル](https://github.com/Fiware/tutorials.IoT-Sensors)で行ったように、IoT デバイスから直接 Ultra Light 2.0 リクエストを送信するのではなく、**ベル**に呼び出し音を出したり、**スマート・ドア**を開閉したり、**スイッチスマート・ランプ**をオン/オフに切り替えることができます。
 
 <a name="registering-a-bell-command"></a>
 ### ベル・コマンドの登録
