@@ -335,7 +335,7 @@ The response will look similar to the following:
 >
 >```console
 >curl -X GET \
-  'http://$(docker-machine ip default):4041/version'
+>  'http://$(docker-machine ip default):4041/version'
 >```
 >
 > Alternatively run all your curl commands from within the container network:
