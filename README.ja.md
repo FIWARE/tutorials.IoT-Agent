@@ -1180,6 +1180,11 @@ curl -iX DELETE \
 <a name="next-steps"></a>
 # 次のステップ
 
-高度な機能を追加することで、アプリケーションに複雑さを加える方法を知りたいですか？このシリーズの他のチュー[トリアルを読むことで](https://www.letsfiware.jp/fiware-tutorials)見つけることができます : 
+高度な機能を追加することで、アプリケーションに複雑さを加える方法を知りたいですか？このシリーズの[他のチュートリアル](https://www.letsfiware.jp/fiware-tutorials)を読むことで見つけることができます : 
 
 
+---
+
+## License
+
+[MIT](LICENSE) © FIWARE Foundation e.V.
