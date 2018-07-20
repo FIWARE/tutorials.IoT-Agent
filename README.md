@@ -80,12 +80,12 @@ In effect, this brings a standard interface to all IoT interactions at the conte
 Each group of IoT devices are able to use their own proprietary protocols and disparate transport mechanisms under
 the hood whilst the associated IoT Agent offers a facade pattern to handle this complexity.
 
-IoT Agents already exist or are in development for many common transports and protocols. Examples include the following:
+IoT Agents already exist or are in development for many IoT communication protocols and data models. Examples include the following:
 
-* [IoTAgent-JSON](http://fiware-iotagent-json.readthedocs.io/en/latest/) (HTTP/MQTT transport) - a bridge between an HTTP/MQTT+JSON based protocol and NGSI
-* [IoTAgent-LWM2M](http://fiware-iotagent-lwm2m.readthedocs.io/en/latest)  (CoAP transport) - a bridge between the Lightweight M2M protocol and NGSI
-* [IoTAgent-UL](http://fiware-iotagent-ul.readthedocs.io/en/latest) (HTTP/MQTT transport) -  a bridge between the UltraLight2.0 protocol and NGSI
-* [IoTagent-LoRaWAN](http://fiware-lorawan.readthedocs.io/en/latest) (CoAP transport) -  a bridge between the LoRaWAN protocol and NGSI
+* [IoTAgent-JSON](http://fiware-iotagent-json.readthedocs.io/en/latest/) - a bridge between HTTP/MQTT messaging (with a JSON payload) and NGSI
+* [IoTAgent-LWM2M](http://fiware-iotagent-lwm2m.readthedocs.io/en/latest)  - a bridge between the [Lightweight M2M](https://www.omaspecworks.org/what-is-oma-specworks/iot/lightweight-m2m-lwm2m/) protocol and NGSI
+* [IoTAgent-UL](http://fiware-iotagent-ul.readthedocs.io/en/latest) -  a bridge between HTTP/MQTT messaging (with an UltraLight2.0 payload) and NGSI
+* [IoTagent-LoRaWAN](http://fiware-lorawan.readthedocs.io/en/latest) -  a bridge between the [LoRaWAN](https://www.thethingsnetwork.org/docs/lorawan/) protocol and NGSI
 
 ## Southbound Traffic (Commands)
 
@@ -95,7 +95,8 @@ actuator devices which alter the state of the real world by their actions.
 
 For example to switch on a real-life UltraLight 2.0 **Smart Lamp** the following interactions would occur:
 
-1. An request is sent to the **Context broker** to invoke the `on` command of the **Smart Lamp** via NGSI
+1. An NGSI PATCH request is sent to the **Context broker** to update the current context of **Smart Lamp**
+  - this is effectively an indirect request invoke the `on` command of the **Smart Lamp**
 2. The **Context Broker** finds the entity within the context and notes that the context provision for this
   attribute has been delegated to the IoT Agent
 3. The **Context broker** sends an NGSI request to the North Port of the **IoT Agent** to invoke the command
@@ -480,7 +481,9 @@ Which should be familiar UltraLight 2.0 syntax from the [previous tutorial](http
 When a measurement from an IoT device is received on the resource url it needs to be interpreted and passed
 to the context broker. The `entity_type` attribute provides a default `type` for each device which has made a
 request (in this case anonymous devices will be known as `Thing` entities. Furthermore the location of the
-context broker is required, so that the IoT Agent can pass on any measurements received to the correct location.
+context broker (`cbroker`) is needed, so that the IoT Agent can pass on any measurements received to the
+correct location. `cbroker` is an optional attribute - if it is not provided, the IoT Agent uses the context broker URL
+as defined in the configuration file, however it has been included here for completeness.
 
 
 ### Provisioning a Sensor
@@ -512,7 +515,6 @@ curl -iX POST \
      "device_id":   "motion001",
      "entity_name": "urn:ngsd-ld:Motion:001",
      "entity_type": "Motion",
-     "protocol":    "PDI-IoTA-UltraLight",
      "timezone":    "Europe/Berlin",
      "attributes": [
        { "object_id": "c", "name": "count", "type": "Integer" }
@@ -578,6 +580,14 @@ curl -X GET \
         "metadata": {
             "TimeInstant": {"type": "ISO8601","value": "2018-05-25T10:51:32.646Z"}
         }
+    },
+    "refStore": {
+        "type": "Relationship",
+        "value": "urn:ngsi-ld:Store:001",
+        "metadata": {
+            "TimeInstant": {"type": "ISO8601", "value": "2018-05-25T10:51:32.646Z"
+            }
+        }
     }
 }
 ```
@@ -588,7 +598,7 @@ The `c`  attribute from the dummy device measurement request has been mapped to 
 within the context. As you will notice, a `TimeInstant` attribute has been added to both the entity and the
 meta data of the attribute - this represents the last time the entity and attribute have been updated, and is
 automatically added to each new entity because the `IOTA_TIMESTAMP`  environment variable was set when the
-IoT Agent was started up.
+IoT Agent was started up. The `refStore` attribute comes from the `static_attributes` set when the device was provisioned.
 
 
 ### Provisioning an Actuator
@@ -628,9 +638,10 @@ curl -iX POST \
 '
 ```
 
-A command can be invoked within IoT Agent by amending the context of the device using the NGSI v1 `/v1/updateContext` endpoint.
-This will endpoint will eventually be invoked by the context broker once we have wired it up. To test the configuration you
-can run the command directly as shown:
+Before we wire-up the context broker, we can test that a command can be send to a device by making a REST request
+directly to the IoT Agent's North Port using the `/v1/updateContext` endpoint.
+It is this endpoint that will eventually be invoked by the context broker once we have connected it up.
+To test the configuration you can run the command directly as shown:
 
 #### :seven: Request:
 
@@ -715,7 +726,7 @@ curl -X GET \
 }
 ```
 
-The `TimeInstant` shows last the time any command associated with the entity has been invoked. the result of `ring` command can be see in the value of the `ring_info` attribute.
+The `TimeInstant` shows last the time any command associated with the entity has been invoked. The result of `ring` command can be seen in the value of the `ring_info` attribute.
 
 
 ### Provisioning a Smart Door
