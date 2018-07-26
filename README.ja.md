@@ -21,7 +21,11 @@
   * [共通の機能](#common-functionality)
 - [アーキテクチャ](#architecture)
   * [ダミー IoT デバイスの設定](#dummy-iot-devices-configuration)
-  * [ IoT Agent for UltraLight 2.0 の設定](#iot-agent-for-ultralight-20-configuration)
+  * [IoT Agent for UltraLight 2.0 の設定](#iot-agent-for-ultralight-20-configuration)
+- [前提条件](#prerequisites)
+  * [Docker と Docker Compose](#docker-and-docker-compose)
+  * [Cygwin for Windows](#cygwin-for-windows)
+- [起動](#start-up)
 - [IoT Agent のプロビジョニング](#provisioning-an-iot-agent)
   * [IoT Agent サービスの正常性の確認](#checking-the-iot-agent-service-health)
   * [IoT デバイスの接続](#connecting-iot-devices)
@@ -66,12 +70,12 @@ Orion Context Broker は、すべての相互作用に対して排他的に [NGS
 
 実際には、コンテキスト情報管理レベルでのすべての IoT インタラクションに対する標準インタフェースを提供します。IoT デバイスの各グループは、独自の専有プロトコルとさまざまなトランスポート・メカニズムを内部で使用できますが、関連する IoT Agent はこの複雑さを処理する Facade パターンを提供します。
 
-IoT Agent はすでに存在しているか、多くの一般的なトランスポートとプロトコルのために開発中です。例には次のものがあります :
+IoT Agent はすでに存在しているか、多くの IoT コミュニケーション・プロトコルとデータモデルのために開発中です。例には次のものがあります :
 
-* [IoTAgent-JSON](http://fiware-iotagent-json.readthedocs.io/en/latest/) (HTTP/MQTT transport) - HTTP/MQTT+JSON ベースのプロトコルと NGSI のブリッジ
-* [IoTAgent-LWM2M](http://fiware-iotagent-lwm2m.readthedocs.io/en/latest)  (CoAP transport) - Lightweight M2M プロトコル と NGSI のブリッジ
-* [IoTAgent-UL](http://fiware-iotagent-ul.readthedocs.io/en/latest) (HTTP/MQTT transport) -  UltraLight2.0 プロトコルと NGSI のブリッジ
-* [IoTagent-LoRaWAN](http://fiware-lorawan.readthedocs.io/en/latest) (CoAP transport) -  LoRaWAN プロトコルと NGSI のブリッジ
+* [IoTAgent-JSON](http://fiware-iotagent-json.readthedocs.io/en/latest/) - JSON ペイロードを持つ HTTP/MQTT メッセージング と NGSI のブリッジ
+* [IoTAgent-LWM2M](http://fiware-iotagent-lwm2m.readthedocs.io/en/latest) - [Lightweight M2M](https://www.omaspecworks.org/what-is-oma-specworks/iot/lightweight-m2m-lwm2m/) プロトコル と NGSI のブリッジ
+* [IoTAgent-UL](http://fiware-iotagent-ul.readthedocs.io/en/latest) -  UltraLight2.0 ペイロード を持つ HTTP/MQTT メッセージング と NGSI のブリッジ
+* [IoTagent-LoRaWAN](http://fiware-lorawan.readthedocs.io/en/latest) -  [LoRaWAN](https://www.thethingsnetwork.org/docs/lorawan/) プロトコルと NGSI のブリッジ
 
 <a name="southbound-traffic-commands"></a>
 ## サウス・バウンドのトラフィック (コマンド)
@@ -80,7 +84,8 @@ Context Broker から生成され、IoT Agent を介して、IoT デバイスに
 
 たとえば、実際の Ultra Light 2.0 **スマート・ランプ**をオンに切り替えるには、次のようなやりとりが発生します :
 
-1. NGSI を介して**スマート・ランプ**の `on` コマンドを呼び出すようにリクエストが **Context Broker** に送信されます
+1. **Context Broker** に NGSI PATCH リクエストが送信され、**スマート・ランプ**の現在のコンテキストが更新されます
+  - これは事実上、**スマート・ランプ**の `on` コマンドを呼び出す間接的な要求です
 2. **Context Broker** は、コンテキスト内でエンティティを見つけ、この属性のコンテキスト・プロビジョニングは **IoT Agnet** に委任されていることに注意します
 3. **Context Broker** は、**IoT Agnet** のノース・ポートに NGSI リクエストを送信して、コマンドを呼び出します
 4. **IoT Agnet** は、このサウス・バウンドのリクエストを受信し、UltraLight 2.0 の構文に変換し、それを**スマート・ランプ** に渡します
@@ -142,7 +147,7 @@ IoT デバイスから生成され、IoT Agent を介して、Context Broker に
 
 したがって、全体的なアーキテクチャは次の要素で構成されます :
 
-* [NGSI](http://fiware.github.io/specifications/ngsiv2/latest/) を使用してリクエストを受信する、FIWARE [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) 
+* [NGSI](http://fiware.github.io/specifications/ngsiv2/latest/) を使用してリクエストを受信する、FIWARE [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/)
 * [NGSI](http://fiware.github.io/specifications/ngsiv2/latest/) を使用してサウス・バウンドのリクエストを受信し、デバイスの [UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) コマンドに変換する、FIWARE [IoT Agent for UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/)
 * 基礎となる [MongoDB](https://www.mongodb.com/) データベース :
   + **Orion Context Broker** が、データ・エンティティ、サブスクリプション、レジストレーションなどのコンテキスト・データの情報を保持するために使用します
@@ -263,6 +268,59 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
 |IOTA_HTTP_PORT|`7896`|IoT Agent が HTTP 経由で IoT デバイスのトラフィックをリッスンするポート |
 |IOTA_PROVIDER_URL|`http://iot-agent:4041`|コマンドが登録されたときに Context Broker に渡されたURL。Context Broker がデバイスにコマンドを発行したときに転送 URL の場所として使用 |
 
+<a name="prerequisites"></a>
+# 前提条件
+
+<a name="docker-and-docker-compose"></a>
+## Docker
+
+物事を単純にするために、両方のコンポーネントが [Docker](https://www.docker.com) を使用して実行されます。**Docker** は、さまざまコンポーネントをそれぞれの環境に分離することを可能にするコンテナ・テクノロジです。
+
+* Docker Windows にインストールするには、[こちら](https://docs.docker.com/docker-for-windows/)の手順に従ってください
+* Docker Mac にインストールするには、[こちら](https://docs.docker.com/docker-for-mac/)の手順に従ってください
+* Docker Linux にインストールするには、[こちら](https://docs.docker.com/install/)の手順に従ってください
+
+**Docker Compose** は、マルチコンテナ Docker アプリケーションを定義して実行するためのツールです。[YAML file](https://raw.githubusercontent.com/Fiware/tutorials.Getting-Started/master/docker-compose.yml) ファイルは、アプリケーションのために必要なサービスを構成するために使用します。つまり、すべてのコンテナ・サービスは1つのコマンドで呼び出すことができます。Docker Compose は、デフォルトで Docker for Windows とDocker for Mac の一部としてインストールされますが、Linux ユーザは[ここ](https://docs.docker.com/compose/install/)に記載されている手順に従う必要があります。
+
+次のコマンドを使用して、現在の **Docker** バージョンと **Docker Compose** バージョンを確認できます :
+
+```console
+docker-compose -v
+docker version
+```
+
+Docker バージョン 18.03 以降と Docker Compose 1.21 以上を使用していることを確認し、必要に応じてアップグレードしてください。
+
+<a name="cygwin-for-windows"></a>
+## Cygwin for Windows
+
+シンプルな bash スクリプトを使用してサービスを開始します。Windows ユーザは [cygwin](http://www.cygwin.com/) をダウンロードして、Windows 上の Linux ディストリビューションと同様のコマンドライン機能を提供する必要があります。
+
+<a name="start-up"></a>
+# Start Up
+
+開始する前に、必要な Docker イメージをローカルで取得または構築しておく必要があります。リポジトリを複製し、以下のコマンドを実行して必要なイメージを作成してください :
+
+```console
+git clone git@github.com:Fiware/tutorials.IoT-Agent.git
+cd tutorials.IoT-Agent
+
+./services create
+```
+
+その後、リポジトリ内で提供される、[services](https://github.com/Fiware/tutorials.IoT-Agent/blob/master/services) Bashスクリプトを実行することによって、コマンドラインからすべてのサービスを初期化することができます :
+
+```console
+./services start
+```
+
+>:information_source: **注:** クリーンアップしてやり直す場合は、次のコマンドを実行してください :
+>
+>```console
+>./services stop
+>```
+>
+
 <a name="provisioning-an-iot-agent"></a>
 # IoT Agent のプロビジョニング
 
@@ -274,7 +332,7 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
 
 <a name="checking-the-iot-agent-service-health"></a>
 ## IoT Agent サービスの正常性の確認
- 
+
 IoT Agent が動作しているかどうかは、公開されているポートに対して HTTP リクエストを行うことで確認できます:
 
 #### :one: リクエスト :
@@ -299,8 +357,8 @@ curl -X GET \
 >**`Failed to connect to localhost port 4041: Connection refused` のレスポンスを受け取ったらどうしますか？**
 >
 > `Connection refused` のレスポンスを受け取った場合、IoT Agent がこのチュートリアルで期待される場所に見つからないためです。各 cUrl コマンドの URL とポートを訂正された IP アドレスで置き換える必要があります。すべての cUrl コマンドのチュートリアルでは、IoT Agent が `localhost:4041` で使用可能であると想定しています。
-> 
-> 以下の対策を試してください: 
+>
+> 以下の対策を試してください:
 > * Dockerコンテナが動作していることを確認するには、次のようにしてください:
 >
 >```console
@@ -375,7 +433,7 @@ http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov
 
 これは、[以前のチュートリアル](https://github.com/Fiware/tutorials.IoT-Sensors)で Ultra Light 2.0 の構文に慣れているはずです。
 
-IoT デバイスからの測定値がリソース url で受信されると、それを解釈して Context Broker に渡す必要があります。この`entity_type` 属性は、リクエストを行った各装置のデフォルト `type` を提供します。この場合、匿名の装置は `Thing` エンティティと呼ばれます。また、IoT Agent が受信した任意の測定値を正しい場所に渡すことができるように Context Broker の位置が必要でです。
+IoT デバイスからの測定値がリソース url で受信されると、それを解釈して Context Broker に渡す必要があります。この`entity_type` 属性は、リクエストを行った各装置のデフォルト `type` を提供します。この場合、匿名の装置は `Thing` エンティティと呼ばれます。さらに、IoT Agent が受信した任意の測定値を正しい場所に渡すことができるように、Context Broker (`cbroker`) の位置が必要です。`cbroker` はオプションの属性です。IoT Agent が提供されていない場合、IoT Agent は設定ファイルで定義されている、Context Broker URLを使用しますが、完全性のためにここに含まれています。
 
 <a name="provisioning-a-sensor"></a>
 ### センサのプロビジョニング
@@ -404,7 +462,6 @@ curl -iX POST \
      "device_id":   "motion001",
      "entity_name": "urn:ngsd-ld:Motion:001",
      "entity_type": "Motion",
-     "protocol":    "PDI-IoTA-UltraLight",
      "timezone":    "Europe/Berlin",
      "attributes": [
        { "object_id": "c", "name": "count", "type": "Integer" }
@@ -453,7 +510,7 @@ curl -X GET \
 {
     "id": "urn:ngsd-ld:Motion:001", "type": "Motion",
     "TimeInstant": {
-        "type": "ISO8601","value": "2018-05-25T10:51:32.00Z", 
+        "type": "ISO8601","value": "2018-05-25T10:51:32.00Z",
         "metadata": {}
     },
     "count": {
@@ -461,11 +518,19 @@ curl -X GET \
         "metadata": {
             "TimeInstant": {"type": "ISO8601","value": "2018-05-25T10:51:32.646Z"}
         }
+    },
+    "refStore": {
+        "type": "Relationship",
+        "value": "urn:ngsi-ld:Store:001",
+        "metadata": {
+            "TimeInstant": {"type": "ISO8601", "value": "2018-05-25T10:51:32.646Z"
+            }
+        }
     }
 }
 ```
 
-レスポンスは、`id = motion001`の**モーション・センサ**のデバイスが IoT Agnet によって正常に識別され、エンティティ `id=urn:ngsd-ld:Motion:001` にマッピングされていることを示します。この新しいエンティティは、コンテキスト・データ内で作成されました。ダミー・デバイスの測定リクエストからの `c` 属性はコンテキスト内のより意味のある `count` 属性にマップされています。お気づきのように、`TimeInstant` 属性がエンティティと属性のメタデータの両方に追加されました。これはエンティティと属性が最後に更新された時刻を表し、`IOTA_TIMESTAMP` 環境変数が IoT Agent の起動時に設定されます。
+レスポンスは、`id = motion001`の**モーション・センサ**のデバイスが IoT Agnet によって正常に識別され、エンティティ `id=urn:ngsd-ld:Motion:001` にマッピングされていることを示します。この新しいエンティティは、コンテキスト・データ内で作成されました。ダミー・デバイスの測定リクエストからの `c` 属性はコンテキスト内のより意味のある `count` 属性にマップされています。お気づきのように、`TimeInstant` 属性がエンティティと属性のメタデータの両方に追加されました。これはエンティティと属性が最後に更新された時刻を表し、`IOTA_TIMESTAMP` 環境変数が IoT Agent の起動時に設定されます。`refStore` 属性は、デバイスがプロビジョニングされたときにセットされた `static_attributes` から来ます。
 
 <a name="provisioning-an-actuator"></a>
 ### アクチュエータのプロビジョニング
@@ -489,7 +554,7 @@ curl -iX POST \
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
       "endpoint": "http://context-provider:3001/iot/bell001",
-      "commands": [ 
+      "commands": [
         { "name": "ring", "type": "command" }
        ],
        "static_attributes": [
@@ -501,7 +566,7 @@ curl -iX POST \
 '
 ```
 
-コマンドは、NGSI v1 `/v1/updateContext` エンドポイントを使用してデバイスのコンテキストを修正することによって、IoT Agent 内で呼び出すことができます。エンドポイントは最終的に Context Broker によって呼び出されます。 設定をテストするには、次のようにコマンドを直接実行します :
+Context Broker を接続する前に、`/v1/updateContext` エンドポイントを使用してIoT Agent のノース・ポートに REST リクエストを直接送信することで、コマンドをデバイスに送信できることをテストできます。Context Broker が接続すると、最終的に Context Broker によって呼び出されるのはこのエンドポイントです。設定をテストするには、次のようにコマンドを直接実行します :
 
 #### :seven: リクエスト :
 
@@ -610,7 +675,7 @@ curl -iX POST \
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
       "endpoint": "http://context-provider:3001/iot/door001",
-      "commands": [ 
+      "commands": [
         {"name": "unlock","type": "command"},
         {"name": "open","type": "command"},
         {"name": "close","type": "command"},
@@ -653,7 +718,7 @@ curl -iX POST \
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
       "endpoint": "http://context-provider:3001/iot/lamp001",
-      "commands": [ 
+      "commands": [
         {"name": "on","type": "command"},
         {"name": "off","type": "command"}
        ],
@@ -1025,7 +1090,7 @@ curl -iX POST \
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
       "endpoint": "http://context-provider:3001/iot/bell002",
-      "commands": [ 
+      "commands": [
         {
           "name": "ring",
           "type": "command"
@@ -1180,7 +1245,7 @@ curl -iX DELETE \
 <a name="next-steps"></a>
 # 次のステップ
 
-高度な機能を追加することで、アプリケーションに複雑さを加える方法を知りたいですか？このシリーズの[他のチュートリアル](https://www.letsfiware.jp/fiware-tutorials)を読むことで見つけることができます : 
+高度な機能を追加することで、アプリケーションに複雑さを加える方法を知りたいですか？このシリーズの[他のチュートリアル](https://www.letsfiware.jp/fiware-tutorials)を読むことで見つけることができます :
 
 
 ---
