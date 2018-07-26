@@ -21,7 +21,11 @@
   * [共通の機能](#common-functionality)
 - [アーキテクチャ](#architecture)
   * [ダミー IoT デバイスの設定](#dummy-iot-devices-configuration)
-  * [ IoT Agent for UltraLight 2.0 の設定](#iot-agent-for-ultralight-20-configuration)
+  * [IoT Agent for UltraLight 2.0 の設定](#iot-agent-for-ultralight-20-configuration)
+- [前提条件](#prerequisites)
+  * [Docker と Docker Compose](#docker-and-docker-compose)
+  * [Cygwin for Windows](#cygwin-for-windows)
+- [起動](#start-up)
 - [IoT Agent のプロビジョニング](#provisioning-an-iot-agent)
   * [IoT Agent サービスの正常性の確認](#checking-the-iot-agent-service-health)
   * [IoT デバイスの接続](#connecting-iot-devices)
@@ -142,7 +146,7 @@ IoT デバイスから生成され、IoT Agent を介して、Context Broker に
 
 したがって、全体的なアーキテクチャは次の要素で構成されます :
 
-* [NGSI](http://fiware.github.io/specifications/ngsiv2/latest/) を使用してリクエストを受信する、FIWARE [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) 
+* [NGSI](http://fiware.github.io/specifications/ngsiv2/latest/) を使用してリクエストを受信する、FIWARE [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/)
 * [NGSI](http://fiware.github.io/specifications/ngsiv2/latest/) を使用してサウス・バウンドのリクエストを受信し、デバイスの [UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) コマンドに変換する、FIWARE [IoT Agent for UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/)
 * 基礎となる [MongoDB](https://www.mongodb.com/) データベース :
   + **Orion Context Broker** が、データ・エンティティ、サブスクリプション、レジストレーションなどのコンテキスト・データの情報を保持するために使用します
@@ -263,6 +267,59 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
 |IOTA_HTTP_PORT|`7896`|IoT Agent が HTTP 経由で IoT デバイスのトラフィックをリッスンするポート |
 |IOTA_PROVIDER_URL|`http://iot-agent:4041`|コマンドが登録されたときに Context Broker に渡されたURL。Context Broker がデバイスにコマンドを発行したときに転送 URL の場所として使用 |
 
+<a name="prerequisites"></a>
+# 前提条件
+
+<a name="docker-and-docker-compose"></a>
+## Docker
+
+物事を単純にするために、両方のコンポーネントが [Docker](https://www.docker.com) を使用して実行されます。**Docker** は、さまざまコンポーネントをそれぞれの環境に分離することを可能にするコンテナ・テクノロジです。
+
+* Docker Windows にインストールするには、[こちら](https://docs.docker.com/docker-for-windows/)の手順に従ってください
+* Docker Mac にインストールするには、[こちら](https://docs.docker.com/docker-for-mac/)の手順に従ってください
+* Docker Linux にインストールするには、[こちら](https://docs.docker.com/install/)の手順に従ってください
+
+**Docker Compose** は、マルチコンテナ Docker アプリケーションを定義して実行するためのツールです。[YAML file](https://raw.githubusercontent.com/Fiware/tutorials.Getting-Started/master/docker-compose.yml) ファイルは、アプリケーションのために必要なサービスを構成するために使用します。つまり、すべてのコンテナ・サービスは1つのコマンドで呼び出すことができます。Docker Compose は、デフォルトで Docker for Windows とDocker for Mac の一部としてインストールされますが、Linux ユーザは[ここ](https://docs.docker.com/compose/install/)に記載されている手順に従う必要があります。
+
+次のコマンドを使用して、現在の **Docker** バージョンと **Docker Compose** バージョンを確認できます :
+
+```console
+docker-compose -v
+docker version
+```
+
+Docker バージョン 18.03 以降と Docker Compose 1.21 以上を使用していることを確認し、必要に応じてアップグレードしてください。
+
+<a name="cygwin-for-windows"></a>
+## Cygwin for Windows
+
+シンプルな bash スクリプトを使用してサービスを開始します。Windows ユーザは [cygwin](http://www.cygwin.com/) をダウンロードして、Windows 上の Linux ディストリビューションと同様のコマンドライン機能を提供する必要があります。
+
+<a name="start-up"></a>
+# Start Up
+
+開始する前に、必要な Docker イメージをローカルで取得または構築しておく必要があります。リポジトリを複製し、以下のコマンドを実行して必要なイメージを作成してください :
+
+```console
+git clone git@github.com:Fiware/tutorials.IoT-Agent.git
+cd tutorials.IoT-Agent
+
+./services create
+```
+
+その後、リポジトリ内で提供される、[services](https://github.com/Fiware/tutorials.IoT-Agent/blob/master/services) Bashスクリプトを実行することによって、コマンドラインからすべてのサービスを初期化することができます :
+
+```console
+./services start
+```
+
+>:information_source: **注:** クリーンアップしてやり直す場合は、次のコマンドを実行してください :
+>
+>```console
+>./services stop
+>```
+>
+
 <a name="provisioning-an-iot-agent"></a>
 # IoT Agent のプロビジョニング
 
@@ -274,7 +331,7 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
 
 <a name="checking-the-iot-agent-service-health"></a>
 ## IoT Agent サービスの正常性の確認
- 
+
 IoT Agent が動作しているかどうかは、公開されているポートに対して HTTP リクエストを行うことで確認できます:
 
 #### :one: リクエスト :
@@ -299,8 +356,8 @@ curl -X GET \
 >**`Failed to connect to localhost port 4041: Connection refused` のレスポンスを受け取ったらどうしますか？**
 >
 > `Connection refused` のレスポンスを受け取った場合、IoT Agent がこのチュートリアルで期待される場所に見つからないためです。各 cUrl コマンドの URL とポートを訂正された IP アドレスで置き換える必要があります。すべての cUrl コマンドのチュートリアルでは、IoT Agent が `localhost:4041` で使用可能であると想定しています。
-> 
-> 以下の対策を試してください: 
+>
+> 以下の対策を試してください:
 > * Dockerコンテナが動作していることを確認するには、次のようにしてください:
 >
 >```console
@@ -453,7 +510,7 @@ curl -X GET \
 {
     "id": "urn:ngsd-ld:Motion:001", "type": "Motion",
     "TimeInstant": {
-        "type": "ISO8601","value": "2018-05-25T10:51:32.00Z", 
+        "type": "ISO8601","value": "2018-05-25T10:51:32.00Z",
         "metadata": {}
     },
     "count": {
@@ -489,7 +546,7 @@ curl -iX POST \
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
       "endpoint": "http://context-provider:3001/iot/bell001",
-      "commands": [ 
+      "commands": [
         { "name": "ring", "type": "command" }
        ],
        "static_attributes": [
@@ -610,7 +667,7 @@ curl -iX POST \
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
       "endpoint": "http://context-provider:3001/iot/door001",
-      "commands": [ 
+      "commands": [
         {"name": "unlock","type": "command"},
         {"name": "open","type": "command"},
         {"name": "close","type": "command"},
@@ -653,7 +710,7 @@ curl -iX POST \
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
       "endpoint": "http://context-provider:3001/iot/lamp001",
-      "commands": [ 
+      "commands": [
         {"name": "on","type": "command"},
         {"name": "off","type": "command"}
        ],
@@ -1025,7 +1082,7 @@ curl -iX POST \
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
       "endpoint": "http://context-provider:3001/iot/bell002",
-      "commands": [ 
+      "commands": [
         {
           "name": "ring",
           "type": "command"
@@ -1180,7 +1237,7 @@ curl -iX DELETE \
 <a name="next-steps"></a>
 # 次のステップ
 
-高度な機能を追加することで、アプリケーションに複雑さを加える方法を知りたいですか？このシリーズの[他のチュートリアル](https://www.letsfiware.jp/fiware-tutorials)を読むことで見つけることができます : 
+高度な機能を追加することで、アプリケーションに複雑さを加える方法を知りたいですか？このシリーズの[他のチュートリアル](https://www.letsfiware.jp/fiware-tutorials)を読むことで見つけることができます :
 
 
 ---
