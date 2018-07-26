@@ -70,12 +70,12 @@ Orion Context Broker は、すべての相互作用に対して排他的に [NGS
 
 実際には、コンテキスト情報管理レベルでのすべての IoT インタラクションに対する標準インタフェースを提供します。IoT デバイスの各グループは、独自の専有プロトコルとさまざまなトランスポート・メカニズムを内部で使用できますが、関連する IoT Agent はこの複雑さを処理する Facade パターンを提供します。
 
-IoT Agent はすでに存在しているか、多くの一般的なトランスポートとプロトコルのために開発中です。例には次のものがあります :
+IoT Agent はすでに存在しているか、多くの IoT コミュニケーション・プロトコルとデータモデルのために開発中です。例には次のものがあります :
 
-* [IoTAgent-JSON](http://fiware-iotagent-json.readthedocs.io/en/latest/) (HTTP/MQTT transport) - HTTP/MQTT+JSON ベースのプロトコルと NGSI のブリッジ
-* [IoTAgent-LWM2M](http://fiware-iotagent-lwm2m.readthedocs.io/en/latest)  (CoAP transport) - Lightweight M2M プロトコル と NGSI のブリッジ
-* [IoTAgent-UL](http://fiware-iotagent-ul.readthedocs.io/en/latest) (HTTP/MQTT transport) -  UltraLight2.0 プロトコルと NGSI のブリッジ
-* [IoTagent-LoRaWAN](http://fiware-lorawan.readthedocs.io/en/latest) (CoAP transport) -  LoRaWAN プロトコルと NGSI のブリッジ
+* [IoTAgent-JSON](http://fiware-iotagent-json.readthedocs.io/en/latest/) - JSON ペイロードを持つ HTTP/MQTT メッセージング と NGSI のブリッジ
+* [IoTAgent-LWM2M](http://fiware-iotagent-lwm2m.readthedocs.io/en/latest) - [Lightweight M2M](https://www.omaspecworks.org/what-is-oma-specworks/iot/lightweight-m2m-lwm2m/) プロトコル と NGSI のブリッジ
+* [IoTAgent-UL](http://fiware-iotagent-ul.readthedocs.io/en/latest) -  UltraLight2.0 ペイロード を持つ HTTP/MQTT メッセージング と NGSI のブリッジ
+* [IoTagent-LoRaWAN](http://fiware-lorawan.readthedocs.io/en/latest) -  [LoRaWAN](https://www.thethingsnetwork.org/docs/lorawan/) プロトコルと NGSI のブリッジ
 
 <a name="southbound-traffic-commands"></a>
 ## サウス・バウンドのトラフィック (コマンド)
@@ -84,7 +84,8 @@ Context Broker から生成され、IoT Agent を介して、IoT デバイスに
 
 たとえば、実際の Ultra Light 2.0 **スマート・ランプ**をオンに切り替えるには、次のようなやりとりが発生します :
 
-1. NGSI を介して**スマート・ランプ**の `on` コマンドを呼び出すようにリクエストが **Context Broker** に送信されます
+1. **Context Broker** に NGSI PATCH リクエストが送信され、**スマート・ランプ**の現在のコンテキストが更新されます
+  - これは事実上、**スマート・ランプ**の `on` コマンドを呼び出す間接的な要求です
 2. **Context Broker** は、コンテキスト内でエンティティを見つけ、この属性のコンテキスト・プロビジョニングは **IoT Agnet** に委任されていることに注意します
 3. **Context Broker** は、**IoT Agnet** のノース・ポートに NGSI リクエストを送信して、コマンドを呼び出します
 4. **IoT Agnet** は、このサウス・バウンドのリクエストを受信し、UltraLight 2.0 の構文に変換し、それを**スマート・ランプ** に渡します
@@ -432,7 +433,7 @@ http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov
 
 これは、[以前のチュートリアル](https://github.com/Fiware/tutorials.IoT-Sensors)で Ultra Light 2.0 の構文に慣れているはずです。
 
-IoT デバイスからの測定値がリソース url で受信されると、それを解釈して Context Broker に渡す必要があります。この`entity_type` 属性は、リクエストを行った各装置のデフォルト `type` を提供します。この場合、匿名の装置は `Thing` エンティティと呼ばれます。また、IoT Agent が受信した任意の測定値を正しい場所に渡すことができるように Context Broker の位置が必要でです。
+IoT デバイスからの測定値がリソース url で受信されると、それを解釈して Context Broker に渡す必要があります。この`entity_type` 属性は、リクエストを行った各装置のデフォルト `type` を提供します。この場合、匿名の装置は `Thing` エンティティと呼ばれます。さらに、IoT Agent が受信した任意の測定値を正しい場所に渡すことができるように、Context Broker (`cbroker`) の位置が必要です。`cbroker` はオプションの属性です。IoT Agent が提供されていない場合、IoT Agent は設定ファイルで定義されている、Context Broker URLを使用しますが、完全性のためにここに含まれています。
 
 <a name="provisioning-a-sensor"></a>
 ### センサのプロビジョニング
@@ -461,7 +462,6 @@ curl -iX POST \
      "device_id":   "motion001",
      "entity_name": "urn:ngsd-ld:Motion:001",
      "entity_type": "Motion",
-     "protocol":    "PDI-IoTA-UltraLight",
      "timezone":    "Europe/Berlin",
      "attributes": [
        { "object_id": "c", "name": "count", "type": "Integer" }
@@ -518,11 +518,19 @@ curl -X GET \
         "metadata": {
             "TimeInstant": {"type": "ISO8601","value": "2018-05-25T10:51:32.646Z"}
         }
+    },
+    "refStore": {
+        "type": "Relationship",
+        "value": "urn:ngsi-ld:Store:001",
+        "metadata": {
+            "TimeInstant": {"type": "ISO8601", "value": "2018-05-25T10:51:32.646Z"
+            }
+        }
     }
 }
 ```
 
-レスポンスは、`id = motion001`の**モーション・センサ**のデバイスが IoT Agnet によって正常に識別され、エンティティ `id=urn:ngsd-ld:Motion:001` にマッピングされていることを示します。この新しいエンティティは、コンテキスト・データ内で作成されました。ダミー・デバイスの測定リクエストからの `c` 属性はコンテキスト内のより意味のある `count` 属性にマップされています。お気づきのように、`TimeInstant` 属性がエンティティと属性のメタデータの両方に追加されました。これはエンティティと属性が最後に更新された時刻を表し、`IOTA_TIMESTAMP` 環境変数が IoT Agent の起動時に設定されます。
+レスポンスは、`id = motion001`の**モーション・センサ**のデバイスが IoT Agnet によって正常に識別され、エンティティ `id=urn:ngsd-ld:Motion:001` にマッピングされていることを示します。この新しいエンティティは、コンテキスト・データ内で作成されました。ダミー・デバイスの測定リクエストからの `c` 属性はコンテキスト内のより意味のある `count` 属性にマップされています。お気づきのように、`TimeInstant` 属性がエンティティと属性のメタデータの両方に追加されました。これはエンティティと属性が最後に更新された時刻を表し、`IOTA_TIMESTAMP` 環境変数が IoT Agent の起動時に設定されます。`refStore` 属性は、デバイスがプロビジョニングされたときにセットされた `static_attributes` から来ます。
 
 <a name="provisioning-an-actuator"></a>
 ### アクチュエータのプロビジョニング
@@ -558,7 +566,7 @@ curl -iX POST \
 '
 ```
 
-コマンドは、NGSI v1 `/v1/updateContext` エンドポイントを使用してデバイスのコンテキストを修正することによって、IoT Agent 内で呼び出すことができます。エンドポイントは最終的に Context Broker によって呼び出されます。 設定をテストするには、次のようにコマンドを直接実行します :
+Context Broker を接続する前に、`/v1/updateContext` エンドポイントを使用してIoT Agent のノース・ポートに REST リクエストを直接送信することで、コマンドをデバイスに送信できることをテストできます。Context Broker が接続すると、最終的に Context Broker によって呼び出されるのはこのエンドポイントです。設定をテストするには、次のようにコマンドを直接実行します :
 
 #### :seven: リクエスト :
 
