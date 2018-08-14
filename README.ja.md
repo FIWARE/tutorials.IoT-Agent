@@ -185,7 +185,7 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
         - "3000:3000"
         - "3001:3001"
     environment:
-        - "DEBUG=proxy:*"
+        - "DEBUG=tutorial:*"
         - "PORT=3000"
         - "IOTA_HTTP_HOST=iot-agent"
         - "IOTA_HTTP_PORT=7896"
@@ -203,7 +203,7 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
 
 | キー | 値 | 説明 |
 |-----|-----|-----------|
-|DEBUG|`proxy:*`|ロギングに使用するデバッグ・フラグ |
+|DEBUG|`tutorial:*`|ロギングに使用するデバッグ・フラグ |
 |WEB_APP_PORT|`3000`|ダミー・デバイスのデータを表示する web-app が使用するポート |
 |IOTA_HTTP_HOST|`iot-agent`|Ultra Light 2.0 用 IoT Agent のホスト名 - 下記を参照 |
 |IOTA_HTTP_PORT|`7896`|Ultra Light 2.0 の IoT Agent がリッスンするポート。`7896` は、Ultra Light over HTTP の一般的なデフォルトです |
