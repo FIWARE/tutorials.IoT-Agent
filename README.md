@@ -190,10 +190,10 @@ The necessary configuration information for wiring up the IoT devices and the Io
 ## Dummy IoT Devices Configuration
 
 ```yaml
-  context-provider:
+  tutorial:
     image: fiware/tutorials.context-provider
-    hostname: context-provider
-    container_name: context-provider
+    hostname: iot-sensors
+    container_name: fiware-tutorial
     networks:
         - default
     expose:
@@ -212,14 +212,14 @@ The necessary configuration information for wiring up the IoT devices and the Io
         - "DUMMY_DEVICES_TRANSPORT=HTTP"
 ```
 
-The `context-provider` container is listening on two ports:
+The `tutorial` container is listening on two ports:
 
 * Port `3000` is exposed so we can see the web-page displaying the Dummy IoT devices.
 * Port `3001` is exposed purely for tutorial access - so that cUrl or Postman can make UltraLight commands
   without being part of the same network.
 
 
-The `context-provider` container is driven by environment variables as shown:
+The `tutorial` container is driven by environment variables as shown:
 
 | Key |Value|Description|
 |-----|-----|-----------|
@@ -231,7 +231,7 @@ The `context-provider` container is driven by environment variables as shown:
 |DUMMY_DEVICES_API_KEY|`4jggokgpepnvsb2uv4s40d59ov`| Random security key used for UltraLight interactions - used to ensure the integrity of interactions between the devices and the IoT Agent |
 |DUMMY_DEVICES_TRANSPORT|`HTTP`| The transport protocol used by the dummy IoT devices |
 
-The other `context-provider` container configuration values described in the YAML file are not used in this tutorial.
+The other `tutorial` container configuration values described in the YAML file are not used in this tutorial.
 
 ## IoT Agent for UltraLight 2.0 Configuration
 
@@ -606,7 +606,7 @@ IoT Agent was started up. The `refStore` attribute comes from the `static_attrib
 Provisioning an actuator is similar to provisioning a sensor. This time an `endpoint` attribute holds
 the location where the IoT Agent needs to send the UltraLight command and the `commands` array includes
 a list of each command that can be invoked. The example below provisions a bell with the `deviceId=bell001`.
-The endpoint is `http://context-provider:3001/iot/bell001` and it can accept the `ring` command.
+The endpoint is `http://iot-sensors:3001/iot/bell001` and it can accept the `ring` command.
 The `transport=HTTP` attribute defines the communications protocol to be used.
 
 #### :six: Request:
@@ -625,7 +625,7 @@ curl -iX POST \
       "entity_type": "Bell",
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
-      "endpoint": "http://context-provider:3001/iot/bell001",
+      "endpoint": "http://iot-sensors:3001/iot/bell001",
       "commands": [
         { "name": "ring", "type": "command" }
        ],
@@ -750,7 +750,7 @@ curl -iX POST \
       "entity_type": "Door",
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
-      "endpoint": "http://context-provider:3001/iot/door001",
+      "endpoint": "http://iot-sensors:3001/iot/door001",
       "commands": [
         {"name": "unlock","type": "command"},
         {"name": "open","type": "command"},
@@ -794,7 +794,7 @@ curl -iX POST \
       "entity_type": "Lamp",
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
-      "endpoint": "http://context-provider:3001/iot/lamp001",
+      "endpoint": "http://iot-sensors:3001/iot/lamp001",
       "commands": [
         {"name": "on","type": "command"},
         {"name": "off","type": "command"}
@@ -1161,7 +1161,7 @@ Use the `<device-id>` to uniquely identify a device.
 
 This example provisions an individual device. It maps the `device_id=bell002` to the entity URN `urn:ngsi-ld:Bell:002` and gives the
 entity a type `Bell`. The IoT Agent has been informed that the device offers a single `ring` `command` and is listening on
-`http://context-provider:3001/iot/bell002` using HTTP. `attributes`, `lazy` attributes and `static_attributes` can also be provisioned.
+`http://iot-sensors:3001/iot/bell002` using HTTP. `attributes`, `lazy` attributes and `static_attributes` can also be provisioned.
 
 #### :two::three: Request:
 
@@ -1179,7 +1179,7 @@ curl -iX POST \
       "entity_type": "Bell",
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
-      "endpoint": "http://context-provider:3001/iot/bell002",
+      "endpoint": "http://iot-sensors:3001/iot/bell002",
       "commands": [
         {
           "name": "ring",
@@ -1220,7 +1220,7 @@ The response includes all the commands and attributes mappings associated with t
     "service_path": "/",
     "entity_name": "urn:ngsi",
     "entity_type": "Bell",
-    "endpoint": "http://context-provider:3001/iot/bell002",
+    "endpoint": "http://iot-sensors:3001/iot/bell002",
     "transport": "HTTP",
     "attributes": [],
     "lazy": [],
@@ -1270,7 +1270,7 @@ The response includes all the commands and attributes mappings associated with a
           "service_path": "/",
           "entity_name": "urn:ngsi",
           "entity_type": "Bell",
-          "endpoint": "http://context-provider:3001/iot/bell002",
+          "endpoint": "http://iot-sensors:3001/iot/bell002",
           "transport": "HTTP",
           "attributes": [],
           "lazy": [],
