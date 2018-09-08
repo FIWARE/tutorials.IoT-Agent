@@ -172,10 +172,10 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
 ## ダミー IoT デバイスの設定
 
 ```yaml
-  context-provider:
+  tutorial:
     image: fiware/tutorials.context-provider
-    hostname: context-provider
-    container_name: context-provider
+    hostname: iot-sensors
+    container_name: fiware-tutorial
     networks:
         - default
     expose:
@@ -194,12 +194,12 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
         - "DUMMY_DEVICES_TRANSPORT=HTTP"
 ```
 
-`context-provider` コンテナは、2つのポートでリッスンしています:
+`tutorial` コンテナは、2つのポートでリッスンしています:
 
 * ポート`3000` が公開されているので、ダミー IoT デバイスを表示する Web ページが表示されます
 * ポート`3001` は純粋にチュートリアルのアクセスのために公開されているため、cUrl または Postman は同じネットワーク以外からも、UltraLight コマンドを作成できます
 
-`context-provider` コンテナは、次のように環境変数によって設定値を指定できます :
+`tutorial` コンテナは、次のように環境変数によって設定値を指定できます :
 
 | キー | 値 | 説明 |
 |-----|-----|-----------|
@@ -211,7 +211,7 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
 |DUMMY_DEVICES_API_KEY|`4jggokgpepnvsb2uv4s40d59ov`|UltraLight インタラクションに使用されるランダムなセキュリティキー - デバイスと IoT Agent 間のインタラクションの完全性を保証するために使用します |
 |DUMMY_DEVICES_TRANSPORT|`HTTP`| ダミー IoT デバイスによって使用されるトランスポート・プロトコル |
 
-このチュートリアルでは、YAML ファイルで説明されている他の `context-provider` コンテナの設定値は使用しません。
+このチュートリアルでは、YAML ファイルで説明されている他の `tutorial` コンテナの設定値は使用しません。
 
 <a name="iot-agent-for-ultralight-20-configuration"></a>
 ## IoT Agent for UltraLight 2.0 の設定
@@ -535,7 +535,7 @@ curl -X GET \
 <a name="provisioning-an-actuator"></a>
 ### アクチュエータのプロビジョニング
 
-アクチュエータのプロビジョニングは、センサのプロビジョニングと同様です。今回、`endpoint` 属性には、IoT Agent が UltraLight コマンドを送信する必要がある場所が格納され、`commands` 配列には呼び出すことができる各コマンドのリストが含まれています。以下の例では、`deviceId=bell001` のベルがプロビジョニングされています。エンドポイントは `http://context-provider:3001/iot/bell001` であり、`ring` コマンドを受け入れることができます。
+アクチュエータのプロビジョニングは、センサのプロビジョニングと同様です。今回、`endpoint` 属性には、IoT Agent が UltraLight コマンドを送信する必要がある場所が格納され、`commands` 配列には呼び出すことができる各コマンドのリストが含まれています。以下の例では、`deviceId=bell001` のベルがプロビジョニングされています。エンドポイントは `http://iot-sensors:3001/iot/bell001` であり、`ring` コマンドを受け入れることができます。
 
 #### :six: リクエスト :
 
@@ -553,7 +553,7 @@ curl -iX POST \
       "entity_type": "Bell",
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
-      "endpoint": "http://context-provider:3001/iot/bell001",
+      "endpoint": "http://iot-sensors:3001/iot/bell001",
       "commands": [
         { "name": "ring", "type": "command" }
        ],
@@ -674,7 +674,7 @@ curl -iX POST \
       "entity_type": "Door",
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
-      "endpoint": "http://context-provider:3001/iot/door001",
+      "endpoint": "http://iot-sensors:3001/iot/door001",
       "commands": [
         {"name": "unlock","type": "command"},
         {"name": "open","type": "command"},
@@ -717,7 +717,7 @@ curl -iX POST \
       "entity_type": "Lamp",
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
-      "endpoint": "http://context-provider:3001/iot/lamp001",
+      "endpoint": "http://iot-sensors:3001/iot/lamp001",
       "commands": [
         {"name": "on","type": "command"},
         {"name": "off","type": "command"}
@@ -1071,7 +1071,7 @@ curl -iX DELETE \
 <a name="creating-a-provisioned-device"></a>
 ### プロビジョニングされたデバイスの作成
 
-この例では個々のデバイスをプロビジョニングします。`device_id=bell002` をエンティティ `urn:ngsi-ld:Bell:002` にマップし、エンティティに `Bell` 型を与えます。IoT Agent は、デバイスが単一の `ring` `command` を提供し、HTTP を使用して `http://context-provider:3001/iot/bell002` でリッスンしていることを通知されました。`attributes`, `lazy` 属性と、`static_attributes` もプロビジョニングできます。
+この例では個々のデバイスをプロビジョニングします。`device_id=bell002` をエンティティ `urn:ngsi-ld:Bell:002` にマップし、エンティティに `Bell` 型を与えます。IoT Agent は、デバイスが単一の `ring` `command` を提供し、HTTP を使用して `http://iot-sensors:3001/iot/bell002` でリッスンしていることを通知されました。`attributes`, `lazy` 属性と、`static_attributes` もプロビジョニングできます。
 
 #### :two::three: リクエスト :
 
@@ -1089,7 +1089,7 @@ curl -iX POST \
       "entity_type": "Bell",
       "protocol": "PDI-IoTA-UltraLight",
       "transport": "HTTP",
-      "endpoint": "http://context-provider:3001/iot/bell002",
+      "endpoint": "http://iot-sensors:3001/iot/bell002",
       "commands": [
         {
           "name": "ring",
@@ -1131,7 +1131,7 @@ curl -X GET \
     "service_path": "/",
     "entity_name": "urn:ngsi",
     "entity_type": "Bell",
-    "endpoint": "http://context-provider:3001/iot/bell002",
+    "endpoint": "http://iot-sensors:3001/iot/bell002",
     "transport": "HTTP",
     "attributes": [],
     "lazy": [],
@@ -1181,7 +1181,7 @@ curl -X GET \
           "service_path": "/",
           "entity_name": "urn:ngsi",
           "entity_type": "Bell",
-          "endpoint": "http://context-provider:3001/iot/bell002",
+          "endpoint": "http://iot-sensors:3001/iot/bell002",
           "transport": "HTTP",
           "attributes": [],
           "lazy": [],
