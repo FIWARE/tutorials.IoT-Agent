@@ -4,14 +4,14 @@
 [![License: MIT](https://img.shields.io/github/license/fiware/tutorials.Iot-Agent.svg)](https://opensource.org/licenses/MIT)
 [![Support badge](https://nexus.lab.fiware.org/repository/raw/public/badges/stackoverflow/fiware.svg)](https://stackoverflow.com/questions/tagged/fiware)
 [![NGSI v2](https://img.shields.io/badge/NGSI-v2-blue.svg)](https://fiware-ges.github.io/core.Orion/api/v2/stable/)
-[![UltraLight 2.0](https://img.shields.io/badge/Ultralight-2.0-5dc0cf.svg)](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
+[![UltraLight 2.0](https://img.shields.io/badge/Ultralight-2.0-5dc0cf.svg)](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 <br/>
 [![Documentation](https://img.shields.io/readthedocs/fiware-tutorials.svg)](https://fiware-tutorials.rtfd.io)
 
 
-このチュートリアルでは、**IoT Agent** の概念を紹介し、[以前のチュートリアル](https://github.com/Fiware/tutorials.Context-Providers/)で作成したダミーの [UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) IoT デバイスを接続し、[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) に送信された [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) リクエストを使用して測定値を読み取り、コマンドを送信できるようにします。
+このチュートリアルでは、**IoT Agent** の概念を紹介し、[以前のチュートリアル](https://github.com/Fiware/tutorials.Context-Providers/)で作成したダミーの [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) IoT デバイスを接続し、[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) に送信された [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) リクエストを使用して測定値を読み取り、コマンドを送信できるようにします。
 
-このチュートリアルでは、全体で [cUrl](https://ec.haxx.se/) コマンドを使用していますが、[Postman documentation](http://fiware.github.io/tutorials.IoT-Agent/) も利用できます。
+このチュートリアルでは、全体で [cUrl](https://ec.haxx.se/) コマンドを使用していますが、[Postman documentation](https://fiware.github.io/tutorials.IoT-Agent/) も利用できます。
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/2150531e68299d46f937)
 
@@ -74,10 +74,10 @@ Orion Context Broker は、すべての相互作用に対して排他的に [NGS
 
 IoT Agent はすでに存在しているか、多くの IoT コミュニケーション・プロトコルとデータモデルのために開発中です。例には次のものがあります :
 
-* [IoTAgent-JSON](http://fiware-iotagent-json.readthedocs.io/en/latest/) - JSON ペイロードを持つ HTTP/MQTT メッセージング と NGSI のブリッジ
-* [IoTAgent-LWM2M](http://fiware-iotagent-lwm2m.readthedocs.io/en/latest) - [Lightweight M2M](https://www.omaspecworks.org/what-is-oma-specworks/iot/lightweight-m2m-lwm2m/) プロトコル と NGSI のブリッジ
-* [IoTAgent-UL](http://fiware-iotagent-ul.readthedocs.io/en/latest) -  UltraLight2.0 ペイロード を持つ HTTP/MQTT メッセージング と NGSI のブリッジ
-* [IoTagent-LoRaWAN](http://fiware-lorawan.readthedocs.io/en/latest) -  [LoRaWAN](https://www.thethingsnetwork.org/docs/lorawan/) プロトコルと NGSI のブリッジ
+* [IoTAgent-JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/) - JSON ペイロードを持つ HTTP/MQTT メッセージング と NGSI のブリッジ
+* [IoTAgent-LWM2M](https://fiware-iotagent-lwm2m.readthedocs.io/en/latest) - [Lightweight M2M](https://www.omaspecworks.org/what-is-oma-specworks/iot/lightweight-m2m-lwm2m/) プロトコル と NGSI のブリッジ
+* [IoTAgent-UL](https://fiware-iotagent-ul.readthedocs.io/en/latest) -  UltraLight2.0 ペイロード を持つ HTTP/MQTT メッセージング と NGSI のブリッジ
+* [IoTagent-LoRaWAN](https://fiware-lorawan.readthedocs.io/en/latest) -  [LoRaWAN](https://www.thethingsnetwork.org/docs/lorawan/) プロトコルと NGSI のブリッジ
 
 <a name="southbound-traffic-commands"></a>
 ## サウス・バウンドのトラフィック (コマンド)
@@ -145,12 +145,12 @@ IoT デバイスから生成され、IoT Agent を介して、Context Broker に
 <a name="architecture"></a>
 # アーキテクチャ
 
-このアプリケーションは、[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) と [IoT Agent for UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/) の2つの FIWARE コンポーネントを使用します。アプリケーションが *“Powered by FIWARE”* と認定されるには、Orion Context Broker を使用するだけで十分です。Orion Context Broker と IoT Agent はオープンソースの MongoDB 技術を利用して、保持している情報の永続性を保ちます。[以前のチュートリアル](https://github.com/Fiware/tutorials.Context-Providers/)で作成したダミーの IoT デバイスも使用します。
+このアプリケーションは、[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) と [IoT Agent for UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/) の2つの FIWARE コンポーネントを使用します。アプリケーションが *“Powered by FIWARE”* と認定されるには、Orion Context Broker を使用するだけで十分です。Orion Context Broker と IoT Agent はオープンソースの MongoDB 技術を利用して、保持している情報の永続性を保ちます。[以前のチュートリアル](https://github.com/Fiware/tutorials.Context-Providers/)で作成したダミーの IoT デバイスも使用します。
 
 したがって、全体的なアーキテクチャは次の要素で構成されます :
 
-* [NGSI](http://fiware.github.io/specifications/ngsiv2/latest/) を使用してリクエストを受信する、FIWARE [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/)
-* [NGSI](http://fiware.github.io/specifications/ngsiv2/latest/) を使用してサウス・バウンドのリクエストを受信し、デバイスの [UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) コマンドに変換する、FIWARE [IoT Agent for UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/)
+* [NGSI](https://fiware.github.io/specifications/ngsiv2/latest/) を使用してリクエストを受信する、FIWARE [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/)
+* [NGSI](https://fiware.github.io/specifications/ngsiv2/latest/) を使用してサウス・バウンドのリクエストを受信し、デバイスの [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) コマンドに変換する、FIWARE [IoT Agent for UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/)
 * 基礎となる [MongoDB](https://www.mongodb.com/) データベース :
   + **Orion Context Broker** が、データ・エンティティ、サブスクリプション、レジストレーションなどのコンテキスト・データの情報を保持するために使用します
   + **IoT Agent** が、デバイスの URL やキーなどのデバイス情報を保持するために使用します
@@ -162,7 +162,7 @@ IoT デバイスから生成され、IoT Agent を介して、Context Broker に
   + 店舗情報を表示します
   + 各店舗で購入できる商品を表示します
   + ユーザが製品を購入して在庫数を減らすことを許可します
-* HTTP上で動作する [UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) プロトコルを使用して、ダミーの IoT デバイスのセットとして機能するWebサーバ
+* HTTP上で動作する [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) プロトコルを使用して、ダミーの IoT デバイスのセットとして機能するWebサーバ
 
 要素間のすべての対話は HTTP リクエストによって開始されるため、エンティティはコンテナ化され、公開されたポートから実行されます。
 
@@ -218,7 +218,7 @@ IoTデバイス と IoT Agent を接続するために必要な構成情報は�
 <a name="iot-agent-for-ultralight-20-configuration"></a>
 ## IoT Agent for UltraLight 2.0 の設定
 
-[IoT Agent for UltraLight 2.0](http://fiware-iotagent-ul.readthedocs.io/en/latest/) は 、Docker コンテナ内でインスタンス化できます。公式の Docker イメージは、[Docker Hub](https://hub.docker.com/r/fiware/iotagent-ul/) で、`fiware/iotagent-ul` とタグ付けされています。必要な構成を以下に示します:
+[IoT Agent for UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/) は 、Docker コンテナ内でインスタンス化できます。公式の Docker イメージは、[Docker Hub](https://hub.docker.com/r/fiware/iotagent-ul/) で、`fiware/iotagent-ul` とタグ付けされています。必要な構成を以下に示します:
 
 ```yaml
   iot-agent:
