@@ -1218,7 +1218,7 @@ curl -X GET \
 
 ```console
 curl -iX PUT \
-  'http://localhost:4041/iot/services?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
+  'http://localhost:4041/iot/devices/bell002' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -1230,7 +1230,7 @@ curl -iX PUT \
 <a name="delete-a-provisioned-device"></a>
 ### プロビジョニングされたデバイスを削除
 
-この例では、`/iot/services/<device-id>` エンドポイントに DELETE リクエストを行うことによって、プロビジョニングされたデバイスを削除します。
+この例では、`/iot/devices/<device-id>` エンドポイントに DELETE リクエストを行うことによって、プロビジョニングされたデバイスを削除します。
 
 デバイスの属性はマップされなくなり、コマンドはデバイスに送信できなくなります。デバイスがアクティブな測定を行っていると、関連付けられたサービスが削除されていない場合でも、デフォルト値で処理されます。
 
@@ -1238,7 +1238,7 @@ curl -iX PUT \
 
 ```console
 curl -iX DELETE \
-  'http://localhost:4041/iot/services/?resource=/iot/d&apikey=4jggokgpepnvsb2uv4s40d59ov' \
+  'http://localhost:4041/iot/devices/bell002' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /'
 ```
