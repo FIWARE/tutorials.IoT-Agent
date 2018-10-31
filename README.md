@@ -117,25 +117,25 @@ of the real world by their actions.
 For example to switch on a real-life UltraLight 2.0 **Smart Lamp** the following
 interactions would occur:
 
-1.  An NGSI PATCH request is sent to the **Context broker** to update the current
-   context of **Smart Lamp**
+1.  An NGSI PATCH request is sent to the **Context broker** to update the
+    current context of **Smart Lamp**
 
 -   this is effectively an indirect request invoke the `on` command of the
     **Smart Lamp**
 
-2.  The **Context Broker** finds the entity within the context and notes that the
-   context provision for this attribute has been delegated to the IoT Agent
+2.  The **Context Broker** finds the entity within the context and notes that
+    the context provision for this attribute has been delegated to the IoT Agent
 3.  The **Context broker** sends an NGSI request to the North Port of the **IoT
-   Agent** to invoke the command
+    Agent** to invoke the command
 4.  The **IoT Agent** receives this Southbound request and converts it to
-   UltraLight 2.0 syntax and passes it on to the **Smart Lamp**
-5.  The **Smart Lamp** switches on the lamp and returns the result of the command
-   to the **IoT Agent** in UltraLight 2.0 syntax
+    UltraLight 2.0 syntax and passes it on to the **Smart Lamp**
+5.  The **Smart Lamp** switches on the lamp and returns the result of the
+    command to the **IoT Agent** in UltraLight 2.0 syntax
 6.  The **IoT Agent** receives this Northbound request, interprets it and passes
-   the result of the interaction into the context by making an NGSI request to
-   the **Context Broker**.
+    the result of the interaction into the context by making an NGSI request to
+    the **Context Broker**.
 7.  The **Context Broker** receives this Northbound request and updates the
-   context with the result of the command.
+    context with the result of the command.
 
 ![](https://fiware.github.io/tutorials.IoT-Agent/img/command-swimlane.png)
 
@@ -156,12 +156,12 @@ For example for a real-life **Motion Sensor** to send a count measurement the
 following interactions would occur:
 
 1.  A **Motion Sensor** makes a measurement and passes the result to the **IoT
-   Agent**
+    Agent**
 2.  The **IoT Agent** receives this Northbound request, converts the result from
-   UltraLight syntax and passes the result of the interaction into the context
-   by making an NGSI request to the **Context Broker**.
+    UltraLight syntax and passes the result of the interaction into the context
+    by making an NGSI request to the **Context Broker**.
 3.  The **Context Broker** receives this Northbound request and updates the
-   context with the result of the measurement.
+    context with the result of the measurement.
 
 ![](https://fiware.github.io/tutorials.IoT-Agent/img/measurement-swimlane.png)
 
