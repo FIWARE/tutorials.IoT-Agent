@@ -24,7 +24,10 @@ available as
 
 -   このチュートリアルは[日本語](README.ja.md)でもご覧いただけます。
 
-# Contents
+## Contents
+
+<details>
+<summary><strong>Details</strong></summary>
 
 -   [What is an IoT Agent?](#what-is-an-iot-agent)
     -   [Southbound Traffic (Commands)](#southbound-traffic-commands)
@@ -65,6 +68,8 @@ available as
     -   [Update a Provisioned Device](#update-a-provisioned-device)
     -   [Delete a Provisioned Device](#delete-a-provisioned-device)
 -   [Next Steps](#next-steps)
+
+</details>
 
 # What is an IoT Agent?
 

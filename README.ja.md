@@ -23,7 +23,10 @@ IoT デバイスを接続し
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/2150531e68299d46f937)
 
-# 内容
+## 内容
+
+<details>
+<summary>詳細 <b>(クリックして拡大)</b></summary>
 
 -   [IoT Agent とは何ですか？](#what-is-an-iot-agent)
     -   [サウス・バウンドのトラフィック (コマンド)](#southbound-traffic-commands)
@@ -64,6 +67,8 @@ IoT デバイスを接続し
     -   [プロビジョニングされたデバイスを更新](#update-a-provisioned-device)
     -   [プロビジョニングされたデバイスを削除](#delete-a-provisioned-device)
 -   [次のステップ](#next-steps)
+
+</details>
 
 <a name="what-is-an-iot-agent"></a>
 
