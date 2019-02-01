@@ -99,4 +99,4 @@ networks:
         - subnet: 172.18.1.0/24
 
 volumes:
-  mongo-db:
+  mongo-db: ~
