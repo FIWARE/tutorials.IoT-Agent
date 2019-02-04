@@ -8,6 +8,8 @@
 <br/>
 [![Documentation](https://img.shields.io/readthedocs/fiware-tutorials.svg)](https://fiware-tutorials.rtfd.io)
 
+<!-- prettier-ignore -->
+
 このチュートリアルでは、**IoT Agent** の概念を紹介し
 、[以前のチュートリアル](https://github.com/Fiware/tutorials.Context-Providers/)で
 作成したダミーの
