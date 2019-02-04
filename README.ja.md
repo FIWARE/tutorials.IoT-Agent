@@ -625,7 +625,7 @@ Broker に渡す必要があります。この`entity_type` 属性は、リク�
 ### センサのプロビジョニング
 
 エンティティを作成するときは、NGSI-LD
-[ドラフト勧告](https://docbox.etsi.org/ISG/CIM/Open/ISG_CIM_NGSI-LD_API_Draft_for_public_review.pdf)に
+[ドラフト勧告](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.01.01_60/gs_CIM009v010101p.pdf)に
 従って URNs を使用するのが一般的な良い方法です。さらに、データ属性を定義するとき
 に意味のある名前にするとわかりやすくなります。これらのマッピングは、デバイスを個
 別にプロビジョニングすることによって定義できます。
