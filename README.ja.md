@@ -11,7 +11,7 @@
 <!-- prettier-ignore -->
 
 このチュートリアルでは、**IoT Agent** の概念を紹介し
-、[以前のチュートリアル](https://github.com/Fiware/tutorials.Context-Providers/)で
+、[以前のチュートリアル](https://github.com/FIWARE/tutorials.Context-Providers/)で
 作成したダミーの
 [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 IoT デバイスを接続し
@@ -202,7 +202,7 @@ IoT デバイスから生成され、IoT Agent を介して、Context Broker に
 
 このチュートリアルの目的のために、一連のダミーの IoT デバイスを作成し、Context
 Broker に接続します。使用するアーキテクチャとプロトコルの詳細については
-、[IoT Sensors tutorial](https://github.com/Fiware/tutorials.IoT-Sensors) を参照
+、[IoT Sensors tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors) を参照
 してください。各デバイスの状態は、次の UltraLight2.0 デバイスのモニタ Web ページ
 で確認できます : `http://localhost:3000/device/monitor`
 
@@ -219,7 +219,7 @@ Broker に接続します。使用するアーキテクチャとプロトコル�
 FIWARE”_ と認定されるには、Orion Context Broker を使用するだけで十分です。Orion
 Context Broker と IoT Agent はオープンソースの MongoDB 技術を利用して、保持して
 いる情報の永続性を保ちます
-。[以前のチュートリアル](https://github.com/Fiware/tutorials.Context-Providers/)で
+。[以前のチュートリアル](https://github.com/FIWARE/tutorials.Context-Providers/)で
 作成したダミーの IoT デバイスも使用します。
 
 したがって、全体的なアーキテクチャは次の要素で構成されます :
@@ -440,7 +440,7 @@ cd tutorials.IoT-Agent
 ```
 
 その後、リポジトリ内で提供される
-、[services](https://github.com/Fiware/tutorials.IoT-Agent/blob/master/services)
+、[services](https://github.com/FIWARE/tutorials.IoT-Agent/blob/master/services)
 Bash スクリプトを実行することによって、コマンドラインからすべてのサービスを初期
 化することができます :
 
@@ -609,7 +609,7 @@ http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov
 ```
 
 これは
-、[以前のチュートリアル](https://github.com/Fiware/tutorials.IoT-Sensors)で
+、[以前のチュートリアル](https://github.com/FIWARE/tutorials.IoT-Sensors)で
 Ultra Light 2.0 の構文に慣れているはずです。
 
 IoT デバイスからの測定値がリソース url で受信されると、それを解釈して Context
@@ -988,11 +988,11 @@ curl -X GET \
 
 IoT Agent を IoT デバイスに接続したら、コマンドが利用可能であることを Orion
 Context Broker に通知する必要があります。つまり、IoT Agent をコマンド属性
-の[コンテキストプロバイダ](https://github.com/Fiware/tutorials.Context-Providers/)と
+の[コンテキストプロバイダ](https://github.com/FIWARE/tutorials.Context-Providers/)と
 して登録する必要があります。
 
 コマンドが登録されていたら
-、[以前のチュートリアル](https://github.com/Fiware/tutorials.IoT-Sensors)で行っ
+、[以前のチュートリアル](https://github.com/FIWARE/tutorials.IoT-Sensors)で行っ
 たように、IoT デバイスから直接 Ultra Light 2.0 リクエストを送信するのではなく
 、**ベル**に呼び出し音を出したり、**スマート・ドア**を開閉したり、**スイッチスマ
 ート・ランプ**をオン/オフに切り替えることができます。
