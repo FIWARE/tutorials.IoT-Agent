@@ -5,8 +5,7 @@
 [![Support badge](https://nexus.lab.fiware.org/repository/raw/public/badges/stackoverflow/fiware.svg)](https://stackoverflow.com/questions/tagged/fiware)
 [![NGSI v2](https://img.shields.io/badge/NGSI-v2-blue.svg)](https://fiware-ges.github.io/core.Orion/api/v2/stable/)
 [![UltraLight 2.0](https://img.shields.io/badge/Ultralight-2.0-5dc0cf.svg)](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
-<br/>
-[![Documentation](https://img.shields.io/readthedocs/fiware-tutorials.svg)](https://fiware-tutorials.rtfd.io)
+<br/> [![Documentation](https://img.shields.io/readthedocs/fiware-tutorials.svg)](https://fiware-tutorials.rtfd.io)
 
 <!-- prettier-ignore -->
 
@@ -336,17 +335,19 @@ iot-agent:
         - "4041:4041"
         - "7896:7896"
     environment:
-        - "IOTA_CB_HOST=orion"
-        - "IOTA_CB_PORT=1026"
-        - "IOTA_NORTH_PORT=4041"
-        - "IOTA_REGISTRY_TYPE=mongodb"
-        - "IOTA_LOG_LEVEL=DEBUG"
-        - "IOTA_TIMESTAMP=true"
-        - "IOTA_MONGO_HOST=mongo-db"
-        - "IOTA_MONGO_PORT=27017"
-        - "IOTA_MONGO_DB=iotagentul"
-        - "IOTA_HTTP_PORT=7896"
-        - "IOTA_PROVIDER_URL=http://iot-agent:4041"
+        - IOTA_CB_HOST=orion
+        - IOTA_CB_PORT=1026
+        - IOTA_NORTH_PORT=4041
+        - IOTA_REGISTRY_TYPE=mongodb
+        - IOTA_LOG_LEVEL=DEBUG
+        - IOTA_TIMESTAMP=true
+        - IOTA_CB_NGSI_VERSION=v2
+        - IOTA_AUTOCAST=true
+        - IOTA_MONGO_HOST=mongo-db
+        - IOTA_MONGO_PORT=27017
+        - IOTA_MONGO_DB=iotagentul
+        - IOTA_HTTP_PORT=7896
+        - IOTA_PROVIDER_URL=http://iot-agent:4041
 ```
 
 `iot-agent` コンテナは、Orion Context Broker に依存し、MongoDB データベースを使
@@ -361,19 +362,21 @@ iot-agent:
 
 `iot-agent` コンテナは、次のように環境変数によって設定値を指定できます :
 
-| キー               | 値                      | 説明                                                                                                                                   |
-| ------------------ | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| IOTA_CB_HOST       | `orion`                 | コンテキストを更新する Context Broker のホスト名                                                                                       |
-| IOTA_CB_PORT       | `1026`                  | Context Broker がコンテキストを更新するためにリッスンするポート                                                                        |
-| IOTA_NORTH_PORT    | `4041`                  | IoT Agent の設定および Context Broker からのコンテキスト更新の受信に使用されるポート                                                   |
-| IOTA_REGISTRY_TYPE | `mongodb`               | メモリまたはデータベースに IoT デバイス情報を保持するかどうかを指定                                                                    |
-| IOTA_LOG_LEVEL     | `DEBUG`                 | IoT Agent のログレベル                                                                                                                 |
-| IOTA_TIMESTAMP     | `true`                  | 接続されたデバイスから受信した各測定値にタイムスタンプ情報を提供するかどうかを指定                                                     |
-| IOTA_MONGO_HOST    | `context-db`            | mongoDB のホスト名 - デバイス情報を保持するために使用                                                                                  |
-| IOTA_MONGO_PORT    | `27017`                 | mongoDB はリッスンしているポート                                                                                                       |
-| IOTA_MONGO_DB      | `iotagentul`            | mongoDB で使用されるデータベースの名前                                                                                                 |
-| IOTA_HTTP_PORT     | `7896`                  | IoT Agent が HTTP 経由で IoT デバイスのトラフィックをリッスンするポート                                                                |
-| IOTA_PROVIDER_URL  | `http://iot-agent:4041` | コマンドが登録されたときに Context Broker に渡された URL。Context Broker がデバイスにコマンドを発行したときに転送 URL の場所として使用 |
+| キー                 | 値                      | 説明                                                                                                                                   |
+| -------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| IOTA_CB_HOST         | `orion`                 | コンテキストを更新する Context Broker のホスト名                                                                                       |
+| IOTA_CB_PORT         | `1026`                  | Context Broker がコンテキストを更新するためにリッスンするポート                                                                        |
+| IOTA_NORTH_PORT      | `4041`                  | IoT Agent の設定および Context Broker からのコンテキスト更新の受信に使用されるポート                                                  |
+| IOTA_REGISTRY_TYPE   | `mongodb`               | メモリまたはデータベースに IoT デバイス情報を保持するかどうかを指定                                                                    |
+| IOTA_LOG_LEVEL       | `DEBUG`                 | IoT Agent のログレベル                                                                                                                 |
+| IOTA_TIMESTAMP       | `true`                  | 接続されたデバイスから受信した各測定値にタイムスタンプ情報を提供するかどうかを指定                                                    |
+| IOTA_CB_NGSI_VERSION | `v2`                    | アクティブな属性の更新を送信するときにNGSI v2 を使用するように指定するかどうか                                                        |
+| IOTA_AUTOCAST        | `true`                  | Ultralight の数値が文字列ではなく数値として読み取られるようにする                                                                      |
+| IOTA_MONGO_HOST      | `context-db`            | mongoDB のホスト名 - デバイス情報を保持するために使用                                                                                  |
+| IOTA_MONGO_PORT      | `27017`                 | mongoDB はリッスンしているポート                                                                                                       |
+| IOTA_MONGO_DB        | `iotagentul`            | mongoDB で使用されるデータベースの名前                                                                                                 |
+| IOTA_HTTP_PORT       | `7896`                  | IoT Agent が HTTP 経由で IoT デバイスのトラフィックをリッスンするポート                                                                |
+| IOTA_PROVIDER_URL    | `http://iot-agent:4041` | コマンドが登録されたときに Context Broker に渡された URL。Context Broker がデバイスにコマンドを発行したときに転送 URL の場所として使用 |
 
 <a name="prerequisites"></a>
 
@@ -625,7 +628,7 @@ Broker に渡す必要があります。この`entity_type` 属性は、リク�
 ### センサのプロビジョニング
 
 エンティティを作成するときは、NGSI-LD
-[ドラフト勧告](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.01.01_60/gs_CIM009v010101p.pdf)に
+[仕様](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.01.01_60/gs_CIM009v010101p.pdf)に
 従って URNs を使用するのが一般的な良い方法です。さらに、データ属性を定義するとき
 に意味のある名前にするとわかりやすくなります。これらのマッピングは、デバイスを個
 別にプロビジョニングすることによって定義できます。
