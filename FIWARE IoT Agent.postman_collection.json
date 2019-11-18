@@ -1382,19 +1382,19 @@
 	],
 	"variable": [
 		{
-			"id": "43cd94b2-d9fd-4f8c-9f16-79ade8321dc0",
+			"id": "37214249-48e5-4c37-b5a9-892cd42aec45",
 			"key": "iot-agent",
 			"value": "localhost:4041",
 			"type": "string"
 		},
 		{
-			"id": "00792a5f-dfd2-41af-a236-4c43e4e28442",
+			"id": "0306f18e-51da-43d3-973e-5ca405731215",
 			"key": "orion",
 			"value": "localhost:1026",
 			"type": "string"
 		},
 		{
-			"id": "5abfc42e-cb82-47d3-a0e1-b59d44d5b118",
+			"id": "c9e7329f-3f8d-4439-93de-d30fddca0f57",
 			"key": "ultralight",
 			"value": "localhost:3001",
 			"type": "string"
