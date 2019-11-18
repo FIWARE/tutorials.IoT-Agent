@@ -362,7 +362,7 @@ Before you start you should ensure that you have obtained or built the necessary
 repository and create the necessary images by running the commands as shown:
 
 ```console
-git clone git@github.com:FIWARE/tutorials.IoT-Agent.git
+git clone https://github.com/FIWARE/tutorials.IoT-Agent.git
 cd tutorials.IoT-Agent
 
 ./services create
@@ -682,9 +682,9 @@ curl -iX POST \
 ```
 
 Before we wire-up the context broker, we can test that a command can be send to a device by making a REST request
-directly to the IoT Agent's North Port using the `/v2/op/update` endpoint. It is this endpoint that will eventually
-be invoked by the context broker once we have connected it up. To test the configuration you can run the command
-directly as shown:
+directly to the IoT Agent's North Port using the `/v2/op/update` endpoint. It is this endpoint that will eventually be
+invoked by the context broker once we have connected it up. To test the configuration you can run the command directly
+as shown:
 
 #### :seven: Request:
 
