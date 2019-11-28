@@ -230,17 +230,18 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"contextElements\": [\n        {\n            \"type\": \"Bell\",\n            \"isPattern\": \"false\",\n            \"id\": \"urn:ngsi-ld:Bell:001\",\n            \"attributes\": [\n                {\n                    \"name\": \"ring\",\n                    \"type\": \"command\",\n                    \"value\": \"\"\n                }\n            ]\n        }\n    ],\n    \"updateAction\": \"UPDATE\"\n}"
+							"raw": "{\n    \"actionType\": \"update\",\n    \"entities\": [\n        {\n            \"type\": \"Bell\",\n            \"id\": \"urn:ngsi-ld:Bell:001\",\n            \"ring\" : {\n                \"type\": \"command\",\n                \"value\": \"\"\n            }\n        }\n    ]\n}"
 						},
 						"url": {
-							"raw": "http://{{iot-agent}}/v1/updateContext",
+							"raw": "http://{{iot-agent}}/v2/op/update",
 							"protocol": "http",
 							"host": [
 								"{{iot-agent}}"
 							],
 							"path": [
-								"v1",
-								"updateContext"
+								"v2",
+								"op",
+								"update"
 							]
 						},
 						"description": "Before we wire-up the context broker, we can test that a command can be send to a device by making a REST request \ndirectly to the IoT Agent's North Port using the `/v1/updateContext` endpoint.\nIt is this endpoint that will eventually be invoked by the context broker once we have connected it up. \nTo test the configuration you can run the command directly as shown.\n\nIf you are viewing the device monitor page, you can also see the state of the bell change.\n\n![](https://fiware.github.io/tutorials.IoT-Agent/img/bell-ring.gif)"
@@ -1382,19 +1383,19 @@
 	],
 	"variable": [
 		{
-			"id": "37214249-48e5-4c37-b5a9-892cd42aec45",
+			"id": "61c00a38-a7ff-40a6-8c26-eb0e84993b31",
 			"key": "iot-agent",
 			"value": "localhost:4041",
 			"type": "string"
 		},
 		{
-			"id": "0306f18e-51da-43d3-973e-5ca405731215",
+			"id": "61b352aa-9de8-400d-954b-9b8335adcd41",
 			"key": "orion",
 			"value": "localhost:1026",
 			"type": "string"
 		},
 		{
-			"id": "c9e7329f-3f8d-4439-93de-d30fddca0f57",
+			"id": "f80e2e8b-47ca-453e-8b5b-8b1e1e6fdb6a",
 			"key": "ultralight",
 			"value": "localhost:3001",
 			"type": "string"
