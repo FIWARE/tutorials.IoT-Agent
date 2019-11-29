@@ -86,7 +86,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n \"devices\": [\n   {\n     \"device_id\":   \"motion001\",\n     \"entity_name\": \"urn:ngsd-ld:Motion:001\",\n     \"entity_type\": \"Motion\",\n     \"timezone\":    \"Europe/Berlin\",\n     \"attributes\": [\n       { \"object_id\": \"c\", \"name\":\"count\", \"type\":\"Integer\"}\n      ],\n      \"static_attributes\": [\n         {\"name\":\"refStore\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Store:001\"}\n      ]\n   }\n ]\n}\n"
+							"raw": "{\n \"devices\": [\n   {\n     \"device_id\":   \"motion001\",\n     \"entity_name\": \"urn:ngsi-ld:Motion:001\",\n     \"entity_type\": \"Motion\",\n     \"timezone\":    \"Europe/Berlin\",\n     \"attributes\": [\n       { \"object_id\": \"c\", \"name\":\"count\", \"type\":\"Integer\"}\n      ],\n      \"static_attributes\": [\n         {\"name\":\"refStore\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Store:001\"}\n      ]\n   }\n ]\n}\n"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/devices",
@@ -158,7 +158,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{orion}}/v2/entities/urn:ngsd-ld:Motion:001",
+							"raw": "http://{{orion}}/v2/entities/urn:ngsi-ld:Motion:001",
 							"protocol": "http",
 							"host": [
 								"{{orion}}"
@@ -166,7 +166,7 @@
 							"path": [
 								"v2",
 								"entities",
-								"urn:ngsd-ld:Motion:001"
+								"urn:ngsi-ld:Motion:001"
 							]
 						},
 						"description": "This example returns the data for the `Motion` entity with the `id=urn:ngsd-ld:Motion:001` within the context data.\n\nThe response shows that the device with `id=motion001` has been successfully identifed by the IoT Agent and mapped to the\nentity `id=urn:ngsd-ld:Motion:001`. This new entity has been created within the context data. The `c` \nattribute from the dummy device measurement request has been mapped to the more meaningful `count` attribute\nwithin the context. As you will notice, a `TimeInstant` attribute has been added to both the entity and the\nmeta data of the attribute - this represents the last time the entity and attribute have been updated, and is\nautomatically added to each new entity because the `IOTA_TIMESTAMP`  environment variable was set when the\nIoT Agent was started up. The `refStore` attribute comes from the `static_attributes` set when the device was provisioned."
@@ -1383,19 +1383,19 @@
 	],
 	"variable": [
 		{
-			"id": "61c00a38-a7ff-40a6-8c26-eb0e84993b31",
+			"id": "16c38646-121e-4f5a-91d5-1b45d0134fba",
 			"key": "iot-agent",
 			"value": "localhost:4041",
 			"type": "string"
 		},
 		{
-			"id": "61b352aa-9de8-400d-954b-9b8335adcd41",
+			"id": "809e785e-2aaa-41fa-9260-5a8e5036dd4a",
 			"key": "orion",
 			"value": "localhost:1026",
 			"type": "string"
 		},
 		{
-			"id": "f80e2e8b-47ca-453e-8b5b-8b1e1e6fdb6a",
+			"id": "ed28f54d-edf5-473f-a25f-7b4e3e66d4d6",
 			"key": "ultralight",
 			"value": "localhost:3001",
 			"type": "string"
