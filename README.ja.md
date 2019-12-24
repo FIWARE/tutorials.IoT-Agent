@@ -49,11 +49,8 @@ IoT デバイスを接続し
         -   [スマート・ドアのプロビジョニング](#provisioning-a-smart-door)
         -   [スマート・ランプのプロビジョニング](#provisioning-a-smart-lamp)
     -   [Context Broker コマンド の有効化](#enabling-context-broker-commands)
-        -   [ベル・コマンドの登録](#registering-a-bell-command)
         -   [ベルを鳴らす](#ringing-the-bell)
-        -   [スマート・ドア・コマンドの登録](#registering-smart-door-commands)
         -   [スマート・ドアを開く](#opening-the-smart-door)
-        -   [スマート・ランプ・コマンドの登録](#registering-smart-lamp-commands)
         -   [スマート・ランプをオンにする](#switching-on-the-smart-lamp)
 -   [サービス・グループの CRUD アクション](#service-group-crud-actions)
     -   [サービス・グループの作成](#creating-a-service-group)
@@ -959,51 +956,16 @@ curl -X GET \
 
 ## Context Broker コマンド の有効化
 
-IoT Agent を IoT デバイスに接続したら、コマンドが利用可能であることを Orion
-Context Broker に通知する必要があります。つまり、IoT Agent をコマンド属性
-の[コンテキストプロバイダ](https://github.com/FIWARE/tutorials.Context-Providers/)と
-して登録する必要があります。
+IoT Agent を IoT デバイスに接続すると、Orion Context Broker にコマンドが利用可能に
+なったことが通知されました。つまり、IoT Agent は、コマンド属性の
+[コンテキスト・プロバイダ](https://github.com/FIWARE/tutorials.Context-Providers/)
+として自身を登録しました。
 
 コマンドが登録されていたら
 、[以前のチュートリアル](https://github.com/FIWARE/tutorials.IoT-Sensors)で行っ
 たように、IoT デバイスから直接 Ultra Light 2.0 リクエストを送信するのではなく
 、**ベル**に呼び出し音を出したり、**スマート・ドア**を開閉したり、**スイッチスマ
 ート・ランプ**をオン/オフに切り替えることができます。
-
-<a name="registering-a-bell-command"></a>
-
-### ベル・コマンドの登録
-
-**ベル**のエンティティは、エンティティタイプ `type="Bell"` の
-`id="urn:ngsi-ld:Bell:001"` にマッピングされています。コマンドを登録するには
-、`http://orion:1026/v1` が欠落している `ring` 属性を提供できることを Orion に通
-知する必要があります。これは IoT Agent に転送されます。ご覧のとおり、これは NGSI
-v1 エンドポイントであるため、`legacyForwarding` 属性も設定する必要があります。
-
-#### :one::two: リクエスト :
-
-```console
-curl -iX POST \
-  'http://localhost:1026/v2/registrations' \
-  -H 'Content-Type: application/json' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /' \
-  -d '{
-  "description": "Bell Commands",
-  "dataProvided": {
-    "entities": [
-      {
-        "id": "urn:ngsi-ld:Bell:001", "type": "Bell"
-      }
-    ],
-    "attrs": ["ring"]
-  },
-  "provider": {
-    "http": {"url": "http://orion:1026/v1"},
-    "legacyForwarding": true
-  }
-}'
-```
 
 <a name="ringing-the-bell"></a>
 
@@ -1012,7 +974,7 @@ curl -iX POST \
 `ring` コマンドを呼び出すには、コンテキスト内で `ring` 属性を更新する必要があり
 ます。
 
-#### :one::three: リクエスト :
+#### :one::two: リクエスト :
 
 ```console
 curl -iX PATCH \
@@ -1032,41 +994,6 @@ curl -iX PATCH \
 
 ![](https://fiware.github.io/tutorials.IoT-Agent/img/bell-ring.gif)
 
-<a name="registering-smart-door-commands"></a>
-
-### スマート・ドア・コマンドの登録
-
-**スマート・ドア**のエンティティは、エンティティ・タイプ `type="Door"` で
-、`id="urn:ngsi-ld:Door:001"` にマップされています。コマンドを登録するには、URL
-`http://orion:1026/v1` が不足している属性を提供できることを Orion に通知する必要
-があります。 これは IoT Agent に転送されます。 ご覧のとおり、これは NGSI v1 エン
-ドポイントであるため、`legacyForwarding` 属性も設定する必要があります。
-
-#### :one::four: リクエスト :
-
-```console
-curl -iX POST \
-  'http://localhost:1026/v2/registrations' \
-  -H 'Content-Type: application/json' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /' \
-  -d '{
-  "description": "Door Commands",
-  "dataProvided": {
-    "entities": [
-      {
-        "id": "urn:ngsi-ld:Door:001", "type": "Door"
-      }
-    ],
-    "attrs": [ "lock", "unlock", "open", "close"]
-  },
-  "provider": {
-    "http": {"url": "http://orion:1026/v1"},
-    "legacyForwarding": true
-  }
-}'
-```
-
 <a name="opening-the-smart-door"></a>
 
 ### スマート・ドアを開く
@@ -1074,7 +1001,7 @@ curl -iX POST \
 `open` コマンドを呼び出すには、コンテキスト内で `open` 属性を更新する必要があり
 ます。
 
-#### :one::five: リクエスト :
+#### :one::three: リクエスト :
 
 ```console
 curl -iX PATCH \
@@ -1090,41 +1017,6 @@ curl -iX PATCH \
 }'
 ```
 
-<a name="registering-smart-lamp-commands"></a>
-
-### スマート・ランプ・コマンドの登録
-
-**スマート・ランプ**のエンティティは、エンティティ `type="Lamp"` の
-`id="urn:ngsi-ld:Lamp:001"` にマップされています。コマンドを登録するには、URL
-`http://orion:1026/v1` が不足している属性を提供できることを Orion に通知する必要
-があります。これは IoT Agent に転送されます。ご覧のとおり、これは NGSI v1 エンド
-ポイントなので、`legacyForwarding` 属性も設定する必要があります。
-
-#### :one::six: リクエスト :
-
-```console
-curl -iX POST \
-  'http://localhost:1026/v2/registrations' \
-  -H 'Content-Type: application/json' \
-  -H 'fiware-service: openiot' \
-  -H 'fiware-servicepath: /' \
-  -d '{
-  "description": "Lamp Commands",
-  "dataProvided": {
-    "entities": [
-      {
-        "id": "urn:ngsi-ld:Lamp:001","type": "Lamp"
-      }
-    ],
-    "attrs": [ "on", "off" ]
-  },
-  "provider": {
-    "http": {"url": "http://orion:1026/v1"},
-    "legacyForwarding": true
-  }
-}'
-```
-
 <a name="switching-on-the-smart-lamp"></a>
 
 ### スマート・ランプをオンにする
@@ -1132,7 +1024,7 @@ curl -iX POST \
 **スマート・ランプ**をオンにするには、その `on` 属性をコンテキストで更新する必要
 があります。
 
-#### :one::seven: リクエスト :
+#### :one::four: リクエスト :
 
 ```console
 curl -iX PATCH \
@@ -1171,7 +1063,7 @@ curl -iX PATCH \
 のデバイスが、 IoT Agent が**ノース・バウンド**通信をリッスンしている
 `IOTA_HTTP_PORT` にメッセージを送信することを通知します。
 
-#### :one::eight: リクエスト :
+#### :one::five: リクエスト :
 
 ```console
 curl -iX POST \
@@ -1201,7 +1093,7 @@ curl -iX POST \
 サービス・グループの詳細は、`/iot/services` エンドポイントへの GET リクエストと
 `resource` パラメータの提供によって読み取ることができます。
 
-#### :one::nine: リクエスト :
+#### :one::six: リクエスト :
 
 ```console
 curl -X GET \
@@ -1238,7 +1130,7 @@ curl -X GET \
 この例では、`/iot/services` エンドポイントに GET リクエストを行うことによって、
 プロビジョニングされたすべてのサービスを一覧表示します。
 
-#### :two::zero: リクエスト :
+#### :one::seven: リクエスト :
 
 ```console
 curl -X GET \
@@ -1278,7 +1170,7 @@ curl -X GET \
 サービス・グループの詳細は、`/iot/services` エンドポイントへの PUT リクエストを
 行い、`resource` および `apikey` パラメータを提供することによって更新できます。
 
-#### :two::one: リクエスト :
+#### :one::eight: リクエスト :
 
 ```console
 curl -iX PUT \
@@ -1304,7 +1196,7 @@ curl -iX PUT \
 識別するには、`apiKey` パラメータと `resource` パラメータを指定する必要がありま
 す。
 
-#### :two::two: リクエスト :
+#### :one::nine: リクエスト :
 
 ```console
 curl -iX DELETE \
@@ -1335,7 +1227,7 @@ Agent は、デバイスが単一の `ring` `command` を提供し、HTTP を使
 `http://iot-sensors:3001/iot/bell002` でリッスンしていることを通知されました
 。`attributes`, `lazy` 属性と、`static_attributes` もプロビジョニングできます。
 
-#### :two::three: リクエスト :
+#### :two::zero: リクエスト :
 
 ```console
 curl -iX POST \
@@ -1376,7 +1268,7 @@ curl -iX POST \
 プロビジョニングされたデバイスの詳細は、`/iot/devices/<device-id>` エンドポイン
 トに GET リクエストを行うことで読み取ることができます。
 
-#### :two::four: リクエスト :
+#### :two::one: リクエスト :
 
 ```console
 curl -X GET \
@@ -1426,7 +1318,7 @@ curl -X GET \
 この例では、`/iot/devices` エンドポイントに GET リクエストを行うことによって、プ
 ロビジョニングされたすべてのデバイスを一覧表示します。
 
-#### :two::five: リクエスト :
+#### :two::two: リクエスト :
 
 ```console
 curl -X GET \
@@ -1482,7 +1374,7 @@ curl -X GET \
 この例では、`/iot/devices/<device-id>` エンドポイントに PUT リクエストを行うこと
 によって、既存のプロビジョニングされたデバイスを更新します。
 
-#### :two::six: リクエスト :
+#### :two::three: リクエスト :
 
 ```console
 curl -iX PUT \
@@ -1506,7 +1398,7 @@ curl -iX PUT \
 バイスがアクティブな測定を行っていると、関連付けられたサービスが削除されていない
 場合でも、デフォルト値で処理されます。
 
-#### :two::seven: リクエスト :
+#### :two::four: リクエスト :
 
 ```console
 curl -iX DELETE \
