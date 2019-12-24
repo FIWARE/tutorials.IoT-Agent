@@ -49,7 +49,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n \"services\": [\n   {\n     \"apikey\":      \"4jggokgpepnvsb2uv4s40d59ov\",\n     \"cbroker\":     \"http://orion:1026\",\n     \"entity_type\": \"Thing\",\n     \"resource\":    \"/iot/d\"\n   }\n ]\n}"
+							"raw": "{\n \"services\": [\n   {\n     \"apikey\":      \"4jggokgpepnvsb2uv4s40d59ov\",\n     \"cbroker\":     \"http://orion:1026\",\n     \"entity_type\": \"Motion\",\n     \"resource\":    \"/iot/d\",\n     \"trust\": \"08ca25ba8ea0f322f50244c413fce2e32feed43d\"\n   }\n ]\n}"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/services",
@@ -419,57 +419,6 @@
 					"name": "Bell Commands",
 					"item": [
 						{
-							"name": "Register Bell Commands",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									},
-									{
-										"key": "fiware-service",
-										"value": "openiot"
-									},
-									{
-										"key": "fiware-servicepath",
-										"value": "/"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"description\": \"Bell Commands\",\n  \"dataProvided\": {\n    \"entities\": [\n      {\n        \"id\": \"urn:ngsi-ld:Bell:001\", \"type\": \"Bell\"\n      }\n    ],\n    \"attrs\": [\"ring\"]\n  },\n  \"provider\": {\n    \"http\": {\"url\": \"http://orion:1026/v1\"},\n    \"legacyForwarding\": true\n  }\n}"
-								},
-								"url": {
-									"raw": "http://{{orion}}/v2/registrations?",
-									"protocol": "http",
-									"host": [
-										"{{orion}}"
-									],
-									"path": [
-										"v2",
-										"registrations"
-									],
-									"query": [
-										{
-											"key": "type",
-											"value": "Store",
-											"description": "Entity type, to avoid ambiguity in case there are several entities with the same entity id",
-											"disabled": true
-										},
-										{
-											"key": "attrs",
-											"value": "name",
-											"description": "Ordered list of attribute names to display",
-											"disabled": true
-										}
-									]
-								},
-								"description": "This example registers the `ring` command for the entity with the `id=\"urn:ngsi-ld:Bell:001\"`\n\nTo register the command we need to inform Orion that the URL `http://orion:1026/v1` is able to provide\nthe missing `ring` attribute. This will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 \nendpoint and therefore the `legacyForwarding` attribute must also be set."
-							},
-							"response": []
-						},
-						{
 							"name": "Ring Bell",
 							"request": {
 								"method": "PATCH",
@@ -574,57 +523,6 @@
 					"name": "Smart Door Commands",
 					"item": [
 						{
-							"name": "Register Smart Door Commands",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									},
-									{
-										"key": "fiware-service",
-										"value": "openiot"
-									},
-									{
-										"key": "fiware-servicepath",
-										"value": "/"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"description\": \"Door Commands\",\n  \"dataProvided\": {\n    \"entities\": [\n      {\n        \"id\": \"urn:ngsi-ld:Door:001\", \"type\": \"Door\"\n      }\n    ],\n    \"attrs\": [ \"lock\", \"unlock\", \"open\", \"close\"]\n  },\n  \"provider\": {\n    \"http\": {\"url\": \"http://orion:1026/v1\"},\n    \"legacyForwarding\": true\n  }\n}"
-								},
-								"url": {
-									"raw": "http://{{orion}}/v2/registrations?",
-									"protocol": "http",
-									"host": [
-										"{{orion}}"
-									],
-									"path": [
-										"v2",
-										"registrations"
-									],
-									"query": [
-										{
-											"key": "type",
-											"value": "Store",
-											"description": "Entity type, to avoid ambiguity in case there are several entities with the same entity id",
-											"disabled": true
-										},
-										{
-											"key": "attrs",
-											"value": "name",
-											"description": "Ordered list of attribute names to display",
-											"disabled": true
-										}
-									]
-								},
-								"description": "This example registers the `lock`, `unlock`, `open` and `close` commands for the entity with\nthe `id=\"urn:ngsi-ld:Door:001\"`\n\nTo register the commands we need to inform Orion that the URL `http://orion:1026/v1` is able to provide\nthe missing  attributes. This will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 \nendpoint and therefore the `legacyForwarding` attribute must also be set."
-							},
-							"response": []
-						},
-						{
 							"name": "Open a Door",
 							"request": {
 								"method": "PATCH",
@@ -728,57 +626,6 @@
 				{
 					"name": "Smart Lamp",
 					"item": [
-						{
-							"name": "Register Smart Lamp Commands",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									},
-									{
-										"key": "fiware-service",
-										"value": "openiot"
-									},
-									{
-										"key": "fiware-servicepath",
-										"value": "/"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"description\": \"Lamp Commands\",\n  \"dataProvided\": {\n    \"entities\": [\n      {\n        \"id\": \"urn:ngsi-ld:Lamp:001\",\"type\": \"Lamp\"\n      }\n    ],\n    \"attrs\": [ \"on\", \"off\" ]\n  },\n  \"provider\": {\n    \"http\": {\"url\": \"http://orion:1026/v1\"},\n    \"legacyForwarding\": true\n  }\n}"
-								},
-								"url": {
-									"raw": "http://{{orion}}/v2/registrations?",
-									"protocol": "http",
-									"host": [
-										"{{orion}}"
-									],
-									"path": [
-										"v2",
-										"registrations"
-									],
-									"query": [
-										{
-											"key": "type",
-											"value": "Store",
-											"description": "Entity type, to avoid ambiguity in case there are several entities with the same entity id",
-											"disabled": true
-										},
-										{
-											"key": "attrs",
-											"value": "name",
-											"description": "Ordered list of attribute names to display",
-											"disabled": true
-										}
-									]
-								},
-								"description": "This example registers the `on` and `off` commands for the entity with\nthe `id=\"urn:ngsi-ld:Lamp:001\"`\n\nTo register the commands we need to inform Orion that the URL `http://orion:1026/v1` is able to provide\nthe missing  attributes. This will then be forwarded on to the IoT Agent. As you see this is an NGSI v1 \nendpoint and therefore the `legacyForwarding` attribute must also be set."
-							},
-							"response": []
-						},
 						{
 							"name": "Switch On a Lamp",
 							"request": {
@@ -911,7 +758,7 @@
 					"response": []
 				}
 			],
-			"description": "Having connected up the IoT Agent to the IoT devices, we now need to inform the Orion Context Broker that the commands\nare available. In other words we need to register the IoT Agent as a [Context Provider](https://github.com/Fiware/tutorials.Context-Providers/) for the command attributes.\n\nOnce the commands have been registered it will be possible to ring the **Bell**, open and close the **Smart Door** and\nswitch the **Smart Lamp** on and off by sending requests to the Orion Context Broker, rather than sending UltraLight 2.0\nrequests directly t the IoT devices as we did in the [previous tutorial](https://github.com/Fiware/tutorials.IoT-Sensors)",
+			"description": "Having connected up the IoT Agent to the IoT devices, the Orion Context Broker was informed that the commands are\nnow available. In other words the IoT Agent registered itself as a\n[Context Provider](https://github.com/FIWARE/tutorials.Context-Providers/) for the command attributes.\n\nOnce the commands have been registered it will be possible to ring the **Bell**, open and close the **Smart Door** and\nswitch the **Smart Lamp** on and off by sending requests to the Orion Context Broker, rather than sending UltraLight 2.0\nrequests directly t the IoT devices as we did in the [previous tutorial](https://github.com/Fiware/tutorials.IoT-Sensors)",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -933,7 +780,8 @@
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Service Group CRUD Actions",
@@ -1383,19 +1231,19 @@
 	],
 	"variable": [
 		{
-			"id": "16c38646-121e-4f5a-91d5-1b45d0134fba",
+			"id": "f91a5190-f812-4dcc-a1fa-77bf0ca90704",
 			"key": "iot-agent",
 			"value": "localhost:4041",
 			"type": "string"
 		},
 		{
-			"id": "809e785e-2aaa-41fa-9260-5a8e5036dd4a",
+			"id": "0f8a8343-3667-44ac-9afa-a9457e5246e5",
 			"key": "orion",
 			"value": "localhost:1026",
 			"type": "string"
 		},
 		{
-			"id": "ed28f54d-edf5-473f-a25f-7b4e3e66d4d6",
+			"id": "7d048afc-64ef-450b-9a75-78c5a36b10b0",
 			"key": "ultralight",
 			"value": "localhost:3001",
 			"type": "string"
