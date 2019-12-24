@@ -830,7 +830,7 @@ curl -X GET \
 ## Enabling Context Broker Commands
 
 Having connected up the IoT Agent to the IoT devices, the Orion Context Broker was informed that the commands now
-are available. In other words the IoT Agent registered itself as a 
+are available. In other words the IoT Agent registered itself as a
 [Context Provider](https://github.com/FIWARE/tutorials.Context-Providers/) for the command attributes.
 
 Once the commands have been registered it will be possible to ring the **Bell**, open and close the **Smart Door** and
