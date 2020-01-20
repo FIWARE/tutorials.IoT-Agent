@@ -18,10 +18,31 @@ stoppingContainers () {
 }
 
 addDatabaseIndex () {
-	printf "Create \033[1mMongoDB\033[0m database indexes ..."
-	docker exec  db-mongo mongo --eval 'db.entities.createIndex({"_id.servicePath": 1, "_id.id": 1, "_id.type": 1}, {unique: true})' > /dev/null
-	docker exec  db-mongo mongo --eval 'db.entities.createIndex({"_id.type": 1})'  > /dev/null
-	docker exec  db-mongo mongo --eval 'db.entities.createIndex({"_id.id": 1})'  > /dev/null
+	printf "Create \033[1;34mOrion\033[0m database indexes ..."
+	docker exec  db-mongo mongo --eval '
+	conn = new Mongo();db.createCollection("orion");
+	db = conn.getDB("orion");
+	db.entities.createIndex({"_id.servicePath": 1, "_id.id": 1, "_id.type": 1}, {unique: true});
+	db.entities.createIndex({"_id.type": 1}); 
+	db.entities.createIndex({"_id.id": 1});' > /dev/null
+
+	docker exec  db-mongo mongo --eval '
+	conn = new Mongo();db.createCollection("orion-openiot");
+	db = conn.getDB("orion-openiot");
+	db.entities.createIndex({"_id.servicePath": 1, "_id.id": 1, "_id.type": 1}, {unique: true});
+	db.entities.createIndex({"_id.type": 1}); 
+	db.entities.createIndex({"_id.id": 1});' > /dev/null
+	echo -e " \033[1;32mdone\033[0m"
+
+	printf "Create \033[1;36mIoT-Agent\033[0m database indexes ..."
+	docker exec  db-mongo mongo --eval '
+	conn = new Mongo();db.createCollection("iotagentul");
+	db = conn.getDB("iotagentul");
+	db.devices.createIndex({"_id.service": 1, "_id.id": 1, "_id.type": 1});
+	db.devices.createIndex({"_id.type": 1}); 
+	db.devices.createIndex({"_id.id": 1});
+	db.groups.createIndex({"_id.resource": 1, "_id.apikey": 1, "_id.service": 1});
+	db.groups.createIndex({"_id.type": 1});' > /dev/null
 	echo -e " \033[1;32mdone\033[0m"
 }
 
