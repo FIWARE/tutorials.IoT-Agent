@@ -7,8 +7,15 @@
 
 set -e
 
+if (( $# != 1 )); then
+    echo "Illegal number of parameters"
+    echo "usage: services [create|start|stop]"
+    exit 1
+fi
+
 loadData () {
 	./import-data
+	waitForIoTAgent
 	echo ""
 }
 
@@ -18,7 +25,7 @@ stoppingContainers () {
 }
 
 addDatabaseIndex () {
-	printf "Create \033[1;34mOrion\033[0m database indexes ..."
+	printf "Adding appropriate \033[1mMongoDB\033[0m indexes for \033[1;34mOrion\033[0m  ..."
 	docker exec  db-mongo mongo --eval '
 	conn = new Mongo();db.createCollection("orion");
 	db = conn.getDB("orion");
@@ -36,7 +43,7 @@ addDatabaseIndex () {
 	db.entities.createIndex({"_id.id": 1});' > /dev/null
 	echo -e " \033[1;32mdone\033[0m"
 
-	printf "Create \033[1;36mIoT-Agent\033[0m database indexes ..."
+	printf "Adding appropriate \033[1mMongoDB\033[0m indexes for \033[1;36mIoT-Agent\033[0m  ..."
 	docker exec  db-mongo mongo --eval '
 	conn = new Mongo();
 	db = conn.getDB("iotagentul");
@@ -50,17 +57,30 @@ addDatabaseIndex () {
 	echo -e " \033[1;32mdone\033[0m"
 }
 
+waitForOrion () {
+	echo -e "\n⏳ Waiting for \033[1;34mOrion\033[0m to be available\n"
+	while [ `docker run --network fiware_default --rm appropriate/curl -s -o /dev/null -w %{http_code} 'http://orion:1026/version'` -eq 000 ]
+	do 
+	  echo -e "Context Broker HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://localhost:1026/version'` " (waiting for 200)"
+	  sleep 1
+	done
+}
+
+
+waitForIoTAgent () {
+	echo -e "\n⏳ Waiting for \033[1;36mIoT-Agent\033[0m to be available\n"
+	while [ `docker run --network fiware_default --rm appropriate/curl -s -o /dev/null -w %{http_code} 'http://iot-agent:4041/version'` -eq 000 ]
+	do 
+	  echo -e "IoT Agent HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://localhost:4041/version'` " (waiting for 200)"
+	  sleep 1
+	done
+}
+
 displayServices () {
 	echo ""
 	docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" --filter name=fiware-*
 	echo ""
 }
-
-if (( $# != 1 )); then
-    echo "Illegal number of parameters"
-    echo "usage: services [create|start|stop]"
-    exit 1
-fi
 
 command="$1"
 case "${command}" in
@@ -76,6 +96,7 @@ case "${command}" in
 		echo ""
 		docker-compose --log-level ERROR -p fiware up -d --remove-orphans
 		addDatabaseIndex
+		waitForOrion
 		loadData
 		displayServices
 		echo -e "Now open \033[4mhttp://localhost:3000/device/monitor\033[0m"
