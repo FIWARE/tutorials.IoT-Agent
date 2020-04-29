@@ -15,7 +15,7 @@
 [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 IoT デバイスを接続し
 、[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) に送信
-された [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) リクエスト
+された [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) リクエスト
 を使用して測定値を読み取り、コマンドを送信できるようにします。
 
 このチュートリアルでは、全体で [cUrl](https://ec.haxx.se/) コマンドを使用してい
@@ -84,9 +84,9 @@ Broker にデータを送信し、Context Broker から管理できるように�
 。
 
 Orion Context Broker は、すべての相互作用に対して排他的に
-[NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) リクエストを使用
+[NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) リクエストを使用
 します。各 IoT Agent は、 Context Broker の対話に使用される**ノース・ポート**
-[NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) インターフェイス
+[NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) インターフェイス
 を提供し、このポートの下にあるすべての対話は、接続されたデバイスの**ネイティブ・
 プロトコル**を使用して行われます。
 
@@ -235,11 +235,11 @@ Context Broker と IoT Agent はオープンソースの MongoDB 技術を利用
     -   **IoT Agent** が、デバイスの URL やキーなどのデバイス情報を保持するため
         に使用します
 -   コンテキスト・プロバイダの NGSI proxy は次のようになります :
-    -   [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用し
+    -   [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用し
         てリクエストを受信します
     -   独自の APIs を独自フォーマットで使用して、公開されているデータソースへの
         リクエストを行います
-    -   [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2) 形式でコ
+    -   [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) 形式でコ
         ンテキスト・データを Orion Context Broker に返します
 -   在庫管理フロントエンドは以下を行います :
     -   店舗情報を表示します
