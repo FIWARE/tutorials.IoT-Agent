@@ -48,7 +48,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"services\": [\n    {\n      \"apikey\": \"4jggokgpepnvsb2uv4s40d59ov\",\n      \"cbroker\": \"http://orion:1026\",\n      \"entity_type\": \"Device\",\n      \"resource\": \"/iot/d\",\n      \"expressionLanguage\": \"jexl\",\n      \"attributes\": [\n        {\n          \"object_id\":\"heartRate\",\n          \"type\":\"Property\",\n          \"name\": \"bpm\"\n        },\n        {\n          \"object_id\": \"s\",\n          \"name\": \"status\",\n          \"type\": \"Property\"\n        },\n        {\n          \"object_id\": \"l\",\n          \"name\": \"location\",\n          \"type\": \"GeoProperty\"\n        },\n        {\n          \"object_id\": \"y\",\n          \"name\": \"longitude\",\n          \"type\": \"Property\"\n        }\n      ]\n    }\n  ]\n}"
+							"raw": "{\n    \"services\": [\n        {\n            \"apikey\": \"4jggokgpepnvsb2uv4s40d59ov\",\n            \"cbroker\": \"http://orion:1026\",\n            \"entity_type\": \"Device\",\n            \"resource\": \"/iot/d\",\n            \"attributes\": [\n                {\n                    \"object_id\": \"bpm\",\n                    \"type\": \"Property\",\n                    \"name\": \"heartRate\",\n                    \"metadata\": {\n                        \"unitCode\": {\n                            \"type\": \"Text\",\n                            \"value\": \"5K\"\n                        }\n                    }\n                },\n                {\n                    \"object_id\": \"s\",\n                    \"name\": \"status\",\n                    \"type\": \"Property\"\n                },\n                {\n                    \"object_id\": \"gps\",\n                    \"name\": \"location\",\n                    \"type\": \"geo:point\"\n                }\n            ]\n        }\n    ]\n}"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/services",
@@ -85,7 +85,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"temperature001\",\n      \"entity_name\": \"urn:ngsi-ld:TemperatureSensor:001\",\n      \"entity_type\": \"TemperatureSensor\",\n      \"timezone\": \"Europe/Berlin\",\n      \"attributes\": [\n        {\n          \"object_id\": \"t\",\n          \"name\": \"temperature\",\n          \"type\": \"Property\",\n          \"metadata\": {\n            \"unitCode\": {\n              \"type\": \"Text\",\n              \"value\": \"CEL\"\n            }\n          }\n        }\n      ],\n      \"static_attributes\": [\n        {\n          \"name\": \"controlledAsset\",\n          \"type\": \"Relationship\",\n          \"value\": \"urn:ngsi-ld:Building:barn001\"\n        }\n      ]\n    }\n  ]\n}"
+							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"temperature001\",\n      \"entity_name\": \"urn:ngsi-ld:Device:temperature001\",\n      \"entity_type\": \"Device\",\n      \"timezone\": \"Europe/Berlin\",\n      \"attributes\": [\n        {\n          \"object_id\": \"t\",\n          \"name\": \"temperature\",\n          \"type\": \"Property\",\n          \"metadata\": {\n            \"unitCode\": {\n              \"type\": \"Text\",\n              \"value\": \"CEL\"\n            }\n          }\n        }\n      ],\n      \"static_attributes\": [\n        {\n          \"name\": \"controlledAsset\",\n          \"type\": \"Relationship\",\n          \"value\": \"urn:ngsi-ld:Building:barn001\"\n        }\n      ]\n    }\n  ]\n}"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/devices",
@@ -162,7 +162,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:TemperatureSensor:001",
+							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Device:temperature001",
 							"protocol": "http",
 							"host": [
 								"{{orion}}"
@@ -171,7 +171,7 @@
 								"ngsi-ld",
 								"v1",
 								"entities",
-								"urn:ngsi-ld:TemperatureSensor:001"
+								"urn:ngsi-ld:Device:temperature001"
 							]
 						},
 						"description": "This example returns the data for the `Motion` entity with the `id=urn:ngsd-ld:Motion:001` within the context data.\n\nThe response shows that the device with `id=motion001` has been successfully identifed by the IoT Agent and mapped to the\nentity `id=urn:ngsd-ld:Motion:001`. This new entity has been created within the context data. The `c` \nattribute from the dummy device measurement request has been mapped to the more meaningful `count` attribute\nwithin the context. As you will notice, a `TimeInstant` attribute has been added to both the entity and the\nmeta data of the attribute - this represents the last time the entity and attribute have been updated, and is\nautomatically added to each new entity because the `IOTA_TIMESTAMP`  environment variable was set when the\nIoT Agent was started up. The `refStore` attribute comes from the `static_attributes` set when the device was provisioned."
@@ -280,7 +280,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"water001\",\n      \"entity_name\": \"urn:ngsi-ld:Water:001\",\n      \"entity_type\": \"Water\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/water001\",\n      \"commands\": [ \n        {\n          \"name\": \"on\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"off\",\n          \"type\": \"command\"\n        }\n       ],\n       \"static_attributes\": [\n         {\"name\":\"controllingAsset\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Building:barn001\"}\n    \t]\n    }\n  ]\n}\n"
+							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"water001\",\n      \"entity_name\": \"urn:ngsi-ld:Device:water001\",\n      \"entity_type\": \"Device\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/water001\",\n      \"commands\": [ \n        {\n          \"name\": \"on\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"off\",\n          \"type\": \"command\"\n        }\n       ],\n       \"static_attributes\": [\n         {\"name\":\"controllingAsset\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Building:barn001\"}\n    \t]\n    }\n  ]\n}\n"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/devices",
@@ -320,7 +320,7 @@
 							"raw": "{ \n\n\t\t\"type\": \"Property\", \n\t\t\"value\": \" \" \n\n}"
 						},
 						"url": {
-							"raw": "http://{{iot-agent}}/ngsi-ld/v1/entities/urn:ngsi-ld:Water:001/attrs/on",
+							"raw": "http://{{iot-agent}}/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on",
 							"protocol": "http",
 							"host": [
 								"{{iot-agent}}"
@@ -329,7 +329,7 @@
 								"ngsi-ld",
 								"v1",
 								"entities",
-								"urn:ngsi-ld:Water:001",
+								"urn:ngsi-ld:Device:water001",
 								"attrs",
 								"on"
 							]
@@ -358,7 +358,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"filling001\",\n      \"entity_name\": \"urn:ngsi-ld:FillingLevelSensor:001\",\n      \"entity_type\": \"FillingLevelSensor\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/filling001\",\n      \"commands\": [\n        {\n          \"name\": \"add\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"remove\",\n          \"type\": \"command\"\n        }\n      ],\n      \"attributes\": [\n        {\n          \"object_id\": \"f\",\n          \"name\": \"fillingLevel\",\n          \"type\": \"Number\",\n          \"metadata\": {\n            \"unitCode\": {\n              \"type\": \"Text\",\n              \"value\": \"CAL\"\n            }\n          }\n        }\n      ],\n       \"static_attributes\": [\n        {\n          \"name\": \"controllingAsset\",\n          \"type\": \"Relationship\",\n          \"value\": \"urn:ngsi-ld:Building:barn001\"\n        }\n      ]\n    }\n  ]\n}"
+							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"filling001\",\n      \"entity_name\": \"urn:ngsi-ld:Device:filling001\",\n      \"entity_type\": \"FillingLevelSensor\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/filling001\",\n      \"commands\": [\n        {\n          \"name\": \"add\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"remove\",\n          \"type\": \"command\"\n        }\n      ],\n      \"attributes\": [\n        {\n          \"object_id\": \"f\",\n          \"name\": \"fillingLevel\",\n          \"type\": \"Number\",\n          \"metadata\": {\n            \"unitCode\": {\n              \"type\": \"Text\",\n              \"value\": \"CAL\"\n            }\n          }\n        }\n      ],\n       \"static_attributes\": [\n        {\n          \"name\": \"controllingAsset\",\n          \"type\": \"Relationship\",\n          \"value\": \"urn:ngsi-ld:Building:barn001\"\n        }\n      ]\n    }\n  ]\n}"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/devices",
@@ -395,7 +395,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"tractor001\",\n      \"entity_name\": \"urn:ngsi-ld:Tractor:001\",\n      \"entity_type\": \"Tractor\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/tractor001\",\n      \"commands\": [ \n        {\"name\": \"start\",\"type\": \"command\"},\n        {\"name\": \"stop\",\"type\": \"command\"}\n       ],\n       \"static_attributes\": [\n         {\"name\":\"controllingAsset\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Building:barn001\"}\n    \t]\n    }\n  ]\n}\n"
+							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"tractor001\",\n      \"entity_name\": \"urn:ngsi-ld:Device:tractor001\",\n      \"entity_type\": \"Tractor\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/tractor001\",\n      \"commands\": [ \n        {\"name\": \"start\",\"type\": \"command\"},\n        {\"name\": \"stop\",\"type\": \"command\"}\n       ],\n       \"static_attributes\": [\n         {\"name\":\"controllingAsset\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Building:barn001\"}\n    \t]\n    }\n  ]\n}\n"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/devices",
@@ -502,7 +502,7 @@
 									"raw": "{ \n\n\t\t\"type\": \"Property\", \n\t\t\"value\": \" \" \n\n}"
 								},
 								"url": {
-									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Water:001/attrs/on",
+									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -511,7 +511,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"urn:ngsi-ld:Water:001",
+										"urn:ngsi-ld:Device:water001",
 										"attrs",
 										"on"
 									]
@@ -549,7 +549,7 @@
 									"raw": "{ \n\n\t\t\"type\": \"Property\", \n\t\t\"value\": \" \" \n\n}"
 								},
 								"url": {
-									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Water:001/attrs/off",
+									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/off",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -558,7 +558,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"urn:ngsi-ld:Water:001",
+										"urn:ngsi-ld:Device:water001",
 										"attrs",
 										"off"
 									]
@@ -594,7 +594,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Water:001",
+									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -603,7 +603,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"urn:ngsi-ld:Water:001"
+										"urn:ngsi-ld:Device:water001"
 									]
 								},
 								"description": "The result of the command to ring the bell can be read by querying the entity within the Orion Context Broker. \n\nThe `TimeInstant` shows last the time any command associated with the entity has been invoked. the result of `ring` command can be see in the value of the `ring_info` attribute"
@@ -716,7 +716,7 @@
 									"raw": "{ \n\n\t\t\"type\": \"Property\", \n\t\t\"value\": \" \" \n\n}"
 								},
 								"url": {
-									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Tractor:001/attrs/stop",
+									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Device:tractor001/attrs/stop",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -725,7 +725,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"urn:ngsi-ld:Tractor:001",
+										"urn:ngsi-ld:Device:tractor001",
 										"attrs",
 										"stop"
 									]
@@ -761,7 +761,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Tractor:001",
+									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Device:tractor:001",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -770,7 +770,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"urn:ngsi-ld:Tractor:001"
+										"urn:ngsi-ld:Device:tractor:001"
 									]
 								},
 								"description": "The result of the command to ring the bell can be read by querying the entity within the Orion Context Broker. \n\nThe `TimeInstant` shows last the time any command associated with the entity has been invoked. the result of `ring` command can be see in the value of the `ring_info` attribute"
@@ -836,7 +836,7 @@
 									"raw": "{ \n\n\t\t\"type\": \"Property\", \n\t\t\"value\": \" \" \n\n}"
 								},
 								"url": {
-									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Filling:001/attrs/add",
+									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Device:filling001/attrs/add",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -845,7 +845,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"urn:ngsi-ld:Filling:001",
+										"urn:ngsi-ld:Device:filling001",
 										"attrs",
 										"add"
 									]
@@ -928,7 +928,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Filling:001",
+									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Device:filling:001",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -937,7 +937,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"urn:ngsi-ld:Filling:001"
+										"urn:ngsi-ld:Device:filling:001"
 									]
 								},
 								"description": "The result of the command to ring the bell can be read by querying the entity within the Orion Context Broker. \n\nThe `TimeInstant` shows last the time any command associated with the entity has been invoked. the result of `ring` command can be see in the value of the `ring_info` attribute"
@@ -986,15 +986,22 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{orion}}/v2/entities/",
+							"raw": "http://{{orion}}/ngsi-ld/v1/entities/?type=Device",
 							"protocol": "http",
 							"host": [
 								"{{orion}}"
 							],
 							"path": [
-								"v2",
+								"ngsi-ld",
+								"v1",
 								"entities",
 								""
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "Device"
+								}
 							]
 						},
 						"description": "This example returns the data of all `Store` entities within the context data"
@@ -1515,22 +1522,22 @@
 	],
 	"variable": [
 		{
-			"id": "7ebe8116-5e68-48b3-9b4c-3b970a4b8723",
+			"id": "a6ac6fd0-62dc-4803-ad66-0235d8fbe95b",
 			"key": "iot-agent",
 			"value": "localhost:4041"
 		},
 		{
-			"id": "01f249ad-00ad-4be9-8be3-115d586dc035",
+			"id": "660db678-1d5d-4060-bbe9-6f942e4c4616",
 			"key": "orion",
 			"value": "localhost:1026"
 		},
 		{
-			"id": "203503d1-d512-4334-baa6-e18683317093",
+			"id": "9cc2f0fc-e5da-42f3-aabd-94a5dba932f4",
 			"key": "ultralight",
 			"value": "localhost:3001"
 		},
 		{
-			"id": "512c8ba4-5493-4007-8483-1653048c4242",
+			"id": "a88f8c0d-136f-406b-b082-1e53a67ad7b4",
 			"key": "ngsi-context.jsonld",
 			"value": "http://context-provider:3000/data-models/ngsi-context.jsonld"
 		}
