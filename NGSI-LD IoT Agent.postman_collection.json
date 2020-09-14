@@ -669,7 +669,7 @@
 									"raw": "{ \n\n\t\t\"type\": \"Property\", \n\t\t\"value\": \" \" \n\n}"
 								},
 								"url": {
-									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Tractor:001/attrs/start",
+									"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Device:tractor001/attrs/start",
 									"protocol": "http",
 									"host": [
 										"{{orion}}"
@@ -678,7 +678,7 @@
 										"ngsi-ld",
 										"v1",
 										"entities",
-										"urn:ngsi-ld:Tractor:001",
+										"urn:ngsi-ld:Device:tractor001",
 										"attrs",
 										"start"
 									]
@@ -1522,22 +1522,22 @@
 	],
 	"variable": [
 		{
-			"id": "a6ac6fd0-62dc-4803-ad66-0235d8fbe95b",
+			"id": "3adb133a-8aad-4724-8a10-1aac86fd91e6",
 			"key": "iot-agent",
 			"value": "localhost:4041"
 		},
 		{
-			"id": "660db678-1d5d-4060-bbe9-6f942e4c4616",
+			"id": "336dbcb3-907f-4fac-bba0-75d86b0d9dec",
 			"key": "orion",
 			"value": "localhost:1026"
 		},
 		{
-			"id": "9cc2f0fc-e5da-42f3-aabd-94a5dba932f4",
+			"id": "b233fda9-01fd-456e-ad2b-6db14a358d9e",
 			"key": "ultralight",
 			"value": "localhost:3001"
 		},
 		{
-			"id": "a88f8c0d-136f-406b-b082-1e53a67ad7b4",
+			"id": "680697cc-3805-46a9-8b6a-f9e317b8b66e",
 			"key": "ngsi-context.jsonld",
 			"value": "http://context-provider:3000/data-models/ngsi-context.jsonld"
 		}
