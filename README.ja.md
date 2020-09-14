@@ -198,7 +198,7 @@ IoT デバイスから生成され、IoT Agent を介して、Context Broker に
 
 このチュートリアルの目的のために、一連のダミーの IoT デバイスを作成し、Context
 Broker に接続します。使用するアーキテクチャとプロトコルの詳細については
-、[IoT Sensors tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors) を参照
+、[IoT Sensors tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2) を参照
 してください。各デバイスの状態は、次の UltraLight2.0 デバイスのモニタ Web ページ
 で確認できます : `http://localhost:3000/device/monitor`
 
@@ -610,7 +610,7 @@ http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov
 ```
 
 これは
-、[以前のチュートリアル](https://github.com/FIWARE/tutorials.IoT-Sensors)で
+、[以前のチュートリアル](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2)で
 Ultra Light 2.0 の構文に慣れているはずです。
 
 IoT デバイスからの測定値がリソース url で受信されると、それを解釈して Context
@@ -963,7 +963,7 @@ IoT Agent を IoT デバイスに接続すると、Orion Context Broker にコ�
 として自身を登録しました。
 
 コマンドが登録されていたら
-、[以前のチュートリアル](https://github.com/FIWARE/tutorials.IoT-Sensors)で行っ
+、[以前のチュートリアル](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2)で行っ
 たように、IoT デバイスから直接 Ultra Light 2.0 リクエストを送信するのではなく
 、**ベル**に呼び出し音を出したり、**スマート・ドア**を開閉したり、**スイッチスマ
 ート・ランプ**をオン/オフに切り替えることができます。
