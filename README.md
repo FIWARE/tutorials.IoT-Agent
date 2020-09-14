@@ -367,7 +367,7 @@ git checkout NGSI-v2
 ```
 
 Thereafter, all services can be initialized from the command-line by running the
-[services](https://github.com/FIWARE/tutorials.IoT-Agent/blob/master/services) Bash script provided within the
+[services](https://github.com/FIWARE/tutorials.IoT-Agent/blob/NGSI-v2/services) Bash script provided within the
 repository:
 
 ```console
