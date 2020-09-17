@@ -8,17 +8,18 @@
 [![UltraLight 2.0](https://img.shields.io/badge/Payload-Ultralight-27ae60.svg)](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 <br/> [![Documentation](https://img.shields.io/readthedocs/fiware-tutorials.svg)](https://fiware-tutorials.rtfd.io)
 
-This tutorial introduces the concept of an **IoT Agent** and wires up the dummy
+This **NGSI-LD** tutorial introduces the concept of an **IoT Agent** and wires up the dummy
 [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) IoT
 devices created in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors) so that measurements can be
-read and commands can be sent using [![NGSI LD](https://img.shields.io/badge/NGSI-LD-d6604d.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf) requests sent to an NGSI-LD compliant context broker such as the [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/).
+read and commands can be sent using
+[![NGSI LD](https://img.shields.io/badge/NGSI-LD-d6604d.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf)
+requests sent to an NGSI-LD compliant context broker such as the
+[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/).
 
 The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also available as
 [Postman documentation](https://fiware.github.io/tutorials.IoT-Agent/)
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/2150531e68299d46f937)
-
--   このチュートリアルは[日本語](README.ja.md)でもご覧いただけます。
 
 ## Contents
 
@@ -33,8 +34,8 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
     -   [Dummy IoT Devices Configuration](#dummy-iot-devices-configuration)
     -   [IoT Agent for UltraLight 2.0 Configuration](#iot-agent-for-ultralight-20-configuration)
 -   [Prerequisites](#prerequisites)
-    -   [Docker and Docker Compose](#docker-and-docker-compose)
-    -   [Cygwin for Windows](#cygwin-for-windows)
+    -   [Docker](#docker)
+    -   [Cygwin](#cygwin)
 -   [Start Up](#start-up)
 -   [Provisioning an IoT Agent](#provisioning-an-iot-agent)
     -   [Checking the IoT Agent Service Health](#checking-the-iot-agent-service-health)
@@ -42,12 +43,12 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
         -   [Provisioning a Service Group](#provisioning-a-service-group)
         -   [Provisioning a Sensor](#provisioning-a-sensor)
         -   [Provisioning an Actuator](#provisioning-an-actuator)
-        -   [Provisioning a Smart Door](#provisioning-a-smart-door)
-        -   [Provisioning a Irrigation System](#provisioning-a-smart-lamp)
+        -   [Provisioning a Filling Station](#provisioning-a-filling-station)
+        -   [Provisioning a Tractor FMIS System](#provisioning-a-tractor-fmis-system)
     -   [Enabling Context Broker Commands](#enabling-context-broker-commands)
-        -   [Ringing the Bell](#ringing-the-bell)
-        -   [Opening the Smart Door](#opening-the-smart-door)
-        -   [Switching on the Irrigation System](#switching-on-the-smart-lamp)
+        -   [Activating the Irrigation System](#activating-the-irrigation-system)
+        -   [Activating the Tractor](#activating-the-tractor)
+        -   [Activating the Filling Station](#activating-the-filling-station)
 -   [Service Group CRUD Actions](#service-group-crud-actions)
     -   [Creating a Service Group](#creating-a-service-group)
     -   [Read Service Group Details](#read-service-group-details)
@@ -60,7 +61,6 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
     -   [List all Provisioned Devices](#list-all-provisioned-devices)
     -   [Update a Provisioned Device](#update-a-provisioned-device)
     -   [Delete a Provisioned Device](#delete-a-provisioned-device)
--   [Next Steps](#next-steps)
 
 </details>
 
@@ -74,7 +74,11 @@ An IoT Agent is a component that lets a group of devices send their data to and 
 their own native protocols. IoT Agents should also be able to deal with security aspects of the FIWARE platform
 (authentication and authorization of the channel) and provide other common services to the device programmer.
 
-All **NGSI-LD**-based context brokers such as Scorpio, Stellio and Orion-LD exclusively use the well-defined **NGSI-LD** interface; this interface is also used when receiving instruction from third-parties and again when communicating with **NGSI-LD** aware components around the context broker itself. The north port of the IoT Agent is one such component which can communicate using **NGSI-LD** and the IoT Agent then translates the result so that all interactions beneath this port occur using the **native protocol** of the attached devices.
+All **NGSI-LD**-based context brokers such as Scorpio, Stellio and Orion exclusively use the well-defined **NGSI-LD**
+interface; this interface is also used when receiving instruction from third-parties and again when communicating with
+**NGSI-LD** aware components around the context broker itself. The north port of the IoT Agent is one such component
+which can communicate using **NGSI-LD** and the IoT Agent then translates the result so that all interactions beneath
+this port occur using the **native protocol** of the attached devices.
 
 In effect, this brings a standard interface to all IoT interactions at the context information management level. Each
 group of IoT devices are able to use their own proprietary protocols and disparate transport mechanisms under the hood
@@ -86,7 +90,8 @@ the following:
 -   [IoTAgent-JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/) - a bridge between HTTP/MQTT messaging (with
     a JSON payload) and NGSI-LD
 -   [IoTAgent-LWM2M](https://fiware-iotagent-lwm2m.readthedocs.io/en/latest) - a bridge between the
-    [Lightweight M2M](https://www.omaspecworks.org/what-is-oma-specworks/iot/lightweight-m2m-lwm2m/) protocol and NGSI-LD
+    [Lightweight M2M](https://www.omaspecworks.org/what-is-oma-specworks/iot/lightweight-m2m-lwm2m/) protocol and
+    NGSI-LD
 -   [IoTAgent-UL](https://fiware-iotagent-ul.readthedocs.io/en/latest) - a bridge between HTTP/MQTT messaging (with an
     UltraLight2.0 payload) and NGSI-LD
 -   [IoTagent-LoRaWAN](https://fiware-lorawan.readthedocs.io/en/latest) - a bridge between the
@@ -106,11 +111,12 @@ For example to switch on a real-life UltraLight 2.0 **Irrigation System** the fo
 
 2.  The **Context Broker** finds the entity within the context and notes that the context provision for this attribute
     has been delegated to the IoT Agent
-3.  Using the standard forwarding mechanism, the **Context broker** duplicates the PATCH request and forwards it to the North Port of the **IoT Agent** to invoke the command
+3.  Using the standard forwarding mechanism, the **Context broker** duplicates the PATCH request and forwards it to the
+    North Port of the **IoT Agent** to invoke the command
 4.  The **IoT Agent** receives this Southbound request and converts it to UltraLight 2.0 syntax and passes it on to the
     **Irrigation System**
-5.  The **Irrigation System** switches on the water sprinkler and returns the result of the command to the **IoT Agent** in UltraLight 2.0
-    syntax
+5.  The **Irrigation System** switches on the water sprinkler and returns the result of the command to the **IoT Agent**
+    in UltraLight 2.0 syntax
 6.  The **IoT Agent** receives this Northbound request, interprets it and passes the result of the interaction into the
     context by making an NGSI-LD request to the **Context Broker**.
 7.  The **Context Broker** receives this Northbound request and updates the context with the result of the command.
@@ -149,8 +155,8 @@ For example for a real-life **Soil Sensor** to send a humidity reading, the foll
 As can be seen from the previous sections, although each IoT Agent will be unique since they interpret different
 protocols, there will a large degree of similarity between IoT agents.
 
--   Offering a standard location to listen to device updates
--   Offering a standard location to listen to context data updates
+-   Offering a standard endpoint to listen to device updates
+-   Offering a standard endpoint to listen to context data updates
 -   Holding a list of devices and mapping context data attributes to device syntax
 -   Security Authorization
 
@@ -159,30 +165,31 @@ This base functionality has been abstracted out into a common
 
 #### Device Monitor
 
-For the purpose of this tutorial, a series of dummy agricultural IoT devices have been created, which will be attached to the context
-broker. Details of the architecture and protocol used can be found in the
-[IoT Sensors tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-LD) The state of each device can be seen on the
-UltraLight device monitor web page found at: `http://localhost:3000/device/monitor`
+For the purpose of this tutorial, a series of dummy agricultural IoT devices have been created, which will be attached
+to the context broker. Details of the architecture and protocol used can be found in the
+[IoT Sensors tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-LD) The state of each device can be
+seen on the UltraLight device monitor web page found at: `http://localhost:3000/device/monitor`
 
 ![FIWARE Monitor](https://fiware.github.io/tutorials.IoT-Agent/img/farm-devices.png)
 
 # Architecture
 
 This application builds on the components created in
-[previous tutorials](https://github.com/FIWARE/tutorials.Subscriptions/). It will make use of two FIWARE components -
-an NGSI-LD Context Broker such as [Orion](https://fiware-orion.readthedocs.io/en/latest/) and the
-[IoT Agent for UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/). Usage of the Context Broker
-is sufficient for an application to qualify as _“Powered by FIWARE”_. Both the Orion Context Broker and the IoT Agent
-rely on open source [MongoDB](https://www.mongodb.com/) technology to keep persistence of the information they hold. We
-will also be using the dummy IoT devices created in the
-[previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/)
+[previous tutorials](https://github.com/FIWARE/tutorials.Subscriptions/). It will make use of two FIWARE components - an
+NGSI-LD Context Broker such as [Orion](https://fiware-orion.readthedocs.io/en/latest/) and the
+[IoT Agent for UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/). Usage of the Context Broker is
+sufficient for an application to qualify as _“Powered by FIWARE”_. Both the Orion Context Broker and the IoT Agent rely
+on open source [MongoDB](https://www.mongodb.com/) technology to keep persistence of the information they hold. We will
+also be using the dummy IoT devices created in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/)
 
 Therefore the overall architecture will consist of the following elements:
 
 -   The [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) which will receive requests using
     [NGSI-LD](https://forge.etsi.org/swagger/ui/?url=https://forge.etsi.org/gitlab/NGSI-LD/NGSI-LD/raw/master/spec/updated/full_api.json)
 -   The FIWARE [IoT Agent for UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/) which will receive
-    southbound requests using [NGSI-LD](https://forge.etsi.org/swagger/ui/?url=https://forge.etsi.org/gitlab/NGSI-LD/NGSI-LD/raw/master/spec/updated/full_api.json) and convert them to
+    southbound requests using
+    [NGSI-LD](https://forge.etsi.org/swagger/ui/?url=https://forge.etsi.org/gitlab/NGSI-LD/NGSI-LD/raw/master/spec/updated/full_api.json)
+    and convert them to
     [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
     commands for the devices
 -   The underlying [MongoDB](https://www.mongodb.com/) database :
@@ -191,9 +198,10 @@ Therefore the overall architecture will consist of the following elements:
     -   Used by the **IoT Agent** to hold device information such as device URLs and Keys
 -   The **Tutorial Application** does the following:
     -   Offers static `@context` files defining the context entities within the system.
-    -   Acts as set of dummy [agricultural IoT devices](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-LD) using the
-    [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
-    protocol running over HTTP.
+    -   Acts as set of dummy [agricultural IoT devices](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-LD)
+        using the
+        [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
+        protocol running over HTTP.
 
 Since all interactions between the elements are initiated by HTTP requests, the entities can be containerized and run
 from exposed ports.
@@ -207,7 +215,7 @@ section of the associated `docker-compose.yml` file:
 
 ```yaml
 tutorial:
-    image: fiware/tutorials.context-provider
+    image: fiware/tutorials.ngsi-ld
     hostname: iot-sensors
     container_name: fiware-tutorial
     networks:
@@ -237,18 +245,16 @@ The `tutorial` container is listening on two ports:
 
 The `tutorial` container is driven by environment variables as shown:
 
-| Key                     | Value                        | Description                                                                                                                               |
-| ----------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| DEBUG                   | `tutorial:*`                 | Debug flag used for logging                                                                                                               |
-| WEB_APP_PORT            | `3000`                       | Port used by web-app which displays the dummy device data                                                                                 |
-| IOTA_HTTP_HOST          | `iot-agent`                  | The hostname of the IoT Agent for UltraLight 2.0 - see below                                                                              |
-| IOTA_HTTP_PORT          | `7896`                       | The port that the IoT Agent for UltraLight 2.0 will be listening on. `7896` is a common default for UltraLight over HTTP                  |
-| DUMMY_DEVICES_PORT      | `3001`                       | Port used by the dummy IoT devices to receive commands                                                                                    |
-| DUMMY_DEVICES_API_KEY   | `4jggokgpepnvsb2uv4s40d59ov` | Random security key used for UltraLight interactions - used to ensure the integrity of interactions between the devices and the IoT Agent |
-| DUMMY_DEVICES_TRANSPORT | `HTTP`                       | The transport protocol used by the dummy IoT devices                                                                                      |
-| IOTA_JSON_LD_CONTEXT | `http://context:3000/data-models/ngsi-context.jsonld`                       | The location of the `@context` file used to define the device data models  |
-
-
+| Key                     | Value                                                 | Description                                                                                                                               |
+| ----------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| DEBUG                   | `tutorial:*`                                          | Debug flag used for logging                                                                                                               |
+| WEB_APP_PORT            | `3000`                                                | Port used by web-app which displays the dummy device data                                                                                 |
+| IOTA_HTTP_HOST          | `iot-agent`                                           | The hostname of the IoT Agent for UltraLight 2.0 - see below                                                                              |
+| IOTA_HTTP_PORT          | `7896`                                                | The port that the IoT Agent for UltraLight 2.0 will be listening on. `7896` is a common default for UltraLight over HTTP                  |
+| DUMMY_DEVICES_PORT      | `3001`                                                | Port used by the dummy IoT devices to receive commands                                                                                    |
+| DUMMY_DEVICES_API_KEY   | `4jggokgpepnvsb2uv4s40d59ov`                          | Random security key used for UltraLight interactions - used to ensure the integrity of interactions between the devices and the IoT Agent |
+| DUMMY_DEVICES_TRANSPORT | `HTTP`                                                | The transport protocol used by the dummy IoT devices                                                                                      |
+| IOTA_JSON_LD_CONTEXT    | `http://context:3000/data-models/ngsi-context.jsonld` | The location of the `@context` file used to define the device data models                                                                 |
 
 The other `tutorial` container configuration values described in the YAML file are not used in this tutorial.
 
@@ -300,23 +306,23 @@ information such as device URLs and Keys. The container is listening on two port
 
 The `iot-agent` container is driven by environment variables as shown:
 
-| Key                  | Value                   | Description                                                                                                                                           |
-| -------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| IOTA_CB_HOST         | `orion`                 | Hostname of the context broker to update context                                                                                                      |
-| IOTA_CB_PORT         | `1026`                  | Port that context broker listens on to update context                                                                                                 |
-| IOTA_NORTH_PORT      | `4041`                  | Port used for Configuring the IoT Agent and receiving context updates from the context broker                                                         |
-| IOTA_REGISTRY_TYPE   | `mongodb`               | Whether to hold IoT device info in memory or in a database                                                                                            |
-| IOTA_LOG_LEVEL       | `DEBUG`                 | The log level of the IoT Agent                                                                                                                        |
-| IOTA_TIMESTAMP       | `true`                  | Whether to supply timestamp information with each measurement received from attached devices                                                          |
-| IOTA_CB_NGSI_VERSION | `LD`                    | Whether to supply use NGSI-LD when sending updates for active attributes                                                                              |
-| IOTA_AUTOCAST        | `true`                  | Ensure Ultralight number values are read as numbers not strings                                                                                       |
-| IOTA_MONGO_HOST      | `context-db`            | The hostname of mongoDB - used for holding device information                                                                                         |
-| IOTA_MONGO_PORT      | `27017`                 | The port mongoDB is listening on                                                                                                                      |
-| IOTA_MONGO_DB        | `iotagentul`            | The name of the database used in mongoDB                                                                                                              |
-| IOTA_HTTP_PORT       | `7896`                  | The port where the IoT Agent listens for IoT device traffic over HTTP                                                                                 |
-| IOTA_PROVIDER_URL    | `http://iot-agent:4041` | URL passed to the Context Broker when commands are registered, used as a forwarding URL location when the Context Broker issues a command to a device |
-| IOTA_JSON_LD_CONTEXT | `http://context:3000/data-models/ngsi-context.jsonld`                       | The location of the `@context` file used to define the device data models  |
-| IOTA_FALLBACK_TENANT | `openiot`               | The tenant to use if no explicit tenant has been received from communications                          |
+| Key                  | Value                                                 | Description                                                                                                                                           |
+| -------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| IOTA_CB_HOST         | `orion`                                               | Hostname of the context broker to update context                                                                                                      |
+| IOTA_CB_PORT         | `1026`                                                | Port that context broker listens on to update context                                                                                                 |
+| IOTA_NORTH_PORT      | `4041`                                                | Port used for Configuring the IoT Agent and receiving context updates from the context broker                                                         |
+| IOTA_REGISTRY_TYPE   | `mongodb`                                             | Whether to hold IoT device info in memory or in a database                                                                                            |
+| IOTA_LOG_LEVEL       | `DEBUG`                                               | The log level of the IoT Agent                                                                                                                        |
+| IOTA_TIMESTAMP       | `true`                                                | Whether to supply timestamp information with each measurement received from attached devices                                                          |
+| IOTA_CB_NGSI_VERSION | `LD`                                                  | Whether to supply use NGSI-LD when sending updates for active attributes                                                                              |
+| IOTA_AUTOCAST        | `true`                                                | Ensure Ultralight number values are read as numbers not strings                                                                                       |
+| IOTA_MONGO_HOST      | `context-db`                                          | The hostname of mongoDB - used for holding device information                                                                                         |
+| IOTA_MONGO_PORT      | `27017`                                               | The port mongoDB is listening on                                                                                                                      |
+| IOTA_MONGO_DB        | `iotagentul`                                          | The name of the database used in mongoDB                                                                                                              |
+| IOTA_HTTP_PORT       | `7896`                                                | The port where the IoT Agent listens for IoT device traffic over HTTP                                                                                 |
+| IOTA_PROVIDER_URL    | `http://iot-agent:4041`                               | URL passed to the Context Broker when commands are registered, used as a forwarding URL location when the Context Broker issues a command to a device |
+| IOTA_JSON_LD_CONTEXT | `http://context:3000/data-models/ngsi-context.jsonld` | The location of the `@context` file used to define the device data models                                                                             |
+| IOTA_FALLBACK_TENANT | `openiot`                                             | The tenant to use if no explicit tenant has been received from communications                                                                         |
 
 # Prerequisites
 
@@ -406,10 +412,10 @@ The response will look similar to the following:
 
 ```json
 {
-    "libVersion": "2.6.0-next",
+    "libVersion": "2.12.0-next",
     "port": "4041",
     "baseRoot": "/",
-    "version": "1.6.0-next"
+    "version": "1.13.0-next"
 }
 ```
 
@@ -450,14 +456,25 @@ The response will look similar to the following:
 
 The IoT Agent acts as a middleware between the IoT devices and the context broker. It therefore needs to be able to
 create context data entities with unique IDs. Once a service has been provisioned and an unknown device makes a
-measurement the IoT Agent add this to the context using the supplied `<device-id>` (unless the device is recognized and
-can be mapped to a known ID.
+measurement the IoT Agent add this to the context using the standard `urn:ngsi-ld:` prefix, a default `type` and the
+supplied `<device-id>` (unless the device is recognized and can be mapped to a known ID.
+
+In the case of **NGSI-LD**, the definition of every attributes of each device entity should be made available in the
+supplied `@context` file. The base **Device** Smart Data Model can be found
+[here](https://swagger.lab.fiware.org/?url=https://fiware.github.io/tutorials.NGSI-LD/swagger/device.yaml). To allow for
+this discoverability and interoperability with third party systems, the IoT Agent must also be pre-supplied with a
+`IOTA_JSON_LD_CONTEXT` environment variable which hold the location of the `@context` file that is resent to the context
+broker with every request.
 
 There is no guarantee that every supplied IoT device `<device-id>` will always be unique, therefore all provisioning
 requests to the IoT Agent require two mandatory headers:
 
--   `fiware-service` header is defined so that entities for a given service can be held in a separate mongoDB database.
+-   `fiware-service` header (equivalent to `NGSILD-Tenant`) is defined so that entities for a given service can be held
+    in a separate mongoDB database.
 -   `fiware-servicepath` can be used to differentiate between arrays of devices.
+
+Note that the **NGSI-LD** IoT Agents are backwardly compatible with **NGSI-v2** and therefore currently still use the
+names of the older FIWARE headers for when provisioning.
 
 For example within a smart city application you would expect different `fiware-service` headers for different
 departments (e.g. parks, transport, refuse collection etc.) and each `fiware-servicepath` would refer to specific park
@@ -497,25 +514,22 @@ curl -iX POST 'http://localhost:4041/iot/services' \
             "resource": "/iot/d",
             "attributes": [
                 {
-                    "object_id": "bpm",
-                    "type": "Property",
-                    "name": "heartRate",
-                    "metadata": {
-                        "unitCode": {
-                            "type": "Text",
-                            "value": "5K"
-                        }
-                    }
+                    "object_id": "bpm", "type": "Property", "name": "heartRate",
+                    "metadata": { "unitCode": {"type": "Text", "value": "5K" }}
                 },
                 {
-                    "object_id": "s",
-                    "name": "status",
-                    "type": "Property"
+                    "object_id": "s", "name": "status", "type": "Property"
                 },
                 {
-                    "object_id": "gps",
-                    "name": "location",
-                    "type": "geo:point"
+                    "object_id": "gps", "name": "location", "type": "geo:point"
+                }
+            ],
+            "static_attributes": [
+                {
+                    "name": "category", "type": "Property", "value": "sensor"
+                },
+                {
+                    "name": "supportedProtocol", "type": "Property", "value": "ul20"
                 }
             ]
         }
@@ -532,25 +546,30 @@ http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov
 ```
 
 Which should be familiar UltraLight 2.0 syntax from the
-[previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors).
+[previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-LD).
+
+The service group provisioning can also be used to define `attributes` mappings and common `static_attributes`. The
+`attributes` mappings define common aliases for anonymous incoming devices. For example the key `gps` can be defined to
+map the `location` GeoProperty.
 
 When a measurement from an IoT device is received on the resource URL it needs to be interpreted and passed to the
 context broker. The `entity_type` attribute provides a default `type` for each device which has made a request (in this
-case anonymous devices will be known as `Thing` entities. Furthermore the location of the context broker (`cbroker`) is
+case anonymous devices will be known as `Device` entities. Furthermore the location of the context broker (`cbroker`) is
 needed, so that the IoT Agent can pass on any measurements received to the correct location. `cbroker` is an optional
 attribute - if it is not provided, the IoT Agent uses the context broker URL as defined in the configuration file,
 however it has been included here for completeness.
 
 ### Provisioning a Sensor
 
-It is common good practice to use URNs following the NGSI-LD
-[specification](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf) when creating
-entities. Furthermore it is easier to understand meaningful names when defining data attributes. These mappings can be
-defined by provisioning a device individually.
+The NGSI-LD [specification](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf)
+mandates full URNs when creating context data entities, however the incoming messages from the devices will not be aware
+of this convention. Furthermore the attribute name on the context data entity should match the short names found within
+the associated `@context` file. These mappings can be defined at the service group level as seen in the previous
+request, ot they can be defined by provisioning each device individually.
 
 Three types of measurement attributes can be provisioned:
 
--   `attributes` are active readings from the device
+-   `attributes` are mappings of the active readings from the device
 -   `lazy` attributes are only sent on request - The IoT Agent will inform the device to return the measurement
 -   `static_attributes` are as the name suggests static data about the device (such as relationships) passed on to the
     context broker.
@@ -597,12 +616,13 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 }'
 ```
 
-In the request we are associating the device `motion001` with the URN `urn:ngsi-ld:Motion:001` and mapping the device
-reading `c` with the context attribute `count` (which is defined as an `Integer`) A `controllingAsset` is defined as a
-`static_attribute`, placing the device within **Store** `urn:ngsi-ld:Store:001`
+In the request we are associating the device `temperature001` with the URN `urn:ngsi-ld:Device:temperature001` and
+mapping the device reading `t` with the context attribute `temperature` (which is defined as **Property** with
+appropriate meta-data). A `controllingAsset` **Relationship** is also defined as a `static_attribute`, placing the
+device within the **Building** `urn:ngsi-ld:Building:barn001`
 
-You can simulate a dummy IoT device measurement coming from the **Soil Sensor** device `motion001`, by making the
-following request
+You can simulate a dummy IoT device measurement coming from the **Temperature Sensor** device `temperature001`, by
+making the following request
 
 #### :four: Request:
 
@@ -612,14 +632,15 @@ curl -L -X POST 'http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=temp
     --data-raw 't|3'
 ```
 
-A similar request was made in the previous tutorial (before the IoT Agent was connected) when the door was unlocked, you
-will have seen the state of each Soil sensor changing and a Northbound request will be logged in the device monitor.
+A similar request was made in the previous tutorial (before the IoT Agent was connected) when the sprinkler system was
+activated, you will have seen the state of each sensor changing and a Northbound request will be logged in the device
+monitor.
 
-Now the IoT Agent is connected, the service group has defined the resource upon which the IoT Agent is listening
-(`iot/d`) and the API key used to authenticate the request (`4jggokgpepnvsb2uv4s40d59ov`). Since both of these are
-recognized, the measurement is valid.
+In this tutorial, now that the IoT Agent is connected, the service group has defined the endpoint upon which the IoT
+Agent is listening (`iot/d`) and the API key used to authenticate the request (`4jggokgpepnvsb2uv4s40d59ov`). Since both
+of these are recognized from the request, the measurement is valid.
 
-Because we have specifically provisioned the device (`motion001`) - the IoT Agent is able to map attributes before
+Because we have specifically provisioned the device (`temperature001`) - the IoT Agent is able to map attributes before
 raising a request with the Orion Context Broker.
 
 You can see that a measurement has been recorded, by retrieving the entity data from the context broker. Don't forget to
@@ -637,7 +658,7 @@ curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:te
 
 #### Response:
 
-```json
+```jsonld
 {
     "@context": "http://context-provider:3000/data-models/ngsi-context.jsonld",
     "id": "urn:ngsi-ld:Device:temperature001",
@@ -651,23 +672,80 @@ curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:te
 }
 ```
 
-The response shows that the **Temperature Sensor** device with `id=temperature001` has been successfully identified by the IoT
-Agent and mapped to the entity `id=urn:ngsi-ld:Device:temperature001`. This new entity has been created within the context data.
-The `t` attribute from the dummy device measurement request has been mapped to the more meaningful `temperature` attribute
-within the context. As you will notice, an `observedAt` attribute has been added to the metadata of
-the attribute - this represents the last time the entity and attribute have been updated, and is automatically added to
-each new entity because the `IOTA_TIMESTAMP` environment variable was set when the IoT Agent was started up.
+The response shows that the **Temperature Sensor** device with `id=temperature001` has been successfully identified by
+the IoT Agent and mapped to the entity `id=urn:ngsi-ld:Device:temperature001`. This new entity has been created within
+the context data. The `t` attribute from the dummy device measurement request has been mapped to the more meaningful
+`temperature` attribute within the context. As you will notice, an `observedAt` attribute has been added to the metadata
+of the attribute - this represents the last time the entity and attribute have been updated, and is automatically added
+to each new entity because the `IOTA_TIMESTAMP` environment variable was set when the IoT Agent was started up.
 
+By provisioning the service group, it is also possible to open the IoT Agent to receive readings from anonymous devices.
+For example it would be unnecessary to provision each individual device if all necessary data is available direct from
+the device itself.
+
+For example, consider this request to the `/iot/d` endpoint:
+
+#### :six: Request:
+
+```console
+curl -iX POST 'http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=motion003' \
+-H 'Content-Type: text/plain' \
+--data-raw 'c|1'
+```
+
+Because the resource endpoint has previously been defined within the service group and the API Key matches, this is
+recognised as a valid measure and therefore a new Entity is created in the context broker with attributes mapped to
+based on the knowledge of the service group
+
+#### :seven: Request:
+
+```console
+curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
+-H 'NGSILD-Tenant: openiot' \
+-H 'NGSILD-Path: /' \
+-H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
+```
+
+#### Response:
+
+```jsonld
+[
+    {
+        "@context": "http://context-provider:3000/data-models/ngsi-context.jsonld",
+        "id": "urn:ngsi-ld:Device:motion003",
+        "type": "Device",
+        "c": {
+            "type": "Property",
+            "value": "1",
+            "observedAt": "2020-09-17T09:41:56.755Z"
+        },
+        "category": {
+            "type": "Property",
+            "value": "sensor",
+            "observedAt": "2020-09-17T09:41:56.755Z"
+        },
+        "supportedProtocol": {
+            "type": "Property",
+            "value": "ul20",
+            "observedAt": "2020-09-17T09:41:56.755Z"
+        }
+    }
+]
+```
+
+As you can see, the Entity type and `static_attributes` from the service group have been copied over to the entity in
+the context broker, however since the measure `c|1` does not have a mapping, the name of the Property has been copied
+directly from the received measure.
 
 ### Provisioning an Actuator
 
 Provisioning an actuator is similar to provisioning a sensor. This time an `endpoint` attribute holds the location where
 the IoT Agent needs to send the UltraLight command and the `commands` array includes a list of each command that can be
-invoked. The example below provisions a bell with the `deviceId=bell001`. The endpoint is
-`http://iot-sensors:3001/iot/bell001` and it can accept the `ring` command. The `transport=HTTP` attribute defines the
+invoked. The example below provisions a water with the `deviceId=water001`. The endpoint is
+`http://iot-sensors:3001/iot/water001` and it can accept the `on` command. The `transport=HTTP` attribute defines the
 communications protocol to be used.
 
-#### :six: Request:
+#### :eight: Request:
 
 ```console
 curl -L -X POST 'http://localhost:4041/iot/devices' \
@@ -702,12 +780,12 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 '
 ```
 
-Before we wire-up the context broker, we can test that a command can be send to a device by making a REST request
-directly to the IoT Agent's North Port using the `/v2/op/update` endpoint. It is this endpoint that will eventually be
-invoked by the context broker once we have connected it up. To test the configuration you can run the command directly
-as shown:
+Before we wire-up the context broker, we can test that a command can be send to a device by making a PATCH request
+directly to the IoT Agent's North Port using the `/ngsi-ld/v1/entities/` endpoint. It is this endpoint that will
+eventually be invoked by the context broker once we have connected it up. To test the configuration you can run the
+command directly as shown:
 
-#### :seven: Request:
+#### :nine: Request:
 
 ```console
 curl -L -X PATCH 'http://localhost:4041/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
@@ -726,9 +804,9 @@ If you are viewing the device monitor page, you can also see the state of the wa
 
 ![](https://fiware.github.io/tutorials.IoT-Agent/img/water-on.gif)
 
-The result of the command to ring the bell can be read by querying the entity within the Orion Context Broker.
+The result of the command to turn on the irrigation system can be read by querying the entity within the Context Broker.
 
-#### :eight: Request:
+#### :one::zero: Request:
 
 ```console
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001' \
@@ -775,7 +853,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:wat
 }
 ```
 
-The `TimeInstant` shows last the time any command associated with the entity has been invoked. The result of `ring`
+The `observedAt` shows last the time any command associated with the entity has been invoked. The result of `ring`
 command can be seen in the value of the `ring_info` attribute.
 
 ### Provisioning a Filling Station
@@ -783,7 +861,7 @@ command can be seen in the value of the `ring_info` attribute.
 Provisioning a device which offers both commands and measurements is merely a matter of making an HTTP POST request with
 both `attributes` and `command` attributes in the body of the request.
 
-#### :nine: Request:
+#### :one::one: Request:
 
 ```console
 curl -L -X POST 'http://localhost:4041/iot/devices' \
@@ -818,7 +896,7 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
           "metadata": {
             "unitCode": {
               "type": "Text",
-              "value": "CAL"
+              "value": "C62"
             }
           }
         }
@@ -835,11 +913,11 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 }'
 ```
 
-### Provisioning a Irrigation System
+### Provisioning a Tractor FMIS System
 
 Similarly, a **Tractor** with two commands (`start` and `stop`) and two attributes can be provisioned as follows:
 
-#### :one::zero: Request:
+#### :one::two: Request:
 
 ```console
 curl -L -X POST 'http://localhost:4041/iot/devices' \
@@ -868,9 +946,12 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 '
 ```
 
+The measures from the Tractor (e.g. `gps`) have already been defined within the service group and do not need to be
+repeated here.
+
 The full list of provisioned devices can be obtained by making a GET request to the `/iot/devices` endpoint.
 
-#### :one::one: Request:
+#### :one::three: Request:
 
 ```console
 curl -L -X GET 'http://localhost:4041/iot/devices' \
@@ -884,15 +965,16 @@ Having connected up the IoT Agent to the IoT devices, the Orion Context Broker w
 available. In other words the IoT Agent registered itself as a
 [Context Provider](https://github.com/FIWARE/tutorials.Context-Providers/) for the command attributes.
 
-Once the commands have been registered it will be possible to ring the **Bell**, open and close the **Smart Door** and
-switch the **Irrigation System** on and off by sending requests to the Orion Context Broker, rather than sending UltraLight 2.0
-requests directly the IoT devices as we did in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors)
+Once the commands have been registered it will be possible to ring the **water**, open and close the **Smart Door** and
+switch the **Irrigation System** on and off by sending requests to the Orion Context Broker, rather than sending
+UltraLight 2.0 requests directly the IoT devices as we did in the
+[previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors)
 
-### Ringing the Bell
+### Activating the Irrigation System
 
-To invoke the `ring` command, the `on` attribute must be updated in the context.
+To invoke the `on` command, the `on` attribute must be updated in the context.
 
-#### :one::two: Request:
+#### :one::four: Request:
 
 ```console
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
@@ -907,15 +989,15 @@ curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:w
 }'
 ```
 
-If you are viewing the device monitor page, you can also see the state of the bell change.
+If you are viewing the device monitor page, you can also see the state of the water change.
 
 ![](https://fiware.github.io/tutorials.IoT-Agent/img/water-on.gif)
 
-### Opening the Smart Door
+### Activating the Tractor
 
 To invoke the `start` command, the `start` attribute must be updated in the context.
 
-#### :one::three: Request:
+#### :one::five: Request:
 
 ```console
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:tractor001/attrs/start' \
@@ -930,11 +1012,11 @@ curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:t
 }'
 ```
 
-### Switching on the Irrigation System
+### Activating the Filling Station
 
-To switch on the **Irrigation System**, the `on` attribute must be updated in the context.
+Change the state of the **Fillling System**, the `add` attribute must be updated in the context.
 
-#### :one::four: Request:
+#### :one::six: Request:
 
 ```console
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:filling001/attrs/add' \
@@ -966,7 +1048,7 @@ Use the `resource` and `apikey` parameters to uniquely identify a service group.
 This example provisions an anonymous group of devices. It tells the IoT Agent that a series of devices will be sending
 messages to the `IOTA_HTTP_PORT` (where the IoT Agent is listening for **Northbound** communications)
 
-#### :one::five: Request:
+#### :one::seven: Request:
 
 ```console
 curl -iX POST \
@@ -993,7 +1075,7 @@ This example obtains the full details of a provisioned service with a given `res
 Service group details can be read by making a GET request to the `/iot/services` endpoint and providing a `resource`
 parameter.
 
-#### :one::six: Request:
+#### :one::eight: Request:
 
 ```console
 curl -X GET \
@@ -1055,7 +1137,7 @@ commands or attribute mappings.
 
 This example lists all provisioned services by making a GET request to the `/iot/services` endpoint.
 
-#### :one::seven: Request:
+#### :one::nine: Request:
 
 ```console
 curl -X GET \
@@ -1120,7 +1202,7 @@ This example updates an existing service group with a given `resource` path and 
 Service group details can be updated by making a PUT request to the `/iot/services` endpoint and providing a `resource`
 and `apikey` parameters.
 
-#### :one::eight: Request:
+#### :two::zero: Request:
 
 ```console
 curl -iX PUT \
@@ -1141,7 +1223,7 @@ It means that requests to `http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpe
 is listening for **Northbound** communications) should no longer be processed by the IoT Agent. The `apiKey` and
 `resource` parameters must be supplied in order to identify the service group to be deleted.
 
-#### :one::nine: Request:
+#### :two::one: Request:
 
 ```console
 curl -iX DELETE \
@@ -1164,12 +1246,12 @@ Use the `<device-id>` to uniquely identify a device.
 
 ### Creating a Provisioned Device
 
-This example provisions an individual device. It maps the `device_id=water002` to the entity URN `urn:ngsi-ld:Bell:002`
-and gives the entity a type `Bell`. The IoT Agent has been informed that the device offers a single `ring` `command` and
-is listening on `http://iot-sensors:3001/iot/water002` using HTTP. `attributes`, `lazy` attributes and
+This example provisions an individual device. It maps the `device_id=water002` to the entity URN `urn:ngsi-ld:water:002`
+and gives the entity a type `water`. The IoT Agent has been informed that the device offers a single `ring` `command`
+and is listening on `http://iot-sensors:3001/iot/water002` using HTTP. `attributes`, `lazy` attributes and
 `static_attributes` can also be provisioned.
 
-#### :two::zero: Request:
+#### :two::two: Request:
 
 ```console
 curl -iX POST 'http://localhost:4041/iot/devices' \
@@ -1210,7 +1292,7 @@ This example obtains the full details of a provisioned device with a given `<dev
 
 Provisioned Device details can be read by making a GET request to the `/iot/devices/<device-id>` endpoint.
 
-#### :two::one: Request:
+#### :two::three: Request:
 
 ```console
 curl -X GET \
@@ -1262,7 +1344,7 @@ The response includes all the commands and attributes mappings associated with t
 
 This example lists all provisioned devices by making a GET request to the `/iot/devices` endpoint.
 
-#### :two::two: Request:
+#### :two::four: Request:
 
 ```console
 curl -X GET \
@@ -1314,7 +1396,7 @@ The response includes all the commands and attributes mappings associated with a
 
 This example updates an existing provisioned device by making a PUT request to the `/iot/devices/<device-id>` endpoint.
 
-#### :two::three: Request:
+#### :two::five: Request:
 
 ```console
 curl -iX PUT \
@@ -1334,7 +1416,7 @@ This example removes a provisioned device by making a DELETE request to the `/io
 The device attributes will no longer be mapped and commands can no longer be sent to the device. If the device is making
 active measurements, they will still be handled with default values if the associated service has not been deleted.
 
-#### :two::four: Request:
+#### :two::six: Request:
 
 ```console
 curl -iX DELETE \
