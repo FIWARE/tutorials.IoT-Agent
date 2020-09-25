@@ -96,8 +96,7 @@ RUN \
 	# Remove Git and clean apt cache
 	apt-get clean && \
 	apt-get remove -y git && \
-	apt-get -y autoremove && \
-	chmod +x docker/entrypoint.sh
+	apt-get -y autoremove
 
 USER node
 ENV NODE_ENV=production
@@ -105,5 +104,6 @@ ENV NODE_ENV=production
 # Expose 4061 for NORTH PORT, 7896 for HTTP PORT
 EXPOSE ${IOTA_NORTH_PORT:-4061} ${IOTA_HTTP_PORT:-7896}
 
-ENTRYPOINT ["docker/entrypoint.sh"]
-CMD ["-- ", "config.js"]
+CMD ["node", "/opt/iotaul/bin/iotagent-ul", "-- ", "config.js"]
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \
+   CMD ["npm", "run", "healthcheck"]
