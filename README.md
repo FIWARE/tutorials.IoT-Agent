@@ -21,6 +21,8 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/fbe8cabce2e1845952db)
 
+-   このチュートリアルは[日本語](README.ja.md)でもご覧いただけます。
+
 ## Contents
 
 <details>
@@ -297,7 +299,7 @@ iot-agent:
         - IOTA_FALLBACK_TENANT=openiot
 ```
 
-The `iot-agent` container relies on the precence of the Orion Context Broker and uses a MongoDB database to hold device
+The `iot-agent` container relies on the presence of the Orion Context Broker and uses a MongoDB database to hold device
 information such as device URLs and Keys. The container is listening on two ports:
 
 -   Port `7896` is exposed to receive Ultralight measurements over HTTP from the Dummy IoT devices
@@ -336,7 +338,7 @@ technology which allows to different components isolated into their respective e
 -   To install Docker on Linux follow the instructions [here](https://docs.docker.com/install/)
 
 **Docker Compose** is a tool for defining and running multi-container Docker applications. A
-[YAML file](https://raw.githubusercontent.com/Fiware/tutorials.Entity-Relationships/master/docker-compose.yml) is used
+[YAML file](https://raw.githubusercontent.com/FIWARE/tutorials.IoT-Agent/NGSI-LD/docker-compose/orion-ld.yml) is used
 configure the required services for the application. This means all container services can be brought up in a single
 command. Docker Compose is installed by default as part of Docker for Windows and Docker for Mac, however Linux users
 will need to follow the instructions found [here](https://docs.docker.com/compose/install/)
@@ -457,7 +459,7 @@ The response will look similar to the following:
 The IoT Agent acts as a middleware between the IoT devices and the context broker. It therefore needs to be able to
 create context data entities with unique IDs. Once a service has been provisioned and an unknown device makes a
 measurement the IoT Agent add this to the context using the standard `urn:ngsi-ld:` prefix, a default `type` and the
-supplied `<device-id>` (unless the device is recognized and can be mapped to a known ID.
+supplied `<device-id>` (unless the device is recognized and can be mapped to a known ID).
 
 In the case of **NGSI-LD**, the definition of every attributes of each device entity should be made available in the
 supplied `@context` file. The base **Device** Smart Data Model can be found
@@ -565,7 +567,7 @@ The NGSI-LD [specification](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009
 mandates full URNs when creating context data entities, however the incoming messages from the devices will not be aware
 of this convention. Furthermore the attribute name on the context data entity should match the short names found within
 the associated `@context` file. These mappings can be defined at the service group level as seen in the previous
-request, ot they can be defined by provisioning each device individually.
+request, or they can be defined by provisioning each device individually.
 
 Three types of measurement attributes can be provisioned:
 
@@ -637,7 +639,7 @@ activated, you will have seen the state of each sensor changing and a Northbound
 monitor.
 
 In this tutorial, now that the IoT Agent is connected, the service group has defined the endpoint upon which the IoT
-Agent is listening (`iot/d`) and the API key used to authenticate the request (`4jggokgpepnvsb2uv4s40d59ov`). Since both
+Agent is listening (`/iot/d`) and the API key used to authenticate the request (`4jggokgpepnvsb2uv4s40d59ov`). Since both
 of these are recognized from the request, the measurement is valid.
 
 Because we have specifically provisioned the device (`temperature001`) - the IoT Agent is able to map attributes before
@@ -652,7 +654,7 @@ add the `fiware-service` and `fiware-service-path` headers.
 curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:temperature001' \
     -H 'fiware-service: openiot' \
     -H 'fiware-servicepath: /' \
-    -H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
+    -H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
     -d 'attrs=temperature'
 ```
 
@@ -802,7 +804,7 @@ curl -L -X PATCH 'http://localhost:4041/ngsi-ld/v1/entities/urn:ngsi-ld:Device:w
 
 If you are viewing the device monitor page, you can also see the state of the water sprinkler change.
 
-![](https://fiware.github.io/tutorials.IoT-Agent/img/water-on.gif)
+![](https://fiware.github.io/tutorials.IoT-Agent/img/water-on.png)
 
 The result of the command to turn on the irrigation system can be read by querying the entity within the Context Broker.
 
@@ -853,8 +855,8 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:wat
 }
 ```
 
-The `observedAt` shows last the time any command associated with the entity has been invoked. The result of `ring`
-command can be seen in the value of the `ring_info` attribute.
+The `observedAt` shows last the time any command associated with the entity has been invoked. The result of `on`
+command can be seen in the value of the `on_info` attribute.
 
 ### Provisioning a Filling Station
 
@@ -965,8 +967,8 @@ Having connected up the IoT Agent to the IoT devices, the Orion Context Broker w
 available. In other words the IoT Agent registered itself as a
 [Context Provider](https://github.com/FIWARE/tutorials.Context-Providers/) for the command attributes.
 
-Once the commands have been registered it will be possible to ring the **water**, open and close the **Smart Door** and
-switch the **Irrigation System** on and off by sending requests to the Orion Context Broker, rather than sending
+Once the commands have been registered it will be possible to turn on the **water**, open and close the **Smart Door**
+and switch the **Irrigation System** on and off by sending requests to the Orion Context Broker, rather than sending
 UltraLight 2.0 requests directly the IoT devices as we did in the
 [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors)
 
@@ -991,7 +993,7 @@ curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:w
 
 If you are viewing the device monitor page, you can also see the state of the water change.
 
-![](https://fiware.github.io/tutorials.IoT-Agent/img/water-on.gif)
+![](https://fiware.github.io/tutorials.IoT-Agent/img/water-on.png)
 
 ### Activating the Tractor
 
@@ -1247,8 +1249,8 @@ Use the `<device-id>` to uniquely identify a device.
 ### Creating a Provisioned Device
 
 This example provisions an individual device. It maps the `device_id=water002` to the entity URN `urn:ngsi-ld:water:002`
-and gives the entity a type `water`. The IoT Agent has been informed that the device offers a single `ring` `command`
-and is listening on `http://iot-sensors:3001/iot/water002` using HTTP. `attributes`, `lazy` attributes and
+and gives the entity a type `water`. The IoT Agent has been informed that the device offers two commands (`on` and
+`off`) and is listening on `http://iot-sensors:3001/iot/water002` using HTTP. `attributes`, `lazy` attributes and
 `static_attributes` can also be provisioned.
 
 #### :two::two: Request:
