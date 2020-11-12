@@ -13,6 +13,15 @@ if (( $# != 1 )); then
     exit 1
 fi
 
+waitForContext () {
+	echo -e "\n⏳ Waiting for \033[1m@context\033[0m to be available\n"
+	while [ `docker run --network fiware_default --rm curlimages/curl -s -o /dev/null -w %{http_code} 'http://context-provider:3000/data-models/ngsi-context.jsonld'` -eq 000 ]
+	do 
+	  echo -e "@context HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://context-provider:3000/data-models/ngsi-context.jsonld'` " (waiting for 200)"
+	  sleep 1
+	done
+}
+
 waitForOrion () {
 	echo -e "\n⏳ Waiting for \033[1;34mOrion\033[0m to be available\n"
 	while [ `docker run --network fiware_default --rm curlimages/curl -s -o /dev/null -w %{http_code} 'http://orion:1026/version'` -eq 000 ]
@@ -52,6 +61,7 @@ waitForIoTAgent () {
 
 loadData () {
 	echo ""
+	waitForContext
 	docker run --rm -v $(pwd)/import-data:/import-data \
 		--network fiware_default \
 		-e CONTEXT_BROKER=${CONTEXT_BROKER} \
