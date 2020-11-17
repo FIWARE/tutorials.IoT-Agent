@@ -17,7 +17,7 @@ IoT デバイスを接続して、
 リクエストを使用して測定値を読み取り、コマンドを送信できるようにします。
 
 このチュートリアルでは、全体で [cUrl](https://ec.haxx.se/) コマンドを使用していますが、
-[Postman documentation](https://fiware.github.io/tutorials.IoT-Agent/ngsi-ld) も利用できます。
+[Postman documentation](https://fiware.github.io/tutorials.IoT-Agent/ngsi-ld.html) も利用できます。
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/fbe8cabce2e1845952db)
 
