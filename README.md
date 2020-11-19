@@ -9,9 +9,10 @@
 
 This tutorial introduces the concept of an **IoT Agent** and wires up the dummy
 [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) IoT
-devices created in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2) so that measurements can be
-read and commands can be sent using [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) requests sent to
-the [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/).
+devices created in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2) so that
+measurements can be read and commands can be sent using
+[NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) requests sent to the
+[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/).
 
 The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also available as
 [Postman documentation](https://fiware.github.io/tutorials.IoT-Agent/)
@@ -165,8 +166,8 @@ This base functionality has been abstracted out into a common
 
 For the purpose of this tutorial, a series of dummy IoT devices have been created, which will be attached to the context
 broker. Details of the architecture and protocol used can be found in the
-[IoT Sensors tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2) The state of each device can be seen on the
-UltraLight device monitor web page found at: `http://localhost:3000/device/monitor`
+[IoT Sensors tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2) The state of each device can be
+seen on the UltraLight device monitor web page found at: `http://localhost:3000/device/monitor`
 
 ![FIWARE Monitor](https://fiware.github.io/tutorials.IoT-Agent/img/device-monitor.png)
 
@@ -202,7 +203,8 @@ Therefore the overall architecture will consist of the following elements:
     -   Display store information
     -   Show which products can be bought at each store
     -   Allow users to "buy" products and reduce the stock count.
--   A webserver acting as set of [dummy IoT devices](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2) using the
+-   A webserver acting as set of [dummy IoT devices](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2) using
+    the
     [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
     protocol running over HTTP.
 
@@ -836,7 +838,8 @@ available. In other words the IoT Agent registered itself as a
 
 Once the commands have been registered it will be possible to ring the **Bell**, open and close the **Smart Door** and
 switch the **Smart Lamp** on and off by sending requests to the Orion Context Broker, rather than sending UltraLight 2.0
-requests directly the IoT devices as we did in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2)
+requests directly the IoT devices as we did in the
+[previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2)
 
 ### Ringing the Bell
 
