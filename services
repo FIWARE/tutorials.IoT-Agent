@@ -7,55 +7,82 @@
 
 set -e
 
+SCORPIO="http://scorpio:9090/scorpio/v1/info/"
+ORION="http://orion:1026/version"
+IOT_AGENT="http://iot-agent:4041/version"
+CONTEXT="http://context-provider:3000/data-models/ngsi-context.jsonld"
+
 if (( $# != 1 )); then
-    echo "Illegal number of parameters"
-    echo "usage: services [create|start|stop]"
-    exit 1
+	echo "Illegal number of parameters"
+	echo "usage: services [create|orion|scorpio|stop]"
+	exit 1
 fi
 
-waitForContext () {
-	echo -e "\n⏳ Waiting for \033[1m@context\033[0m to be available\n"
-	while [ `docker run --network fiware_default --rm curlimages/curl -s -o /dev/null -w %{http_code} 'http://context-provider:3000/data-models/ngsi-context.jsonld'` -eq 000 ]
-	do 
-	  echo -e "@context HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://context-provider:3000/data-models/ngsi-context.jsonld'` " (waiting for 200)"
-	  sleep 1
+pause(){
+	printf " "
+	count="$1"
+	[ "$count" -gt 59 ] && printf "Waiting one minute " || printf " Waiting a few seconds ";
+	while [ "$count" -gt 0 ]
+	do
+		printf "."
+		sleep 3
+		count=$((count - 3))
 	done
+	echo ""
+}
+
+getHeartbeat(){
+	eval "response=$(docker run --network fiware_default --rm curlimages/curl -s -o /dev/null -w "%{http_code}" "$1")"
 }
 
 waitForOrion () {
-	echo -e "\n⏳ Waiting for \033[1;34mOrion\033[0m to be available\n"
-	while [ `docker run --network fiware_default --rm curlimages/curl -s -o /dev/null -w %{http_code} 'http://orion:1026/version'` -eq 000 ]
-	do 
-	  echo -e "Context Broker HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://localhost:1026/version'` " (waiting for 200)"
-	  sleep 1
+	echo -e "\n⏳ Waiting for \033[1;34mOrion-LD\033[0m to be available\n"
+	getHeartbeat "${ORION}"
+	while [ "${response}" -eq 000 ]
+	do
+		echo -e "\nContext Broker HTTP state: ${response} (waiting for 200)"
+		pause 6
+		getHeartbeat "${ORION}"
 	done
 }
 
 waitForScorpio () {
 	echo -e "\n⏳ Waiting for \033[1;34mScorpio\033[0m to respond\n"
-	waitSeconds=30
-	while [ `docker run --network fiware_default --rm curlimages/curl -s -o /dev/null -w %{http_code} 'http://scorpio:9090/scorpio/v1/info/'` -eq 000 ]
-	do 
-	  echo -e "Context Broker HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://localhost:9090/scorpio/v1/info/'` " (waiting for 500)"
-	  echo -e "Waiting for ${waitSeconds} seconds ..."
-	  sleep ${waitSeconds}
+	getHeartbeat "${SCORPIO}"
+	while [ "${response}" -eq 000 ]
+	do
+		echo -e "Context Broker HTTP state: ${response} (waiting for 500)"
+		pause 60
+		getHeartbeat "${SCORPIO}"
 	done
 	echo -e "\n⏳ Waiting for all \033[1;34mScorpio\033[0m services to be fully available\n"
-	while [ `docker run --network fiware_default --rm curlimages/curl -s -o /dev/null -w %{http_code} 'http://scorpio:9090/scorpio/v1/info/'` -eq 500 ]
-	do 
-	  echo -e "Context Broker HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://localhost:9090/scorpio/v1/info/'` " (waiting for 200)"
-	  waitSeconds=$((waitSeconds+5))
-	  echo -e "Waiting for ${waitSeconds} seconds ..."
-	  sleep ${waitSeconds}
+	while [ "$response" -eq 500 ]
+	do
+		echo -e "Context Broker HTTP state: ${response} (waiting for 200)"
+		pause 60
+		getHeartbeat "${SCORPIO}"
+	done
+}
+
+waitForContext () {
+	echo -e "\n⏳ Waiting for \033[1m@context\033[0m to be available\n"
+	getHeartbeat "${CONTEXT}"
+	while [ "${response}" -eq 000 ]
+	do
+		echo -e "\n@context HTTP state: ${response} (waiting for 200)"
+		pause 3
+		getHeartbeat "${CONTEXT}"
 	done
 }
 
 waitForIoTAgent () {
 	echo -e "\n⏳ Waiting for \033[1;36mIoT-Agent\033[0m to be available\n"
-	while [ `docker run --network fiware_default --rm curlimages/curl -s -o /dev/null -w %{http_code} 'http://iot-agent:4041/version'` -eq 000 ]
-	do 
-	  echo -e "IoT Agent HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://localhost:4041/version'` " (waiting for 200)"
-	  sleep 1
+	getHeartbeat "${IOT_AGENT}"
+	while [ "${response}" -eq 000 ]
+	do
+		echo -e "\nIoT Agent HTTP state: ${response} (waiting for 200)"
+		pause 3
+		getHeartbeat "${IOT_AGENT}"
 	done
 }
 
@@ -65,7 +92,7 @@ loadData () {
 	docker run --rm -v $(pwd)/import-data:/import-data \
 		--network fiware_default \
 		-e CONTEXT_BROKER=${CONTEXT_BROKER} \
-		-e TUTORIAL_DATA_MODELS_CONTEXT="http://context-provider:3000/data-models/ngsi-context.jsonld" \
+		-e TUTORIAL_DATA_MODELS_CONTEXT=${CONTEXT} \
 		--entrypoint /bin/ash curlimages/curl import-data
 }
 
@@ -76,7 +103,7 @@ addDatabaseIndex () {
 	db = conn.getDB("orion");
 	db.createCollection("entities");
 	db.entities.createIndex({"_id.servicePath": 1, "_id.id": 1, "_id.type": 1}, {unique: true});
-	db.entities.createIndex({"_id.type": 1}); 
+	db.entities.createIndex({"_id.type": 1});
 	db.entities.createIndex({"_id.id": 1});' > /dev/null
 
 	docker exec  db-mongo mongo --eval '
@@ -84,7 +111,7 @@ addDatabaseIndex () {
 	db = conn.getDB("orion-openiot");
 	db.createCollection("entities");
 	db.entities.createIndex({"_id.servicePath": 1, "_id.id": 1, "_id.type": 1}, {unique: true});
-	db.entities.createIndex({"_id.type": 1}); 
+	db.entities.createIndex({"_id.type": 1});
 	db.entities.createIndex({"_id.id": 1});' > /dev/null
 	echo -e " \033[1;32mdone\033[0m"
 }
@@ -96,7 +123,7 @@ addIoTDatabaseIndex () {
 	db = conn.getDB("iotagentul");
 	db.createCollection("devices");
 	db.devices.createIndex({"_id.service": 1, "_id.id": 1, "_id.type": 1});
-	db.devices.createIndex({"_id.type": 1}); 
+	db.devices.createIndex({"_id.type": 1});
 	db.devices.createIndex({"_id.id": 1});
 	db.createCollection("groups");
 	db.groups.createIndex({"_id.resource": 1, "_id.apikey": 1, "_id.service": 1});
@@ -119,8 +146,8 @@ displayServices () {
 command="$1"
 case "${command}" in
 	"help")
-        echo "usage: services [create|orion|scorpio|stop]"
-        ;;
+		echo "usage: services [create|orion|scorpio|stop]"
+		;;
 	"orion")
 		stoppingContainers
 		echo -e "Starting four containers \033[1;34mOrion\033[0m, \033[1;36mIoT-Agent\033[0m, \033[1mTutorial\033[0m and a \033[1mMongoDB\033[0m database."
