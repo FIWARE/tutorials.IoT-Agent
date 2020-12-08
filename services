@@ -186,12 +186,6 @@ case "${command}" in
 		echo "Pulling Docker images"
 		docker-compose --log-level ERROR -f docker-compose/orion-ld.yml pull
 		docker-compose --log-level ERROR -f docker-compose/scorpio-aaio.yml pull
-
-
-		docker build  -t fiware/iotagent-json:1.15.0-ld ./iotagent-json
-		docker build  -t fiware/iotagent-ul:1.14.0-ld ./iotagent-ul
-		docker build  -t fiware/lightweightm2m-iotagent:1.4.0-ld ./lightweightm2m-iotagent
-		docker build  -t fiware/sigfox-iotagent:1.4.0-ld ./sigfox-iotagent
 		;;
 	*)
 		echo "Command not Found."
