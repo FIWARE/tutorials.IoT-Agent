@@ -12,9 +12,8 @@ This **NGSI-LD** tutorial introduces the concept of an **IoT Agent** and wires u
 [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) IoT
 devices created in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors) so that measurements can be
 read and commands can be sent using
-[NGSI LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf)
-requests sent to an NGSI-LD compliant context broker such as the
-[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/).
+[NGSI LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf) requests sent to an
+NGSI-LD compliant context broker such as the [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/).
 
 The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also available as
 [Postman documentation](https://fiware.github.io/tutorials.IoT-Agent/ngsi-ld.html)
@@ -639,8 +638,8 @@ activated, you will have seen the state of each sensor changing and a Northbound
 monitor.
 
 In this tutorial, now that the IoT Agent is connected, the service group has defined the endpoint upon which the IoT
-Agent is listening (`/iot/d`) and the API key used to authenticate the request (`4jggokgpepnvsb2uv4s40d59ov`). Since both
-of these are recognized from the request, the measurement is valid.
+Agent is listening (`/iot/d`) and the API key used to authenticate the request (`4jggokgpepnvsb2uv4s40d59ov`). Since
+both of these are recognized from the request, the measurement is valid.
 
 Because we have specifically provisioned the device (`temperature001`) - the IoT Agent is able to map attributes before
 raising a request with the Orion Context Broker.
@@ -855,8 +854,8 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:wat
 }
 ```
 
-The `observedAt` shows last the time any command associated with the entity has been invoked. The result of `on`
-command can be seen in the value of the `on_info` attribute.
+The `observedAt` shows last the time any command associated with the entity has been invoked. The result of `on` command
+can be seen in the value of the `on_info` attribute.
 
 ### Provisioning a Filling Station
 
