@@ -67,7 +67,8 @@ services:
       - IOTA_PROVIDER_URL=http://iot-agent:${IOTA_NORTH_PORT}
       - IOTA_DEFAULT_RESOURCE=/iot/d
     healthcheck:
-      test: curl --fail -s http://iot-agent:${IOTA_NORTH_PORT}/iot/about || exit 1
+      interval: 5s
+
 
   # Tutorial acts as a series of dummy IoT Sensors over HTTP
   tutorial:
