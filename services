@@ -77,12 +77,19 @@ waitForContext () {
 
 waitForIoTAgent () {
 	echo -e "\n⏳ Waiting for \033[1;36mIoT-Agent\033[0m to be available\n"
-	getHeartbeat "${IOT_AGENT}"
-	while [ "${response}" -eq 000 ]
+	while ! [ `docker inspect --format='{{.State.Health.Status}}' fiware-iot-agent` == "healthy" ]
 	do
 		echo -e "\nIoT Agent HTTP state: ${response} (waiting for 200)"
 		pause 3
 		getHeartbeat "${IOT_AGENT}"
+	done
+}
+
+waitForMongo () {
+	echo -e "\n⏳ Waiting for \033[1mMongoDB\033[0m to be available\n"
+	while ! [ `docker inspect --format='{{.State.Health.Status}}' db-mongo` == "healthy" ]
+	do 
+		sleep 1
 	done
 }
 
@@ -156,6 +163,7 @@ case "${command}" in
 		echo -e "- \033[1mTutorial\033[0m acts as a series of dummy IoT Sensors over HTTP"
 		echo ""
 		docker-compose --log-level ERROR -f docker-compose/orion-ld.yml -p fiware up -d --remove-orphans
+		waitForMongo
 		addDatabaseIndex
 		addIoTDatabaseIndex
 		displayServices fiware
@@ -172,6 +180,7 @@ case "${command}" in
 		echo -e "- \033[1mTutorial\033[0m acts as a series of dummy IoT Sensors over HTTP"
 		echo ""
 		docker-compose --log-level ERROR -f docker-compose/scorpio-aaio.yml -p fiware up -d --remove-orphans
+		waitForMongo
 		addIoTDatabaseIndex
 		displayServices fiware
 		waitForScorpio

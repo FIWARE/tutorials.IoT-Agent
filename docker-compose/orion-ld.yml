@@ -67,7 +67,7 @@ services:
       - IOTA_JSON_LD_CONTEXT=http://context:3000/data-models/ngsi-context.jsonld
       - IOTA_FALLBACK_TENANT=openiot
     healthcheck:
-      test: curl --fail -s http://iot-agent:${IOTA_NORTH_PORT}/iot/about || exit 1
+      interval: 5s
 
   
   # Databases
