@@ -454,7 +454,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "661d9977-6eda-41bc-ab3a-5ab127cf21a5",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -464,15 +463,13 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "1c47421c-2f50-4cee-add5-99cb44744a53",
 						"type": "text/javascript",
 						"exec": [
 							""
 						]
 					}
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Enabling Context Broker Commands",
@@ -623,7 +620,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "03f1d3da-6cdb-4a0a-bc49-3d970f1c4a06",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -633,16 +629,13 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "4b157849-2b5c-42a6-b5f3-786fe212a846",
 								"type": "text/javascript",
 								"exec": [
 									""
 								]
 							}
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Tractor Commands",
@@ -790,7 +783,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "02d53c29-eb41-465b-a5dc-7269fc38fa1f",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -800,16 +792,13 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "2fcfbcff-b0fb-41ea-88e0-0d116a2281de",
 								"type": "text/javascript",
 								"exec": [
 									""
 								]
 							}
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Filling Station Commands",
@@ -957,7 +946,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "84a9c5b1-6c63-40b5-a8db-aebc11eb0452",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -967,16 +955,13 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "6eb03db8-ca2f-47d1-a673-c92ce934768b",
 								"type": "text/javascript",
 								"exec": [
 									""
 								]
 							}
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "List Provisioned Devices",
@@ -1021,7 +1006,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "e5aa0b75-9618-464b-9547-bccf5360d530",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1031,15 +1015,13 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "862fb9fb-be99-4b36-bb84-8ec7f5638ede",
 						"type": "text/javascript",
 						"exec": [
 							""
 						]
 					}
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Service Group CRUD Actions",
@@ -1249,7 +1231,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "a263bbb6-49c9-404b-8083-c75c37f2fc09",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1259,15 +1240,13 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "c52a2169-d0c9-40b6-a77d-87b94b26db01",
 						"type": "text/javascript",
 						"exec": [
 							""
 						]
 					}
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Device CRUD Actions",
@@ -1446,7 +1425,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "7d9ab7f8-ffa3-41ac-a686-e74ec2295c42",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1456,22 +1434,19 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "c2f51cc7-59c3-42f5-806b-5d7d87d0125c",
 						"type": "text/javascript",
 						"exec": [
 							""
 						]
 					}
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		}
 	],
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "e64b3c59-ab46-46cf-b504-30a027ca2986",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1481,7 +1456,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "04676146-332d-41b3-a65e-b9fd5a527aca",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1491,25 +1465,20 @@
 	],
 	"variable": [
 		{
-			"id": "764819ef-5997-408e-8219-4c8bdbedc3da",
 			"key": "iot-agent",
 			"value": "localhost:4041"
 		},
 		{
-			"id": "51023326-115a-4f34-abb2-99399645443a",
 			"key": "orion",
 			"value": "localhost:1026"
 		},
 		{
-			"id": "5a564a77-a263-48ac-a496-f3c37b88f77b",
 			"key": "ultralight",
 			"value": "localhost:3001"
 		},
 		{
-			"id": "a48ad5ba-fc3d-4bf6-94a6-d0d166c1c925",
 			"key": "ngsi-context.jsonld",
 			"value": "http://context-provider:3000/data-models/ngsi-context.jsonld"
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
