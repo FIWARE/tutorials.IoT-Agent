@@ -32,6 +32,7 @@ services:
     command: -dbhost mongo-db -logLevel DEBUG -forwarding
     healthcheck:
       test: curl --fail -s http://orion:${ORION_LD_PORT}/version || exit 1
+      interval: 5s
 
   # IoT-Agent is configured for the UltraLight Protocol
   iot-agent:
@@ -68,28 +69,7 @@ services:
       - IOTA_FALLBACK_TENANT=openiot
     healthcheck:
       interval: 5s
-
   
-  # Databases
-  mongo-db:
-    image: mongo:${MONGO_DB_VERSION}
-    hostname: mongo-db
-    container_name: db-mongo
-    expose:
-      - "${MONGO_DB_PORT}"
-    ports:
-      - "${MONGO_DB_PORT}:${MONGO_DB_PORT}" # localhost:27017
-    networks:
-      - default
-    command: --nojournal
-    volumes:
-      - mongo-db:/data
-    healthcheck:
-      test: |
-        host=`hostname --ip-address || echo '127.0.0.1'`; 
-        mongo --quiet $host/test --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)' && echo 0 || echo 1    
-
-
     # Tutorial acts as a series of dummy IoT Sensors over HTTP
   tutorial:
     image: fiware/tutorials.ngsi-ld
@@ -127,8 +107,24 @@ services:
       - IOTA_JSON_LD_CONTEXT=http://context:3000/data-models/ngsi-context.jsonld
       - NGSI_LD_TENANT=openiot
 
-
-
+  # Database
+  mongo-db:
+    image: mongo:${MONGO_DB_VERSION}
+    hostname: mongo-db
+    container_name: db-mongo
+    expose:
+      - "${MONGO_DB_PORT}"
+    ports:
+      - "${MONGO_DB_PORT}:${MONGO_DB_PORT}" # localhost:27017
+    networks:
+      - default
+    volumes:
+      - mongo-db:/data
+    healthcheck:
+      test: |
+        host=`hostname --ip-address || echo '127.0.0.1'`; 
+        mongo --quiet $host/test --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)' && echo 0 || echo 1
+      interval: 5s
 
 networks:
   default:
