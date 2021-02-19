@@ -156,6 +156,7 @@ case "${command}" in
 		echo "usage: services [create|orion|scorpio|stop]"
 		;;
 	"orion")
+		export $(cat .env | grep "#" -v)
 		stoppingContainers
 		echo -e "Starting four containers \033[1;34mOrion\033[0m, \033[1;36mIoT-Agent\033[0m, \033[1mTutorial\033[0m and a \033[1mMongoDB\033[0m database."
 		echo -e "- \033[1;34mOrion\033[0m is the context broker"
@@ -173,6 +174,7 @@ case "${command}" in
 		waitForIoTAgent
 		;;
 	"scorpio")
+		export $(cat .env | grep "#" -v)
 		stoppingContainers
 		echo -e "Starting seven containers \033[1;34mScorpio\033[0m, \033[1mKafka\033[0m, \033[1mZookeeper\033[0m and a \033[1mPostgres\033[0m database, \033[1;36mIoT-Agent\033[0m, \033[1mTutorial\033[0m and a \033[1mMongoDB\033[0m database."
 		echo -e "- \033[1;34mScorpio\033[0m is the context broker"
