@@ -651,7 +651,7 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 
 リクエストでは、デバイス `temperature001` を URN `urn:ngsi-ld:Device:temperature001` に関連付け、 `t`
 を読み取るデバイスを (適切なメタデータを含む **Property**として定義されている) コンテキスト属性 `temperature`
-にマッピングしています。`controllingAsset` **Relationship** も `static_attribute` として定義され、デバイスを
+にマッピングしています。`controlledAsset` **Relationship** も `static_attribute` として定義され、デバイスを
 **Building** `urn:ngsi-ld:Building:barn001` 内に配置します
 
 次のリクエストを行うことで、**Temperature Sensor** デバイス `temperature001` からのダミー IoT
@@ -805,7 +805,7 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
         }
        ],
        "static_attributes": [
-         {"name":"controllingAsset", "type": "Relationship","value": "urn:ngsi-ld:Building:barn001"}
+         {"name":"controlledAsset", "type": "Relationship","value": "urn:ngsi-ld:Building:barn001"}
         ]
     }
   ]
@@ -870,7 +870,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:wat
         },
         "observedAt": "2020-09-14T15:27:11.066Z"
     },
-    "controllingAsset": {
+    "controlledAsset": {
         "type": "Relationship",
         "object": "urn:ngsi-ld:Building:barn001",
         "observedAt": "2020-09-14T15:27:11.066Z"
@@ -938,7 +938,7 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
       ],
        "static_attributes": [
         {
-          "name": "controllingAsset",
+          "name": "controlledAsset",
           "type": "Relationship",
           "value": "urn:ngsi-ld:Building:barn001"
         }
@@ -976,7 +976,7 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
         {"name": "stop","type": "command"}
        ],
        "static_attributes": [
-         {"name":"controllingAsset", "type": "Relationship","value": "urn:ngsi-ld:Building:barn001"}
+         {"name":"controlledAsset", "type": "Relationship","value": "urn:ngsi-ld:Building:barn001"}
         ]
     }
   ]
@@ -1343,7 +1343,7 @@ curl -iX POST 'http://localhost:4041/iot/devices' \
         }
        ],
        "static_attributes": [
-         {"name":"controllingAsset", "type": "Relationship","value": "urn:ngsi-ld:Building:barn002"}
+         {"name":"controlledAsset", "type": "Relationship","value": "urn:ngsi-ld:Building:barn002"}
         ]
     }
   ]
@@ -1398,7 +1398,7 @@ curl -X GET \
     ],
     "static_attributes": [
         {
-            "name": "controllingAsset",
+            "name": "controlledAsset",
             "type": "Relationship",
             "value": "urn:ngsi-ld:Building:barn002"
         }
@@ -1451,7 +1451,7 @@ curl -X GET \
           ],
           "static_attributes": [
               {
-                  "name": "controllingAsset",
+                  "name": "controlledAsset",
                   "type": "Relationship",
                   "value": "urn:ngsi-ld:Store:002"
               }
