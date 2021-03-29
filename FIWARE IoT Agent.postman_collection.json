@@ -49,7 +49,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n \"services\": [\n   {\n     \"apikey\":      \"4jggokgpepnvsb2uv4s40d59ov\",\n     \"cbroker\":     \"http://orion:1026\",\n     \"entity_type\": \"Motion\",\n     \"resource\":    \"/iot/d\",\n     \"trust\": \"08ca25ba8ea0f322f50244c413fce2e32feed43d\"\n   }\n ]\n}"
+							"raw": "{\n \"services\": [\n   {\n     \"apikey\":      \"4jggokgpepnvsb2uv4s40d59ov\",\n     \"cbroker\":     \"http://orion:1026\",\n     \"entity_type\": \"Motion\",\n     \"resource\":    \"/iot/d\"\n   }\n ]\n}"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/services",
@@ -207,6 +207,43 @@
 							]
 						},
 						"description": "Provisioning an actuator is similar to provisioning a sensor. This time an `endpoint` attribute holds\nthe location where the IoT Agent needs to send the UltraLight command and the `commands` array includes\na list of each command that can be invoked. The example below provisions a bell with the `deviceId=bell001`.\nThe endpoint is `http://context-provider:3001/iot/bell001` and it can accept the `ring` command."
+					},
+					"response": []
+				},
+				{
+					"name": "IoT Agent - Provision a Bidrectional Attribute",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "openiot"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"bell002\",\n      \"entity_name\": \"urn:ngsi-ld:Bell:002\",\n      \"entity_type\": \"Bell\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/bell002\",\n      \"attributes\": [\n          {\n          \"name\":\"ring\",\n          \"type\":\"Text\",\n          \"expression\": \"${@ring}\",\n          \"reverse\": [\n            {\n              \"object_id\":\"ring\",\n              \"type\": \"Text\",\n              \"expression\": \"${@ring}\"\n            }\n          ]\n        }\n      ],\n       \"static_attributes\": [\n         {\"name\":\"refStore\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Store:002\"}\n    \t]\n    }\n  ]\n}\n"
+						},
+						"url": {
+							"raw": "http://{{iot-agent}}/iot/devices",
+							"protocol": "http",
+							"host": [
+								"{{iot-agent}}"
+							],
+							"path": [
+								"iot",
+								"devices"
+							]
+						},
+						"description": "An actuator can also be provisioned using a bidirectional attribute. Once again an `endpoint` attribute holds\nthe location where the IoT Agent needs to send the UltraLight command. The `ring` attribute is defined using an `expression` and mapped to  itself in the `reverse` direction. When un update to the `ring` attribute is received, it is also send to the device itself."
 					},
 					"response": []
 				},
@@ -393,7 +430,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "661d9977-6eda-41bc-ab3a-5ab127cf21a5",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -403,7 +439,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "1c47421c-2f50-4cee-add5-99cb44744a53",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -499,7 +534,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "03f1d3da-6cdb-4a0a-bc49-3d970f1c4a06",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -509,15 +543,13 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "4b157849-2b5c-42a6-b5f3-786fe212a846",
 								"type": "text/javascript",
 								"exec": [
 									""
 								]
 							}
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Smart Door Commands",
@@ -603,7 +635,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "bd93a337-b87f-4f47-9aca-604325c80bec",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -613,15 +644,13 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "062e5306-e534-49d9-ac6c-df5d71317195",
 								"type": "text/javascript",
 								"exec": [
 									""
 								]
 							}
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Smart Lamp",
@@ -707,7 +736,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "5d5cbd31-cc55-4abd-a3b5-90be1a06ebad",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -717,15 +745,13 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "aebaf411-d20a-4580-aee9-8484def536ad",
 								"type": "text/javascript",
 								"exec": [
 									""
 								]
 							}
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "List Provisioned Devices",
@@ -763,7 +789,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "e5aa0b75-9618-464b-9547-bccf5360d530",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -773,15 +798,13 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "862fb9fb-be99-4b36-bb84-8ec7f5638ede",
 						"type": "text/javascript",
 						"exec": [
 							""
 						]
 					}
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Service Group CRUD Actions",
@@ -991,7 +1014,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "a263bbb6-49c9-404b-8083-c75c37f2fc09",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1001,7 +1023,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "c52a2169-d0c9-40b6-a77d-87b94b26db01",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1187,7 +1208,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "7d9ab7f8-ffa3-41ac-a686-e74ec2295c42",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1197,7 +1217,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "c2f51cc7-59c3-42f5-806b-5d7d87d0125c",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1211,7 +1230,6 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "e64b3c59-ab46-46cf-b504-30a027ca2986",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1221,7 +1239,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "04676146-332d-41b3-a65e-b9fd5a527aca",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1231,22 +1248,16 @@
 	],
 	"variable": [
 		{
-			"id": "f91a5190-f812-4dcc-a1fa-77bf0ca90704",
 			"key": "iot-agent",
-			"value": "localhost:4041",
-			"type": "string"
+			"value": "localhost:4041"
 		},
 		{
-			"id": "0f8a8343-3667-44ac-9afa-a9457e5246e5",
 			"key": "orion",
-			"value": "localhost:1026",
-			"type": "string"
+			"value": "localhost:1026"
 		},
 		{
-			"id": "7d048afc-64ef-450b-9a75-78c5a36b10b0",
 			"key": "ultralight",
-			"value": "localhost:3001",
-			"type": "string"
+			"value": "localhost:3001"
 		}
 	]
 }
