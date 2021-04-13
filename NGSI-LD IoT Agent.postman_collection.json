@@ -99,7 +99,7 @@
 								"devices"
 							]
 						},
-						"description": "The NGSI-LD [specification](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf)\nmandates full URNs when creating context data entities, however the incoming messages from the devices will not be aware\nof this convention. Furthermore the attribute name on the context data entity should match the short names found within\nthe associated `@context` file. These mappings can be defined at the service group level as seen in the previous\nrequest, ot they can be defined by provisioning each device individually.\n\nThree types of measurement attributes can be provisioned:\n\n-   `attributes` are mappings of the active readings from the device\n-   `lazy` attributes are only sent on request - The IoT Agent will inform the device to return the measurement\n-   `static_attributes` are as the name suggests static data about the device (such as relationships) passed on to the\n    context broker.\n\n> **Note**: in the case where individual `id`s are not required, or aggregated data is sufficient the `attributes` can\n> be defined within the provisioning service rather than individually.\nIn the request we are associating the device `temperature001` with the URN `urn:ngsi-ld:Device:temperature001` and\nmapping the device reading `t` with the context attribute `temperature` (which is defined as **Property** with\nappropriate meta-data). A `controlledAsset` **Relationship** is also defined as a `static_attribute`, placing the\ndevice within the **Building** `urn:ngsi-ld:Building:barn001`\n"
+						"description": "The NGSI-LD [specification](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf)\nmandates full URNs when creating context data entities, however the incoming messages from the devices will not be aware\nof this convention. Furthermore the attribute name on the context data entity should match the short names found within\nthe associated `@context` file. These mappings can be defined at the service group level as seen in the previous\nrequest, ot they can be defined by provisioning each device individually.\n\nThree types of measurement attributes can be provisioned:\n\n-   `attributes` are mappings of the active readings from the device\n-   `lazy` attributes are only sent on request - The IoT Agent will inform the device to return the measurement\n-   `static_attributes` are as the name suggests static data about the device (such as relationships) passed on to the\n    context broker.\n\n> **Note**: in the case where individual `id`s are not required, or aggregated data is sufficient the `attributes` can\n> be defined within the provisioning service rather than individually.\nIn the request we are associating the device `temperature001` with the URN `urn:ngsi-ld:Device:temperature001` and\nmapping the device reading `t` with the context attribute `temperature` (which is defined as **Property** with\nappropriate meta-data). A `controllingAsset` **Relationship** is also defined as a `static_attribute`, placing the\ndevice within the **Building** `urn:ngsi-ld:Building:barn001`\n"
 					},
 					"response": []
 				},
@@ -245,7 +245,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/entities/?type=Device",
+							"raw": "http://{{orion}}/ngsi-ld/v1/entities/?type=Thing",
 							"protocol": "http",
 							"host": [
 								"{{orion}}"
@@ -259,7 +259,7 @@
 							"query": [
 								{
 									"key": "type",
-									"value": "Device"
+									"value": "Thing"
 								}
 							]
 						},
@@ -268,7 +268,7 @@
 					"response": []
 				},
 				{
-					"name": "IoT Agent - Provision an Actuator",
+					"name": "IoT Agent - Provision an Actuator via a Command",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -287,7 +287,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"water001\",\n      \"entity_name\": \"urn:ngsi-ld:Device:water001\",\n      \"entity_type\": \"Device\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/water001\",\n      \"commands\": [ \n        {\n          \"name\": \"on\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"off\",\n          \"type\": \"command\"\n        }\n       ],\n       \"static_attributes\": [\n         {\"name\":\"controlledAsset\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Building:barn001\"}\n    \t]\n    }\n  ]\n}\n"
+							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"water001\",\n      \"entity_name\": \"urn:ngsi-ld:Device:water001\",\n      \"entity_type\": \"Device\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/water001\",\n      \"commands\": [ \n        {\n          \"name\": \"on\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"off\",\n          \"type\": \"command\"\n        }\n       ],\n       \"static_attributes\": [\n         {\"name\":\"controllingAsset\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Building:barn001\"}\n    \t]\n    }\n  ]\n}\n"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/devices",
@@ -306,6 +306,89 @@
 				},
 				{
 					"name": "IoT Agent - Invoke a Command",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "NGSILD-Tenant",
+								"value": "openiot"
+							},
+							{
+								"key": "NGSILD-Path",
+								"value": "/"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Link",
+								"value": "<{{ngsi-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n\n\t\t\"type\": \"Property\", \n\t\t\"value\": \"x\" \n\n}"
+						},
+						"url": {
+							"raw": "http://{{iot-agent}}/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on",
+							"protocol": "http",
+							"host": [
+								"{{iot-agent}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"entities",
+								"urn:ngsi-ld:Device:water001",
+								"attrs",
+								"on"
+							]
+						},
+						"description": "Before we wire-up the context broker, we can test that a command can be send to a device by making a PATCH request\ndirectly to the IoT Agent's North Port using the `/ngsi-ld/v1/entities/` endpoint. It is this endpoint that will\neventually be invoked by the context broker once we have connected it up. To test the configuration you can run the\ncommand directly as shown:\n\nIf you are viewing the device monitor page, you can also see the state of the water sprinkler change.\n\n![](https://fiware.github.io/tutorials.IoT-Agent/img/water-on.gif)\n"
+					},
+					"response": []
+				},
+				{
+					"name": "IoT Agent - Provision an Actuator via a Bidirectional Attribute",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "fiware-service",
+								"value": "openiot"
+							},
+							{
+								"key": "fiware-servicepath",
+								"value": "/"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"water001\",\n      \"entity_name\": \"urn:ngsi-ld:Device:water001\",\n      \"entity_type\": \"Device\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/water001\",\n      \"attributes\": [\n          {\n          \"name\":\"on\",\n          \"type\":\"Property\",\n          \"expression\": \"${@on}\",\n          \"reverse\": [\n            {\n              \"object_id\":\"on\",\n              \"type\": \"Property\",\n              \"expression\": \"${@on}\"\n            }\n          ]\n        },\n        {\n          \"name\":\"off\",\n          \"type\":\"Property\",\n          \"expression\": \"${@off}\",\n          \"reverse\": [\n            {\n              \"object_id\":\"off\",\n              \"type\": \"Property\",\n              \"expression\": \"${@off}\"\n            }\n          ]\n        }\n      ],\n       \"static_attributes\": [\n         {\"name\":\"controllingAsset\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Building:barn001\"}\n    \t]\n    }\n  ]\n}\n"
+						},
+						"url": {
+							"raw": "http://{{iot-agent}}/iot/devices",
+							"protocol": "http",
+							"host": [
+								"{{iot-agent}}"
+							],
+							"path": [
+								"iot",
+								"devices"
+							]
+						},
+						"description": "Provisioning an actuator is similar to provisioning a sensor. This time an `endpoint` attribute holds the location where\nthe IoT Agent needs to send the UltraLight command and the `commands` array includes a list of each command that can be\ninvoked. The example below provisions a water with the `deviceId=water001`. The endpoint is\n`http://iot-sensors:3001/iot/water001` and it can accept the `on` command. The `transport=HTTP` attribute defines the\ncommunications protocol to be used."
+					},
+					"response": []
+				},
+				{
+					"name": "IoT Agent - Invoke a Command Copy",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -365,7 +448,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"filling001\",\n      \"entity_name\": \"urn:ngsi-ld:Device:filling001\",\n      \"entity_type\": \"FillingLevelSensor\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/filling001\",\n      \"commands\": [\n        {\n          \"name\": \"add\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"remove\",\n          \"type\": \"command\"\n        }\n      ],\n      \"attributes\": [\n        {\n          \"object_id\": \"f\",\n          \"name\": \"fillingLevel\",\n          \"type\": \"Number\",\n          \"metadata\": {\n            \"unitCode\": {\n              \"type\": \"Text\",\n              \"value\": \"CAL\"\n            }\n          }\n        }\n      ],\n       \"static_attributes\": [\n        {\n          \"name\": \"controlledAsset\",\n          \"type\": \"Relationship\",\n          \"value\": \"urn:ngsi-ld:Building:barn001\"\n        }\n      ]\n    }\n  ]\n}"
+							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"filling001\",\n      \"entity_name\": \"urn:ngsi-ld:Device:filling001\",\n      \"entity_type\": \"FillingLevelSensor\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/filling001\",\n      \"commands\": [\n        {\n          \"name\": \"add\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"remove\",\n          \"type\": \"command\"\n        }\n      ],\n      \"attributes\": [\n        {\n          \"object_id\": \"f\",\n          \"name\": \"fillingLevel\",\n          \"type\": \"Number\",\n          \"metadata\": {\n            \"unitCode\": {\n              \"type\": \"Text\",\n              \"value\": \"CAL\"\n            }\n          }\n        }\n      ],\n       \"static_attributes\": [\n        {\n          \"name\": \"controllingAsset\",\n          \"type\": \"Relationship\",\n          \"value\": \"urn:ngsi-ld:Building:barn001\"\n        }\n      ]\n    }\n  ]\n}"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/devices",
@@ -402,7 +485,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"devices\": [\n        {\n            \"device_id\": \"tractor001\",\n            \"entity_name\": \"urn:ngsi-ld:Device:tractor001\",\n            \"entity_type\": \"Tractor\",\n            \"protocol\": \"PDI-IoTA-UltraLight\",\n            \"transport\": \"HTTP\",\n            \"endpoint\": \"http://context-provider:3001/iot/tractor001\",\n            \"commands\": [\n                {\n                    \"name\": \"start\",\n                    \"type\": \"command\"\n                },\n                {\n                    \"name\": \"stop\",\n                    \"type\": \"command\"\n                }\n            ],\n            \"static_attributes\": [\n                {\n                    \"name\": \"category\",\n                    \"type\": \"Property\",\n                    \"value\": [\n                        \"sensor\",\n                        \"actuator\"\n                    ]\n                },\n                {\n                    \"name\": \"controlledAsset\",\n                    \"type\": \"Relationship\",\n                    \"value\": \"urn:ngsi-ld:Building:barn001\"\n                }\n            ]\n        }\n    ]\n}"
+							"raw": "{\n    \"devices\": [\n        {\n            \"device_id\": \"tractor001\",\n            \"entity_name\": \"urn:ngsi-ld:Device:tractor001\",\n            \"entity_type\": \"Tractor\",\n            \"protocol\": \"PDI-IoTA-UltraLight\",\n            \"transport\": \"HTTP\",\n            \"endpoint\": \"http://context-provider:3001/iot/tractor001\",\n            \"commands\": [\n                {\n                    \"name\": \"start\",\n                    \"type\": \"command\"\n                },\n                {\n                    \"name\": \"stop\",\n                    \"type\": \"command\"\n                }\n            ],\n            \"static_attributes\": [\n                {\n                    \"name\": \"category\",\n                    \"type\": \"Property\",\n                    \"value\": [\n                        \"sensor\",\n                        \"actuator\"\n                    ]\n                },\n                {\n                    \"name\": \"controllingAsset\",\n                    \"type\": \"Relationship\",\n                    \"value\": \"urn:ngsi-ld:Building:barn001\"\n                }\n            ]\n        }\n    ]\n}"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/devices",
@@ -1271,7 +1354,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"water002\",\n      \"entity_name\": \"urn:ngsi-ld:Device:water002\",\n      \"entity_type\": \"Device\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/water002\",\n      \"commands\": [ \n        {\n          \"name\": \"on\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"off\",\n          \"type\": \"command\"\n        }\n       ],\n       \"static_attributes\": [\n         {\"name\":\"controlledAsset\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Building:barn002\"}\n    \t]\n    }\n  ]\n}\n"
+							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"water002\",\n      \"entity_name\": \"urn:ngsi-ld:Device:water002\",\n      \"entity_type\": \"Device\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/water002\",\n      \"commands\": [ \n        {\n          \"name\": \"on\",\n          \"type\": \"command\"\n        },\n        {\n          \"name\": \"off\",\n          \"type\": \"command\"\n        }\n       ],\n       \"static_attributes\": [\n         {\"name\":\"controllingAsset\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Building:barn002\"}\n    \t]\n    }\n  ]\n}\n"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/devices",
@@ -1465,18 +1548,22 @@
 	],
 	"variable": [
 		{
+			"id": "e6d6d16b-a5b7-4299-bf91-ab42682a1c96",
 			"key": "iot-agent",
 			"value": "localhost:4041"
 		},
 		{
+			"id": "aa999932-7a79-49e0-b2dc-2311a29119ff",
 			"key": "orion",
 			"value": "localhost:1026"
 		},
 		{
+			"id": "00d70ac0-cb6a-421c-8e6a-293ff6481c50",
 			"key": "ultralight",
 			"value": "localhost:3001"
 		},
 		{
+			"id": "caf6f9d8-edd1-447b-b45f-9ac9b5d165a2",
 			"key": "ngsi-context.jsonld",
 			"value": "http://context-provider:3000/data-models/ngsi-context.jsonld"
 		}
