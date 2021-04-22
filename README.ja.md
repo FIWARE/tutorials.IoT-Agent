@@ -1,5 +1,5 @@
 [![FIWARE Banner](https://fiware.github.io/tutorials.IoT-Agent/img/fiware.png)](https://www.fiware.org/developers)
-[![NGSI LD](https://img.shields.io/badge/NGSI-LD-d6604d.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf)
+[![NGSI LD](https://img.shields.io/badge/NGSI-LD-d6604d.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.04.01_60/gs_cim009v010401p.pdf)
 
 [![FIWARE IoT Agents](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/iot-agents.svg)](https://github.com/FIWARE/catalogue/blob/master/iot-agents/README.md)
 [![License: MIT](https://img.shields.io/github/license/fiware/tutorials.Iot-Agent.svg)](https://opensource.org/licenses/MIT)
@@ -13,7 +13,7 @@
 [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 IoT デバイスを接続して、
 [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) のような NGSI-LD 準拠の Context Broker
-に送信された [NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf)
+に送信された [NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.04.01_60/gs_cim009v010401p.pdf)
 リクエストを使用して測定値を読み取り、コマンドを送信できるようにします。
 
 このチュートリアルでは、全体で [cUrl](https://ec.haxx.se/) コマンドを使用していますが、
@@ -195,10 +195,10 @@ IoT デバイスから生成され、IoT Agent を介して、Context Broker に
 したがって、全体的なアーキテクチャは次の要素で構成されます:
 
 -   [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) は、
-    [NGSI-LD](https://forge.etsi.org/swagger/ui/?url=https://forge.etsi.org/gitlab/NGSI-LD/NGSI-LD/raw/master/spec/updated/full_api.json)
+    [NGSI-LD](https://forge.etsi.org/swagger/ui/?url=https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/generated/full_api.json)
     を使用してリクエストを受信します
 -   FIWARE [IoT Agent for UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/) は、
-    [NGSI-LD](https://forge.etsi.org/swagger/ui/?url=https://forge.etsi.org/gitlab/NGSI-LD/NGSI-LD/raw/master/spec/updated/full_api.json)
+    [NGSI-LD](https://forge.etsi.org/swagger/ui/?url=https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/generated/full_api.json)
     を使用してサウスバウンド・リクエストを受信し、それらをデバイスの
     [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
     コマンドに変換します
@@ -594,7 +594,7 @@ IoT Agent は設定ファイルで定義された Context Broker URL を使用�
 
 ### センサのプロビジョニング
 
-NGSI-LD [specification](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf)
+NGSI-LD [specification](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.04.01_60/gs_cim009v010401p.pdf)
 は、コンテキスト・データ・エンティティの作成時に完全な URNs を要求しますが、デバイスからの着信メッセージはこの規則を
 認識しません。 さらに、コンテキスト・データ・エンティティの属性名は、関連付けられた `@context` ファイル内にある短い名前と
 一致する必要があります。これらのマッピングは、前のリクエストに見られるようにサービス・グループ・レベルで定義するか、
