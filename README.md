@@ -567,7 +567,28 @@ curl -iX POST \
 
 In the request we are associating the device `motion001` with the URN `urn:ngsi-ld:Motion:001` and mapping the device
 reading `c` with the context attribute `count` (which is defined as an `Integer`) A `refStore` is defined as a
-`static_attribute`, placing the device within **Store** `urn:ngsi-ld:Store:001`
+`static_attribute`, placing the device within **Store** `urn:ngsi-ld:Store:001`.
+
+> Static attributes are useful as additional data on an entity to enable querying using the `q` parameter. For example
+> the Smart Data Models [Device](https://github.com/smart-data-models/dataModel.Device/blob/master/Device/doc/spec.md)
+> model defines attributes such as `category` or `controlledProperty` which enable queries to be made like:
+>
+> -   _Which **Actuators** currently have a low `batteryLevel`?_
+>
+> `/v2/entities?q=category=="actuator";batteryLevel<0.1`
+>
+> -   _Which **Devices** measuring `fillingLevel` were installed before January 2020?_
+>
+> `/v2/entities?q=controlledProperty=="fillingLevel";dateInstalled<"2020-01-25T00:00:00.000Z"`
+>
+> Obviously static data can be extended as necessary and can also include additional data such as a unique `name` or
+> `serialNumber` for each device should the entity ID be too inflexible for queries.
+>
+> `/v2/entities?q=serialNumber=="XS403001-002"`
+>
+> Additionally devices with a fixed `location` static attribute can also be queried using the Geofencing parameters.
+>
+> `/v2/entities?georel=near;maxDistance:1500&geometry=point&coords=52.5162,13.3777`
 
 You can simulate a dummy IoT device measurement coming from the **Motion Sensor** device `motion001`, by making the
 following request
@@ -682,11 +703,12 @@ curl -iX POST \
 '
 ```
 
-
 ### Provisioning an Actuator via a Bidirectional attribute
 
-An actuator can also be provisioned using a bidirectional attribute. Once again an `endpoint` attribute holds
-the location where the IoT Agent needs to send the UltraLight command. The `ring` attribute is defined using an `expression` and mapped to  itself in the `reverse` direction. When an update to the `ring` attribute is received, it is also sent to the device itself. Internally the difference is that this method relies on a subscription rather than a registration.
+An actuator can also be provisioned using a bidirectional attribute. Once again an `endpoint` attribute holds the
+location where the IoT Agent needs to send the UltraLight command. The `ring` attribute is defined using an `expression`
+and mapped to itself in the `reverse` direction. When an update to the `ring` attribute is received, it is also sent to
+the device itself. Internally the difference is that this method relies on a subscription rather than a registration.
 
 #### :seven: Request:
 
@@ -728,14 +750,11 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 '
 ```
 
-
 Before we wire-up the context broker, we can test that a command can be send to a device by making a REST request
 directly to the IoT Agent's North Port using the `/v2/op/update` endpoint. It is this endpoint that will eventually be
 invoked by the context broker once we have connected it up.
 
-To test the configuration you can run the command directly
-as shown:
-
+To test the configuration you can run the command directly as shown:
 
 #### :eight: Request:
 
