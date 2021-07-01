@@ -245,7 +245,7 @@ tutorial:
         - "DUMMY_DEVICES_PORT=3001"
         - "DUMMY_DEVICES_API_KEY=4jggokgpepnvsb2uv4s40d59ov"
         - "DUMMY_DEVICES_TRANSPORT=HTTP"
-        - "IOTA_JSON_LD_CONTEXT=http://context:3000/data-models/ngsi-context.jsonld"
+        - "IOTA_JSON_LD_CONTEXT=http://context/ngsi-context.jsonld"
 ```
 
 `tutorial` コンテナは、2つのポートでリッスンしています:
@@ -265,7 +265,7 @@ tutorial:
 | DUMMY_DEVICES_PORT      | `3001`                                                | コマンドを受信するためにダミー IoT デバイスが使用するポート                                                                                      |
 | DUMMY_DEVICES_API_KEY   | `4jggokgpepnvsb2uv4s40d59ov`                          | UltraLight インタラクションに使用されるランダムなセキュリティキー - デバイスと IoT Agent 間のインタラクションの完全性を保証するために使用します |
 | DUMMY_DEVICES_TRANSPORT | `HTTP`                                                | ダミー IoT デバイスによって使用されるトランスポート・プロトコル                                                                                  |
-| IOTA_JSON_LD_CONTEXT    | `http://context:3000/data-models/ngsi-context.jsonld` | デバイスのデータモデルの定義に使用される `@context` ファイルの場所                                                                               |
+| IOTA_JSON_LD_CONTEXT    | `http://context/ngsi-context.jsonld` | デバイスのデータモデルの定義に使用される `@context` ファイルの場所                                                                               |
 
 このチュートリアルでは、YAML ファイルで説明されている他の `tutorial` コンテナの設定値は使用しません。
 
@@ -307,7 +307,7 @@ iot-agent:
         - IOTA_MONGO_DB=iotagentul
         - IOTA_HTTP_PORT=7896
         - IOTA_PROVIDER_URL=http://iot-agent:4041
-        - IOTA_JSON_LD_CONTEXT=http://context:3000/data-models/ngsi-context.jsonld
+        - IOTA_JSON_LD_CONTEXT=http://context/ngsi-context.jsonld
         - IOTA_FALLBACK_TENANT=openiot
 ```
 
@@ -335,7 +335,7 @@ URLs やキーなどのデバイス情報を保持します。コンテナは2�
 | IOTA_MONGO_DB        | `iotagentul`                                          | mongoDB で使用されるデータベースの名前                                                                                                             |
 | IOTA_HTTP_PORT       | `7896`                                                | IoT Agent が HTTP 経由で IoT デバイスのトラフィックをリッスンするポート                                                                            |
 | IOTA_PROVIDER_URL    | `http://iot-agent:4041`                               | コマンドが登録されたときに Context Broker に渡された URL。Context Broker がデバイスにコマンドを発行したときにフォワーディング URL の場所として使用 |
-| IOTA_JSON_LD_CONTEXT | `http://context:3000/data-models/ngsi-context.jsonld` | デバイス・データモデルの定義に使用される `@context` ファイルの場所                                                                                |
+| IOTA_JSON_LD_CONTEXT | `http://context/ngsi-context.jsonld` | デバイス・データモデルの定義に使用される `@context` ファイルの場所                                                                                |
 | IOTA_FALLBACK_TENANT | `openiot`                                             | 明示的なテナントが通信から受信されていない場合に使用するテナント                                                                                   |
 
 <a name="prerequisites">
@@ -684,7 +684,7 @@ Context Broker からエンティティ・データを取得すると、測定�
 curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:temperature001' \
     -H 'fiware-service: openiot' \
     -H 'fiware-servicepath: /' \
-    -H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
     -d 'attrs=temperature'
 ```
 
@@ -692,7 +692,7 @@ curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:te
 
 ```jsonld
 {
-    "@context": "http://context-provider:3000/data-models/ngsi-context.jsonld",
+    "@context": "http://context/ngsi-context.jsonld",
     "id": "urn:ngsi-ld:Device:temperature001",
     "type": "Device",
     "temperature": {
@@ -735,7 +735,7 @@ curl -iX POST 'http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=motion
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
 -H 'NGSILD-Tenant: openiot' \
 -H 'NGSILD-Path: /' \
--H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
+-H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
 ```
 
 #### レスポンス:
@@ -743,7 +743,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
 ```jsonld
 [
     {
-        "@context": "http://context-provider:3000/data-models/ngsi-context.jsonld",
+        "@context": "http://context/ngsi-context.jsonld",
         "id": "urn:ngsi-ld:Device:motion003",
         "type": "Device",
         "c": {
@@ -844,7 +844,7 @@ Water sprinkler をオンにするコマンドの結果は、Context Broker 内�
 ```console
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001' \
     -H 'NGSILD-Tenant: openiot' \
-    -H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
     -H 'Accept: application/json'
 ```
 
@@ -1022,7 +1022,7 @@ IoT Agent を IoT デバイスに接続すると、Orion Context Broker にコ�
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
 -H 'NGSILD-Tenant: openiot' \
 -H 'Content-Type: application/json' \
--H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 --data-raw '{
 
         "type": "Property",
@@ -1047,7 +1047,7 @@ curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:w
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:tractor001/attrs/start' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Content-Type: application/json' \
-    -H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 --data-raw '{
 
         "type": "Property",
@@ -1068,7 +1068,7 @@ curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:t
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:filling001/attrs/add' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Content-Type: application/json' \
-    -H 'Link: <http://context-provider:3000/data-models/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 --data-raw '{
 
         "type": "Property",
