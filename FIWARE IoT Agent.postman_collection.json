@@ -193,7 +193,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"bell001\",\n      \"entity_name\": \"urn:ngsi-ld:Bell:001\",\n      \"entity_type\": \"Bell\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/bell001\",\n      \"commands\": [ \n        {\n          \"name\": \"ring\",\n          \"type\": \"command\"\n        }\n       ],\n       \"static_attributes\": [\n         {\"name\":\"refStore\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Store:001\"}\n    \t]\n    }\n  ]\n}\n"
+							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"bell001\",\n      \"entity_name\": \"urn:ngsi-ld:Bell:001\",\n      \"entity_type\": \"Bell\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://iot-sensors:3001/iot/bell001\",\n      \"commands\": [ \n        {\n          \"name\": \"ring\",\n          \"type\": \"command\"\n        }\n       ],\n       \"static_attributes\": [\n         {\"name\":\"refStore\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Store:001\"}\n    \t]\n    }\n  ]\n}\n"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/devices",
@@ -206,7 +206,7 @@
 								"devices"
 							]
 						},
-						"description": "Provisioning an actuator is similar to provisioning a sensor. This time an `endpoint` attribute holds\nthe location where the IoT Agent needs to send the UltraLight command and the `commands` array includes\na list of each command that can be invoked. The example below provisions a bell with the `deviceId=bell001`.\nThe endpoint is `http://context-provider:3001/iot/bell001` and it can accept the `ring` command."
+						"description": "Provisioning an actuator is similar to provisioning a sensor. This time an `endpoint` attribute holds\nthe location where the IoT Agent needs to send the UltraLight command and the `commands` array includes\na list of each command that can be invoked. The example below provisions a bell with the `deviceId=bell001`.\nThe endpoint is `http://iot-sensors:3001/iot/bell001` and it can accept the `ring` command."
 					},
 					"response": []
 				},
@@ -230,7 +230,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"bell002\",\n      \"entity_name\": \"urn:ngsi-ld:Bell:002\",\n      \"entity_type\": \"Bell\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/bell002\",\n      \"attributes\": [\n          {\n          \"name\":\"ring\",\n          \"type\":\"Text\",\n          \"expression\": \"${@ring}\",\n          \"reverse\": [\n            {\n              \"object_id\":\"ring\",\n              \"type\": \"Text\",\n              \"expression\": \"${@ring}\"\n            }\n          ]\n        }\n      ],\n       \"static_attributes\": [\n         {\"name\":\"refStore\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Store:002\"}\n    \t]\n    }\n  ]\n}\n"
+							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"bell002\",\n      \"entity_name\": \"urn:ngsi-ld:Bell:002\",\n      \"entity_type\": \"Bell\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://iot-sensors:3001/iot/bell002\",\n      \"attributes\": [\n          {\n          \"name\":\"ring\",\n          \"type\":\"Text\",\n          \"expression\": \"${@ring}\",\n          \"reverse\": [\n            {\n              \"object_id\":\"ring\",\n              \"type\": \"Text\",\n              \"expression\": \"${@ring}\"\n            }\n          ]\n        }\n      ],\n       \"static_attributes\": [\n         {\"name\":\"refStore\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Store:002\"}\n    \t]\n    }\n  ]\n}\n"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/devices",
@@ -341,7 +341,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"door001\",\n      \"entity_name\": \"urn:ngsi-ld:Door:001\",\n      \"entity_type\": \"Door\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/door001\",\n      \"commands\": [ \n        {\"name\": \"unlock\",\"type\": \"command\"},\n        {\"name\": \"open\",\"type\": \"command\"},\n        {\"name\": \"close\",\"type\": \"command\"},\n        {\"name\": \"lock\",\"type\": \"command\"}\n       ],\n       \"attributes\": [\n       \t{\"object_id\": \"s\", \"name\": \"state\", \"type\":\"Text\"}\n       ],\n       \"static_attributes\": [\n         {\"name\":\"refStore\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Store:001\"}\n       ]\n    }\n  ]\n}\n"
+							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"door001\",\n      \"entity_name\": \"urn:ngsi-ld:Door:001\",\n      \"entity_type\": \"Door\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://iot-sensors:3001/iot/door001\",\n      \"commands\": [ \n        {\"name\": \"unlock\",\"type\": \"command\"},\n        {\"name\": \"open\",\"type\": \"command\"},\n        {\"name\": \"close\",\"type\": \"command\"},\n        {\"name\": \"lock\",\"type\": \"command\"}\n       ],\n       \"attributes\": [\n       \t{\"object_id\": \"s\", \"name\": \"state\", \"type\":\"Text\"}\n       ],\n       \"static_attributes\": [\n         {\"name\":\"refStore\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Store:001\"}\n       ]\n    }\n  ]\n}\n"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/devices",
@@ -378,7 +378,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"lamp001\",\n      \"entity_name\": \"urn:ngsi-ld:Lamp:001\",\n      \"entity_type\": \"Lamp\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/lamp001\",\n      \"commands\": [ \n        {\"name\": \"on\",\"type\": \"command\"},\n        {\"name\": \"off\",\"type\": \"command\"}\n       ],\n       \"attributes\": [\n       \t{\"object_id\": \"s\", \"name\": \"state\", \"type\":\"Text\"},\n        {\"object_id\": \"l\", \"name\": \"luminosity\", \"type\":\"Integer\"}\n       ],\n       \"static_attributes\": [\n         {\"name\":\"refStore\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Store:001\"}\n    \t]\n    }\n  ]\n}\n"
+							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"lamp001\",\n      \"entity_name\": \"urn:ngsi-ld:Lamp:001\",\n      \"entity_type\": \"Lamp\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://iot-sensors:3001/iot/lamp001\",\n      \"commands\": [ \n        {\"name\": \"on\",\"type\": \"command\"},\n        {\"name\": \"off\",\"type\": \"command\"}\n       ],\n       \"attributes\": [\n       \t{\"object_id\": \"s\", \"name\": \"state\", \"type\":\"Text\"},\n        {\"object_id\": \"l\", \"name\": \"luminosity\", \"type\":\"Integer\"}\n       ],\n       \"static_attributes\": [\n         {\"name\":\"refStore\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Store:001\"}\n    \t]\n    }\n  ]\n}\n"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/devices",
@@ -1054,7 +1054,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"bell002\",\n      \"entity_name\": \"urn:ngsi-ld:Bell:002\",\n      \"entity_type\": \"Bell\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://context-provider:3001/iot/bell002\",\n      \"commands\": [ \n        {\n          \"name\": \"ring\",\n          \"type\": \"command\"\n        }\n       ],\n       \"static_attributes\": [\n         {\"name\":\"refStore\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Store:002\"}\n    \t]\n    }\n  ]\n}\n"
+							"raw": "{\n  \"devices\": [\n    {\n      \"device_id\": \"bell002\",\n      \"entity_name\": \"urn:ngsi-ld:Bell:002\",\n      \"entity_type\": \"Bell\",\n      \"protocol\": \"PDI-IoTA-UltraLight\",\n      \"transport\": \"HTTP\",\n      \"endpoint\": \"http://iot-sensors:3001/iot/bell002\",\n      \"commands\": [ \n        {\n          \"name\": \"ring\",\n          \"type\": \"command\"\n        }\n       ],\n       \"static_attributes\": [\n         {\"name\":\"refStore\", \"type\": \"Relationship\",\"value\": \"urn:ngsi-ld:Store:002\"}\n    \t]\n    }\n  ]\n}\n"
 						},
 						"url": {
 							"raw": "http://{{iot-agent}}/iot/devices",
@@ -1067,7 +1067,7 @@
 								"devices"
 							]
 						},
-						"description": "This example provisions an individual device. It maps the `device_id=bell002` to the entity URN `urn:ngsi-ld:Bell:002` and gives the\nentity a type `Bell`. The IoT Agent has been informed that the device offers a single `ring` `command` and is listening on \n`http://context-provider:3001/iot/bell002` using HTTP. `attributes`, `lazy` attributes and `static_attributes` can also be provisioned."
+						"description": "This example provisions an individual device. It maps the `device_id=bell002` to the entity URN `urn:ngsi-ld:Bell:002` and gives the\nentity a type `Bell`. The IoT Agent has been informed that the device offers a single `ring` `command` and is listening on \n`http://iot-sensors:3001/iot/bell002` using HTTP. `attributes`, `lazy` attributes and `static_attributes` can also be provisioned."
 					},
 					"response": []
 				},
