@@ -121,7 +121,7 @@ services:
    # Tutorial acts as a series of dummy IoT Sensors over HTTP
   tutorial:
     image: fiware/tutorials.context-provider
-    hostname: tutorial
+    hostname: iot-sensors
     container_name: fiware-tutorial
     depends_on:
       - scorpio
@@ -129,7 +129,7 @@ services:
     networks:
       default:
         aliases:
-          - iot-sensors
+          - tutorial
           - context-provider
     expose:
       - "${TUTORIAL_APP_PORT}"

@@ -91,7 +91,7 @@ curl -s -o /dev/null -X POST 'http://'"${CONTEXT_BROKER}"'/ngsi-ld/v1/entityOper
         "inDefinedTermSet": "https://targetjobs.co.uk/careers-advice/job-descriptions",
         "termCode": "277119-agricultural-manager-job-description",
         "name": "Agricultural Manager",
-        "url": "https://targetjobs.co.uk/careers-advice/job-descriptions/https://targetjobs.co.uk/careers-advice/job-descriptions/277119-agricultural-manager-job-description"
+        "url": "https://targetjobs.co.uk/careers-advice/job-descriptions/277119-agricultural-manager-job-description"
         }
     }
   },
@@ -105,7 +105,7 @@ curl -s -o /dev/null -X POST 'http://'"${CONTEXT_BROKER}"'/ngsi-ld/v1/entityOper
         "inDefinedTermSet": "https://targetjobs.co.uk/careers-advice/job-descriptions",
         "termCode": "277119-agricultural-manager-job-description",
         "name": "Agricultural Manager",
-        "url": "https://targetjobs.co.uk/careers-advice/job-descriptions/https://targetjobs.co.uk/careers-advice/job-descriptions/277119-agricultural-manager-job-description"
+        "url": "https://targetjobs.co.uk/careers-advice/job-descriptions/277119-agricultural-manager-job-description"
         }
     },
     "owns": {"type": "Relationship", "object": "urn:ngsi-ld:Building:farm002"},
@@ -123,7 +123,7 @@ curl -s -o /dev/null -X POST 'http://'"${CONTEXT_BROKER}"'/ngsi-ld/v1/entityOper
         "inDefinedTermSet": "https://targetjobs.co.uk/careers-advice/job-descriptions",
         "termCode": "276387-broadcasting-presenter-job-description",
         "name": "Broadcasting Presenter",
-        "url": "https://targetjobs.co.uk/careers-advice/job-descriptions/https://targetjobs.co.uk/careers-advice/job-descriptions/276387-broadcasting-presenter-job-description"
+        "url": "https://targetjobs.co.uk/careers-advice/job-descriptions/276387-broadcasting-presenter-job-description"
         }
     },
     "weight": {
@@ -140,7 +140,7 @@ curl -s -o /dev/null -X POST 'http://'"${CONTEXT_BROKER}"'/ngsi-ld/v1/entityOper
         "inDefinedTermSet": "https://targetjobs.co.uk/careers-advice/job-descriptions",
         "termCode": "277089-agricultural-consultant-description",
         "name": "Agricultural Consultant",
-        "url": "https://targetjobs.co.uk/careers-advice/job-descriptions/https://targetjobs.co.uk/careers-advice/job-descriptions/277089-agricultural-consultant"
+        "url": "https://targetjobs.co.uk/careers-advice/job-descriptions/277089-agricultural-consultant"
         }
     },
     "weight": {
