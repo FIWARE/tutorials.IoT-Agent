@@ -7,7 +7,7 @@
 set -e
 
 dockerCmd="docker compose"
-if (( $# == 2 )); then
+if (( $# == 1 )); then
     dockerCmd="docker-compose"
 fi
 
