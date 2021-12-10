@@ -160,6 +160,7 @@ addIoTDatabaseIndex () {
 	docker exec  db-mongo mongo --eval '
 	conn = new Mongo();
 	db = conn.getDB("iotagentul");
+	db.getCollectionNames().forEach(c=>db[c].drop());
 	db.createCollection("devices");
 	db.devices.createIndex({"_id.service": 1, "_id.id": 1, "_id.type": 1});
 	db.devices.createIndex({"_id.type": 1});
@@ -171,8 +172,11 @@ addIoTDatabaseIndex () {
 }
 
 stoppingContainers () {
-	echo "Stopping containers"
-	${dockerCmd} -f docker-compose/common.yml -f docker-compose/orion-ld.yml -f docker-compose/scorpio-aaio.yml -f docker-compose/stellio.yml down down --remove-orphans -v
+	CONTAINERS=$(docker ps -aq)
+	if [[ -n $CONTAINERS ]]; then 
+		echo "Stopping containers"
+		docker rm -f $CONTAINERS
+	fi
 	VOLUMES=$(docker volume ls -qf dangling=true) 
 	if [[ -n $VOLUMES ]]; then 
 		echo "Removing old volumes"
