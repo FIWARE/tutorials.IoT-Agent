@@ -1,5 +1,4 @@
-[![FIWARE Banner](https://fiware.github.io/tutorials.IoT-Agent/img/fiware.png)](https://www.fiware.org/developers)
-[![NGSI LD](https://img.shields.io/badge/NGSI-LD-d6604d.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.04.01_60/gs_cim009v010401p.pdf)
+# IoT Agents[<img src="https://img.shields.io/badge/NGSI-LD-d6604d.svg" width="90"  align="left" />](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.04.01_60/gs_cim009v010401p.pdf)[<img src="https://fiware.github.io/tutorials.IoT-Agent/img/fiware.png" align="left" width="162">](https://www.fiware.org/)<br/>
 
 [![FIWARE IoT Agents](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/iot-agents.svg)](https://github.com/FIWARE/catalogue/blob/master/iot-agents/README.md)
 [![License: MIT](https://img.shields.io/github/license/fiware/tutorials.Iot-Agent.svg)](https://opensource.org/licenses/MIT)
@@ -207,7 +206,6 @@ IoT デバイスから生成され、IoT Agent を介して、Context Broker に
         コンテキスト・データの情報を保持するために使用します
     -   **IoT Agent** が、デバイスの URLs やキーなどのデバイス情報を保持するために使用します
 -   **チュートリアル・アプリケーション**は、以下のことを行います:
-    -   システム内のコンテキスト・エンティティを定義する静的ファイル `@context` を提供します
     -   HTTP を介して実行される
         [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
         プロトコルを使用して、ダミーの農業 IoT デバイスのセットとして機能します
@@ -370,7 +368,7 @@ URLs やキーなどのデバイス情報を保持します。コンテナは2�
 docker-compose -v
 docker version
 ```
-Docker バージョン 18.03 以降と Docker Compose 1.21 以上を使用していることを確認し、
+Docker バージョン 20.10 以降と Docker Compose 1.29 以上を使用していることを確認し、
 必要に応じてアップグレードしてください。
 
 <a name="cygwin">
@@ -653,6 +651,27 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 を読み取るデバイスを (適切なメタデータを含む **Property**として定義されている) コンテキスト属性 `temperature`
 にマッピングしています。`controlledAsset` **Relationship** も `static_attribute` として定義され、デバイスを
 **Building** `urn:ngsi-ld:Building:barn001` 内に配置します
+
+> 静的属性 (static attributes) は、`q` パラメータを使用したクエリを有効にするエンティティの追加データとして役立ちます。
+> たとえば、Smart Data Models [Device](https://github.com/smart-data-models/dataModel.Device/blob/master/Device/doc/spec.md)
+> モデルは、`category` や `controledProperty` などの属性を定義します。これにより、次のようにクエリを実行できます:
+>
+> -   _現在 `batteryLevel` が低い **Actuators** はどれですか？_
+>
+> `/ngsi-ld/v1/entities?q=category=="actuator";batteryLevel<0.1`
+>
+> -   _2020年1月より前にインストールされた `fillingLevel` を測定する **Devices** はどれですか？_
+>
+> `/ngsi-ld/v1/entities?q=controlledProperty=="fillingLevel";dateInstalled<"2020-01-25T00:00:00.000Z"`
+>
+> 明らかに、静的データは必要に応じて拡張でき、エンティティ ID がクエリに対して柔軟性がない場合は、デバイスごとに一意
+> の `name` や `serialNumber` などの追加データを含めることもできます。
+>
+> `/ngsi-ld/v1/entities?q=serialNumber=="XS403001-002"`
+>
+> さらに、固定の `location` 静的属性を持つデバイスは、ジオフェンス・パラメータを使用してクエリすることもできます。
+>
+> `/ngsi-ld/v1/entities?georel=near;maxDistance:1500&geometry=point&coords=52.5162,13.3777`
 
 次のリクエストを行うことで、**Temperature Sensor** デバイス `temperature001` からのダミー IoT
 デバイス測定をシミュレートできます。
