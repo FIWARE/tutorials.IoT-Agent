@@ -45,7 +45,8 @@ IoT デバイスを接続し
     -   [IoT デバイスの接続](#connecting-iot-devices)
         -   [サービス・グループのプロビジョニング](#provisioning-a-service-group)
         -   [センサのプロビジョニング](#provisioning-a-sensor)
-        -   [アクチュエータのプロビジョニング](#provisioning-an-actuator)
+        -   [コマンドを介したアクチュエータのプロビジョニング](#provisioning-an-actuator-via-a-command)
+        -   [双方向属性を介したアクチュエータのプロビジョニング](#provisioning-an-actuator-via-a-bidirectional-attribute)
         -   [スマート・ドアのプロビジョニング](#provisioning-a-smart-door)
         -   [スマート・ランプのプロビジョニング](#provisioning-a-smart-lamp)
     -   [Context Broker コマンド の有効化](#enabling-context-broker-commands)
@@ -220,10 +221,10 @@ Context Broker と IoT Agent はオープンソースの MongoDB 技術を利用
 
 したがって、全体的なアーキテクチャは次の要素で構成されます :
 
--   [NGSI](https://fiware.github.io/specifications/ngsiv2/latest/) を使用してリ
+-   [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用してリ
     クエストを受信する、FIWARE
     [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/)
--   [NGSI](https://fiware.github.io/specifications/ngsiv2/latest/) を使用してサ
+-   [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用してサ
     ウス・バウンドのリクエストを受信し、デバイスの
     [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
     コマンドに変換する、FIWARE
@@ -363,11 +364,11 @@ iot-agent:
 | -------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | IOTA_CB_HOST         | `orion`                 | コンテキストを更新する Context Broker のホスト名                                                                                       |
 | IOTA_CB_PORT         | `1026`                  | Context Broker がコンテキストを更新するためにリッスンするポート                                                                        |
-| IOTA_NORTH_PORT      | `4041`                  | IoT Agent の設定および Context Broker からのコンテキスト更新の受信に使用されるポート                                                  |
+| IOTA_NORTH_PORT      | `4041`                  | IoT Agent の設定および Context Broker からのコンテキスト更新の受信に使用されるポート                                                   |
 | IOTA_REGISTRY_TYPE   | `mongodb`               | メモリまたはデータベースに IoT デバイス情報を保持するかどうかを指定                                                                    |
 | IOTA_LOG_LEVEL       | `DEBUG`                 | IoT Agent のログレベル                                                                                                                 |
-| IOTA_TIMESTAMP       | `true`                  | 接続されたデバイスから受信した各測定値にタイムスタンプ情報を提供するかどうかを指定                                                    |
-| IOTA_CB_NGSI_VERSION | `v2`                    | アクティブな属性の更新を送信するときにNGSI v2 を使用するように指定するかどうか                                                        |
+| IOTA_TIMESTAMP       | `true`                  | 接続されたデバイスから受信した各測定値にタイムスタンプ情報を提供するかどうかを指定                                                     |
+| IOTA_CB_NGSI_VERSION | `v2`                    | アクティブな属性の更新を送信するときにNGSI v2 を使用するように指定するかどうか                                                         |
 | IOTA_AUTOCAST        | `true`                  | Ultralight の数値が文字列ではなく数値として読み取られるようにする                                                                      |
 | IOTA_MONGO_HOST      | `context-db`            | mongoDB のホスト名 - デバイス情報を保持するために使用                                                                                  |
 | IOTA_MONGO_PORT      | `27017`                 | mongoDB はリッスンしているポート                                                                                                       |
@@ -413,7 +414,7 @@ docker-compose -v
 docker version
 ```
 
-Docker バージョン 18.03 以降と Docker Compose 1.29 以上を使用していることを確認
+Docker バージョン 20.10 以降と Docker Compose 1.29 以上を使用していることを確認
 し、必要に応じてアップグレードしてください。
 
 <a name="cygwin-for-windows"></a>
@@ -674,6 +675,27 @@ curl -iX POST \
 `count` とマッピングしています。`refStore` は static_attribute として定義され、
 デバイスを **Store** `urn:ngsi-ld:Store:001` 内に配置します。
 
+> 静的属性は、`q` パラメータを使用したクエリを有効にするエンティティの追加データとして役立ちます。たとえば、Smart
+> Data Models [Device](https://github.com/smart-data-models/dataModel.Device/blob/master/Device/doc/spec.md) モデルは、
+> クエリを次のように実行できるようにする `category` や `controledProperty` などの属性を定義します:
+>
+> -   _現在どの **Actuators** の `batteryLevel` が低いですか？_
+>
+> `/v2/entities?q=category=="actuator";batteryLevel<0.1`
+>
+> -   _2020年1月より前にインストールされた `fillingLevel` を測定する **Devices** はどれですか？_
+>
+> `/v2/entities?q=controlledProperty=="fillingLevel";dateInstalled<"2020-01-25T00:00:00.000Z"`
+>
+> 明らかに、静的データは必要に応じて拡張でき、エンティティ ID がクエリに対して柔軟性がない場合は、デバイスごとに一意の
+> `name ` や `serialNumber` などの追加データを含めることもできます。
+>
+> `/v2/entities?q=serialNumber=="XS403001-002"`
+>
+> さらに、固定の `location` 静的属性を持つデバイスは、ジオフェンス・パラメータを使用してクエリすることもできます。
+>
+> `/v2/entities?georel=near;maxDistance:1500&geometry=point&coords=52.5162,13.3777`
+
 **モーション・センサ**のデバイス `motion001` からのダミー IoT デバイスの測定値を
 シミュレーションするには、次のリクエストを行います
 
@@ -754,9 +776,9 @@ curl -X GET \
 定されます。`refStore` 属性は、デバイスがプロビジョニングされたときにセットされ
 た `static_attributes` から来ます。
 
-<a name="provisioning-an-actuator"></a>
+<a name="provisioning-an-actuator-via-a-command"></a>
 
-### アクチュエータのプロビジョニング
+### コマンドを介したアクチュエータのプロビジョニング
 
 アクチュエータのプロビジョニングは、センサのプロビジョニングと同様です。今回
 、`endpoint` 属性には、IoT Agent が UltraLight コマンドを送信する必要がある場所
@@ -794,13 +816,62 @@ curl -iX POST \
 '
 ```
 
+<a name="provisioning-an-actuator-via-a-bidirectional-attribute"></a>
+
+### 双方向属性 (bidirectional attribute) を介したアクチュエータのプロビジョニング
+
+アクチュエータは、双方向属性を使用してプロビジョニングすることもできます。 ここでも、`endpoint` 属性は、IoT Agent が
+UltraLight コマンドを送信する必要がある場所を保持します。`ring` 属性は `expression` を使用して定義され、`reverse`
+方向にそれ自体にマップされます。 `ring` 属性の更新を受信すると、それはデバイス自体にも送信されます。内部的な違いは、
+この方法がレジストレーションではなくサブスクリプションに依存していることです。
+
+#### :seven: リクエスト :
+
+```console
+curl -L -X POST 'http://localhost:4041/iot/devices' \
+-H 'fiware-service: openiot' \
+-H 'fiware-servicepath: /' \
+-H 'Content-Type: application/json' \
+-H 'Cookie: _csrf=MAPTGFPcoPnewsGCWklHi4Mq' \
+--data-raw '{
+  "devices": [
+    {
+      "device_id": "bell002",
+      "entity_name": "urn:ngsi-ld:Bell:002",
+      "entity_type": "Bell",
+      "protocol": "PDI-IoTA-UltraLight",
+      "transport": "HTTP",
+      "endpoint": "http://iot-sensors:3001/iot/bell002",
+      "attributes": [
+          {
+          "name":"ring",
+          "type":"Text",
+          "expression": "${@ring}",
+          "reverse": [
+            {
+              "object_id":"ring",
+              "type": "Text",
+              "expression": "${@ring}"
+            }
+          ]
+        }
+      ],
+       "static_attributes": [
+         {"name":"refStore", "type": "Relationship","value": "urn:ngsi-ld:Store:002"}
+        ]
+    }
+  ]
+}
+'
+```
+
 Context Broker を接続する前に、`/v2/op/update` エンドポイントを使用して IoT
 Agent のノース・ポートに REST リクエストを直接送信することで、コマンドをデバイス
 に送信できることをテストできます。Context Broker が接続すると、最終的に Context
 Broker によって呼び出されるのはこのエンドポイントです。設定をテストするには、次
 のようにコマンドを直接実行します :
 
-#### :seven: リクエスト :
+#### :eight: リクエスト :
 
 ```console
 curl -iX POST \
@@ -830,7 +901,7 @@ curl -iX POST \
 ベルを鳴らすコマンドの結果は、Orion Context Broker 内のエンティティにクエリする
 ことによって読み取ることができます。
 
-#### :eight: リクエスト :
+#### :nine: リクエスト :
 
 ```console
 curl -X GET \
@@ -865,7 +936,7 @@ curl -X GET \
 `attributes` と `command` 属性の両方を含む、HTTP POST リクエストを作成するだけで
 す。
 
-#### :nine: リクエスト :
+#### :one::zero: リクエスト :
 
 ```console
 curl -iX POST \
@@ -907,7 +978,7 @@ curl -iX POST \
 同様に、2 つのコマンド(`on` および `off`)と 2 つの属性を持つ**スマート・ラン
 プ**は、次のようにプロビジョニングできます:
 
-#### :one::zero:リクエスト :
+#### :one::one:リクエスト :
 
 ```console
 curl -iX POST \
@@ -944,7 +1015,7 @@ curl -iX POST \
 プロビジョニングされたデバイスの完全なリストは、`/iot/devices` エンドポイントに
 GET リクエストを行うことで取得できます。
 
-#### :one::one: リクエスト :
+#### :one::two: リクエスト :
 
 ```console
 curl -X GET \
@@ -975,7 +1046,7 @@ IoT Agent を IoT デバイスに接続すると、Orion Context Broker にコ�
 `ring` コマンドを呼び出すには、コンテキスト内で `ring` 属性を更新する必要があり
 ます。
 
-#### :one::two: リクエスト :
+#### :one::three: リクエスト :
 
 ```console
 curl -iX PATCH \
@@ -1002,7 +1073,7 @@ curl -iX PATCH \
 `open` コマンドを呼び出すには、コンテキスト内で `open` 属性を更新する必要があり
 ます。
 
-#### :one::three: リクエスト :
+#### :one::four: リクエスト :
 
 ```console
 curl -iX PATCH \
@@ -1025,7 +1096,7 @@ curl -iX PATCH \
 **スマート・ランプ**をオンにするには、その `on` 属性をコンテキストで更新する必要
 があります。
 
-#### :one::four: リクエスト :
+#### :one::five: リクエスト :
 
 ```console
 curl -iX PATCH \
@@ -1064,7 +1135,7 @@ curl -iX PATCH \
 のデバイスが、 IoT Agent が**ノース・バウンド**通信をリッスンしている
 `IOTA_HTTP_PORT` にメッセージを送信することを通知します。
 
-#### :one::five: リクエスト :
+#### :one::six: リクエスト :
 
 ```console
 curl -iX POST \
@@ -1094,7 +1165,7 @@ curl -iX POST \
 サービス・グループの詳細は、`/iot/services` エンドポイントへの GET リクエストと
 `resource` パラメータの提供によって読み取ることができます。
 
-#### :one::six: リクエスト :
+#### :one::seven: リクエスト :
 
 ```console
 curl -X GET \
@@ -1131,7 +1202,7 @@ curl -X GET \
 この例では、`/iot/services` エンドポイントに GET リクエストを行うことによって、
 プロビジョニングされたすべてのサービスを一覧表示します。
 
-#### :one::seven: リクエスト :
+#### :one::eight: リクエスト :
 
 ```console
 curl -X GET \
@@ -1171,7 +1242,7 @@ curl -X GET \
 サービス・グループの詳細は、`/iot/services` エンドポイントへの PUT リクエストを
 行い、`resource` および `apikey` パラメータを提供することによって更新できます。
 
-#### :one::eight: リクエスト :
+#### :one::nine: リクエスト :
 
 ```console
 curl -iX PUT \
@@ -1197,7 +1268,7 @@ curl -iX PUT \
 識別するには、`apiKey` パラメータと `resource` パラメータを指定する必要がありま
 す。
 
-#### :one::nine: リクエスト :
+#### :two::zero: リクエスト :
 
 ```console
 curl -iX DELETE \
@@ -1228,7 +1299,7 @@ Agent は、デバイスが単一の `ring` `command` を提供し、HTTP を使
 `http://iot-sensors:3001/iot/bell002` でリッスンしていることを通知されました
 。`attributes`, `lazy` 属性と、`static_attributes` もプロビジョニングできます。
 
-#### :two::zero: リクエスト :
+#### :two::one: リクエスト :
 
 ```console
 curl -iX POST \
@@ -1269,7 +1340,7 @@ curl -iX POST \
 プロビジョニングされたデバイスの詳細は、`/iot/devices/<device-id>` エンドポイン
 トに GET リクエストを行うことで読み取ることができます。
 
-#### :two::one: リクエスト :
+#### :two::two: リクエスト :
 
 ```console
 curl -X GET \
@@ -1319,7 +1390,7 @@ curl -X GET \
 この例では、`/iot/devices` エンドポイントに GET リクエストを行うことによって、プ
 ロビジョニングされたすべてのデバイスを一覧表示します。
 
-#### :two::two: リクエスト :
+#### :two::three: リクエスト :
 
 ```console
 curl -X GET \
@@ -1375,7 +1446,7 @@ curl -X GET \
 この例では、`/iot/devices/<device-id>` エンドポイントに PUT リクエストを行うこと
 によって、既存のプロビジョニングされたデバイスを更新します。
 
-#### :two::three: リクエスト :
+#### :two::four: リクエスト :
 
 ```console
 curl -iX PUT \
@@ -1399,7 +1470,7 @@ curl -iX PUT \
 バイスがアクティブな測定を行っていると、関連付けられたサービスが削除されていない
 場合でも、デフォルト値で処理されます。
 
-#### :two::four: リクエスト :
+#### :two::five: リクエスト :
 
 ```console
 curl -iX DELETE \
@@ -1415,10 +1486,10 @@ curl -iX DELETE \
 高度な機能を追加することで、アプリケーションに複雑さを加える方法を知りたいですか
 ？このシリーズ
 の[他のチュートリアル](https://www.letsfiware.jp/fiware-tutorials)を読むことで見
-つけることができます :
+つけることができます
 
 ---
 
 ## License
 
-[MIT](LICENSE) © 2018-2020 FIWARE Foundation e.V.
+[MIT](LICENSE) © 2018-2022 FIWARE Foundation e.V.
