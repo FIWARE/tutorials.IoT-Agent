@@ -15,7 +15,8 @@
 
 set -e
 
-SCORPIO="http://scorpio:9090/scorpio/v1/info/"
+STELLIO="http://stellio:8080/actuator/health"
+SCORPIO="http://scorpio:9090/scorpio/"
 ORION="http://orion:1026/version"
 STELLIO="http://localhost:8080/actuator/health"
 IOT_AGENT="http://iot-agent:4041/version"
@@ -28,7 +29,7 @@ fi
 
 if (( $# < 1 )); then
 	echo "Illegal number of parameters"
-	echo "usage: services [create|orion|scorpio|stop]"
+	echo "usage: services [create|orion|scorpio|stellio|stop]"
 	exit 1
 fi
 
@@ -66,13 +67,6 @@ waitForScorpio () {
 	while [ "${response}" -eq 000 ]
 	do
 		echo -e "Context Broker HTTP state: ${response} (waiting for 500)"
-		pause 60
-		getHeartbeat "${SCORPIO}"
-	done
-	echo -e "\n⏳ Waiting for all \033[1;34mScorpio\033[0m services to be fully available\n"
-	while [ "$response" -eq 500 ]
-	do
-		echo -e "Context Broker HTTP state: ${response} (waiting for 200)"
 		pause 60
 		getHeartbeat "${SCORPIO}"
 	done
@@ -198,7 +192,7 @@ displayServices () {
 command="$1"
 case "${command}" in
 	"help")
-		echo "usage: services [create|orion|scorpio|stop]"
+		echo "usage: services [create|orion|scorpio|stellio|stop]"
 		;;
 	"orion")
 		export $(cat .env | grep "#" -v)
@@ -235,6 +229,23 @@ case "${command}" in
 		loadData
 		waitForIoTAgent
 		;;
+	"stellio")
+		export $(cat .env | grep "#" -v)
+		stoppingContainers
+		echo -e "Starting containers:  \033[1;34mStellio\033[0m, \033[1mKafka\033[0m, \033[1mZookeeper\033[0m and a \033[1mPostgres\033[0m database and a \033[1mNeo4J\033[0m database, \033[1;36mIoT-Agent\033[0m, \033[1mTutorial\033[0m, a linked data \033[1mContext\033[0m and a \033[1mMongoDB\033[0m database."
+		echo -e "- \033[1;34mStellio\033[0m is the context broker"
+		echo -e "- \033[1;36mIoT-Agent\033[0m is configured for the UltraLight Protocol"
+		echo -e "- \033[1mTutorial\033[0m acts as a series of dummy IoT Sensors over HTTP"
+		echo ""
+		${dockerCmd} -f docker-compose/common.yml -f docker-compose/stellio.yml up -d --remove-orphans --renew-anon-volumes
+		waitForMongo
+		addIoTDatabaseIndex
+		displayServices fiware
+		waitForStellio
+		export CONTEXT_BROKER=stellio:8080
+		loadData
+		waitForIoTAgent
+		;;
 	"stop")
 		export $(cat .env | grep "#" -v)
 		stoppingContainers
@@ -251,7 +262,7 @@ case "${command}" in
 		;;
 	*)
 		echo "Command not Found."
-		echo "usage: services [create|orion|scorpio|stop]"
+		echo "usage: services [create|orion|scorpio|stellio|stop]"
 		exit 127;
 		;;
 esac
