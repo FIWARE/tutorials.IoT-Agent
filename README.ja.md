@@ -1288,7 +1288,7 @@ curl -iX PUT \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
   -d '{
-  "entity_type": "IoT-Device"
+  "attributes": []
 }'
 ```
 
