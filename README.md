@@ -98,6 +98,8 @@ the following:
     UltraLight2.0 payload) and NGSI
 -   [IoTagent-LoRaWAN](https://fiware-lorawan.readthedocs.io/en/latest) - a bridge between the
     [LoRaWAN](https://www.thethingsnetwork.org/docs/lorawan/) protocol and NGSI
+-   [IoTagent-OPCUA](https://iotagent-opcua.readthedocs.io/en/latest/) - a bridge between the
+    [OPC-UA](https://opcfoundation.org/about/opc-technologies/opc-ua/) protocol and NGSI
 
 ## Southbound Traffic (Commands)
 
