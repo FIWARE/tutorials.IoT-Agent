@@ -265,7 +265,7 @@ IoT デバイス と IoT Agent を接続するために必要な構成情報は�
 
 ```yaml
 tutorial:
-    image: fiware/tutorials.context-provider
+    image: quay.io/fiware/tutorials.context-provider
     hostname: iot-sensors
     container_name: fiware-tutorial
     networks:
@@ -320,7 +320,7 @@ tutorial:
 
 ```yaml
 iot-agent:
-    image: fiware/iotagent-ul:latest
+    image: quay.io/fiware/iotagent-ul:latest
     hostname: iot-agent
     container_name: fiware-iot-agent
     depends_on:
@@ -628,7 +628,7 @@ Broker に渡す必要があります。この`entity_type` 属性は、リク�
 ### センサのプロビジョニング
 
 エンティティを作成するときは、NGSI-LD
-[仕様](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.04.01_60/gs_cim009v010401p.pdf)に
+[仕様](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.06.01_60/gs_CIM009v010601p.pdf)に
 従って URNs を使用するのが一般的な良い方法です。さらに、データ属性を定義するとき
 に意味のある名前にするとわかりやすくなります。これらのマッピングは、デバイスを個
 別にプロビジョニングすることによって定義できます。
