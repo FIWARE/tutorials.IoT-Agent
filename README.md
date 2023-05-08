@@ -95,8 +95,10 @@ the following:
     NGSI-LD
 -   [IoTAgent-UL](https://fiware-iotagent-ul.readthedocs.io/en/latest) - a bridge between HTTP/MQTT messaging (with an
     UltraLight2.0 payload) and NGSI-LD
--   [IoTagent-LoRaWAN](https://fiware-lorawan.readthedocs.io/en/latest) - a bridge between the
+-   [IoTAgent-LoRaWAN](https://fiware-lorawan.readthedocs.io/en/latest) - a bridge between the
     [LoRaWAN](https://www.thethingsnetwork.org/docs/lorawan/) protocol and NGSI-LD
+-   [IoTAgent-OPCUA](https://iotagent-opcua.readthedocs.io/en/latest/) - a bridge between the
+    [OPC-UA](https://opcfoundation.org/about/opc-technologies/opc-ua/) protocol and NGSI-LD
 
 ## Southbound Traffic (Commands)
 
