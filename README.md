@@ -381,7 +381,7 @@ git clone https://github.com/FIWARE/tutorials.IoT-Agent.git
 cd tutorials.IoT-Agent
 git checkout NGSI-LD
 
-./services orion|scorpio
+./services [orion|scorpio|stellio]
 ```
 
 > :information_source: **Note:** If you want to clean up and start over again you can do so with the following command:

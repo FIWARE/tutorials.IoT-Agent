@@ -225,6 +225,7 @@ case "${command}" in
 		export CONTEXT_BROKER=orion:1026
 		loadData
 		waitForIoTAgent
+		echo -e "\033[1;34m${command}\033[0m is now running and exposed on localhost:${EXPOSED_PORT}"
 		;;
 	"scorpio")
 		export $(cat .env | grep "#" -v)
@@ -244,6 +245,7 @@ case "${command}" in
 		export CONTEXT_BROKER=scorpio:9090
 		loadData
 		waitForIoTAgent
+		echo -e "\033[1;34m${command}\033[0m is now running and exposed on localhost:${EXPOSED_PORT}"
 		;;
 	"stellio")
 		export $(cat .env | grep "#" -v)
@@ -263,6 +265,7 @@ case "${command}" in
 		export CONTEXT_BROKER=stellio:8080
 		loadData
 		waitForIoTAgent
+		echo -e "\033[1;34m${command}\033[0m is now running and exposed on localhost:${EXPOSED_PORT}"
 		;;
 	"stop")
 		export $(cat .env | grep "#" -v)
@@ -270,7 +273,7 @@ case "${command}" in
 		;;
 	"start")
 		export $(cat .env | grep "#" -v)
-		./services orion $2
+		./services ${CONTEXT_BROKER:=orion} $2
 		;;
 	"create")
 		export $(cat .env | grep "#" -v)
