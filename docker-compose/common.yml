@@ -84,6 +84,7 @@ services:
       - TWITTER_CONSUMER_SECRET=<ADD_YOUR_CONSUMER_SECRET>
       - MONGO_URL=mongodb://mongo-db:27017
       - IOTA_JSON_LD_CONTEXT=http://context/ngsi-context.jsonld
+      - MOVE_TRACTOR=-1
 
 
   # IoT-Agent is configured for the UltraLight Protocol
