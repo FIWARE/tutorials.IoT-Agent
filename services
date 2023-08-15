@@ -21,7 +21,7 @@ ORION="http://orion:1026/version"
 STELLIO="http://localhost:8080/actuator/health"
 IOT_AGENT="http://iot-agent:4041/version"
 CONTEXT="http://context/ngsi-context.jsonld"
-CORE_CONTEXT="https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld"
+CORE_CONTEXT="https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context-v1.6.jsonld"
 
 dockerCmd="docker compose"
 if (( $# == 2 )); then
