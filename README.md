@@ -150,7 +150,8 @@ For example for a real-life **Motion Sensor** to send a count measurement the fo
 -   Requests between **IoT-Device** and **IoT-Agent** use native protocols
 -   Requests between **IoT-Agent** and **Context-Broker** use NGSI
 
-> **Note** Other more complex interactions are also possible, but this overview is sufficient to understand the basic
+> [!NOTE]
+>  Other more complex interactions are also possible, but this overview is sufficient to understand the basic
 > principles of an IoT Agent.
 
 ## Common Functionality
@@ -539,7 +540,8 @@ Three types of measurement attributes can be provisioned:
 -   `static_attributes` are as the name suggests static data about the device (such as relationships) passed on to the
     context broker.
 
-> **Note**: in the case where individual `id`s are not required, or aggregated data is sufficient the `attributes` can
+> [!NOTE]
+> In the case where individual `id`s are not required, or aggregated data is sufficient the `attributes` can
 > be defined within the provisioning service rather than individually.
 
 #### 3️⃣ Request:
