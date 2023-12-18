@@ -478,7 +478,7 @@ Bash スクリプトを実行することによって、コマンドラインか
 IoT Agent が動作しているかどうかは、公開されているポートに対して HTTP リクエスト
 を行うことで確認できます:
 
-#### :one: リクエスト :
+#### 1️⃣ リクエスト :
 
 ```console
 curl -X GET \
@@ -582,7 +582,7 @@ IoT Agent は、IoT デバイスと Context Broker との間のミドルウェ�
 に、一連のデバイスが、IoT Agent が**ノース・バウンド**通信をリッスンしている
 `IOTA_HTTP_PORT` クライアントにメッセージを送信することを通知します。
 
-#### :two: リクエスト :
+#### 2️⃣ リクエスト :
 
 ```console
 curl -iX POST \
@@ -644,7 +644,7 @@ Broker に渡す必要があります。この`entity_type` 属性は、リク�
 > **注**: 個体 id が必要でないか、または集約されたデータが十分である場合は、個別
 > にではなくプロビジョニング・サービス内で `attributes` を定義できます
 
-#### :three: リクエスト :
+#### 3️⃣ リクエスト :
 
 ```console
 curl -iX POST \
@@ -700,7 +700,7 @@ curl -iX POST \
 **モーション・センサ**のデバイス `motion001` からのダミー IoT デバイスの測定値を
 シミュレーションするには、次のリクエストを行います
 
-#### :four: リクエスト :
+#### 4️⃣ リクエスト :
 
 ```console
 curl -iX POST \
@@ -724,7 +724,7 @@ Context Broker からエンティティのデータを取得することによ�
 ていることがわかります。`fiware-service` と `fiware-service-path` ヘッダを追加す
 ることを忘れないでください。
 
-#### :five: リクエスト :
+#### 5️⃣ リクエスト :
 
 ```console
 curl -X GET \
@@ -788,7 +788,7 @@ curl -X GET \
 エンドポイントは `http://iot-sensors:3001/iot/bell001` であり、`ring` コマンドを
 受け入れることができます。
 
-#### :six: リクエスト :
+#### 6️⃣ リクエスト :
 
 ```console
 curl -iX POST \
@@ -826,7 +826,7 @@ UltraLight コマンドを送信する必要がある場所を保持します。
 方向にそれ自体にマップされます。 `ring` 属性の更新を受信すると、それはデバイス自体にも送信されます。内部的な違いは、
 この方法がレジストレーションではなくサブスクリプションに依存していることです。
 
-#### :seven: リクエスト :
+#### 7️⃣  リクエスト :
 
 ```console
 curl -L -X POST 'http://localhost:4041/iot/devices' \
@@ -872,7 +872,7 @@ Agent のノース・ポートに REST リクエストを直接送信するこ�
 Broker によって呼び出されるのはこのエンドポイントです。設定をテストするには、次
 のようにコマンドを直接実行します :
 
-#### :eight: リクエスト :
+#### 8️⃣  リクエスト :
 
 ```console
 curl -iX POST \
@@ -902,7 +902,7 @@ curl -iX POST \
 ベルを鳴らすコマンドの結果は、Orion Context Broker 内のエンティティにクエリする
 ことによって読み取ることができます。
 
-#### :nine: リクエスト :
+#### 9️⃣ リクエスト :
 
 ```console
 curl -X GET \
@@ -937,7 +937,7 @@ curl -X GET \
 `attributes` と `command` 属性の両方を含む、HTTP POST リクエストを作成するだけで
 す。
 
-#### :one::zero: リクエスト :
+#### 1️⃣0️⃣ リクエスト :
 
 ```console
 curl -iX POST \
@@ -979,7 +979,7 @@ curl -iX POST \
 同様に、2 つのコマンド(`on` および `off`)と 2 つの属性を持つ**スマート・ラン
 プ**は、次のようにプロビジョニングできます:
 
-#### :one::one:リクエスト :
+#### 1️⃣1️⃣リクエスト :
 
 ```console
 curl -iX POST \
@@ -1016,7 +1016,7 @@ curl -iX POST \
 プロビジョニングされたデバイスの完全なリストは、`/iot/devices` エンドポイントに
 GET リクエストを行うことで取得できます。
 
-#### :one::two: リクエスト :
+#### 1️⃣2️⃣ リクエスト :
 
 ```console
 curl -X GET \
@@ -1047,7 +1047,7 @@ IoT Agent を IoT デバイスに接続すると、Orion Context Broker にコ�
 `ring` コマンドを呼び出すには、コンテキスト内で `ring` 属性を更新する必要があり
 ます。
 
-#### :one::three: リクエスト :
+#### 1️⃣3️⃣ リクエスト :
 
 ```console
 curl -iX PATCH \
@@ -1074,7 +1074,7 @@ curl -iX PATCH \
 `open` コマンドを呼び出すには、コンテキスト内で `open` 属性を更新する必要があり
 ます。
 
-#### :one::four: リクエスト :
+#### 1️⃣4️⃣ リクエスト :
 
 ```console
 curl -iX PATCH \
@@ -1097,7 +1097,7 @@ curl -iX PATCH \
 **スマート・ランプ**をオンにするには、その `on` 属性をコンテキストで更新する必要
 があります。
 
-#### :one::five: リクエスト :
+#### 1️⃣5️⃣ リクエスト :
 
 ```console
 curl -iX PATCH \
@@ -1136,7 +1136,7 @@ curl -iX PATCH \
 のデバイスが、 IoT Agent が**ノース・バウンド**通信をリッスンしている
 `IOTA_HTTP_PORT` にメッセージを送信することを通知します。
 
-#### :one::six: リクエスト :
+#### 1️⃣6️⃣ リクエスト :
 
 ```console
 curl -iX POST \
@@ -1166,7 +1166,7 @@ curl -iX POST \
 サービス・グループの詳細は、`/iot/services` エンドポイントへの GET リクエストと
 `resource` パラメータの提供によって読み取ることができます。
 
-#### :one::seven: リクエスト :
+#### 1️⃣7️⃣  リクエスト :
 
 ```console
 curl -X GET \
@@ -1203,7 +1203,7 @@ curl -X GET \
 この例では、`/iot/services` エンドポイントに GET リクエストを行うことによって、
 プロビジョニングされたすべてのサービスを一覧表示します。
 
-#### :one::eight: リクエスト :
+#### 1️⃣8️⃣  リクエスト :
 
 ```console
 curl -X GET \
@@ -1243,7 +1243,7 @@ curl -X GET \
 サービス・グループの詳細は、`/iot/services` エンドポイントへの PUT リクエストを
 行い、`resource` および `apikey` パラメータを提供することによって更新できます。
 
-#### :one::nine: リクエスト :
+#### 1️⃣9️⃣ リクエスト :
 
 ```console
 curl -iX PUT \
@@ -1269,7 +1269,7 @@ curl -iX PUT \
 識別するには、`apiKey` パラメータと `resource` パラメータを指定する必要がありま
 す。
 
-#### :two::zero: リクエスト :
+#### 2️⃣0️⃣ リクエスト :
 
 ```console
 curl -iX DELETE \
@@ -1300,7 +1300,7 @@ Agent は、デバイスが単一の `ring` `command` を提供し、HTTP を使
 `http://iot-sensors:3001/iot/bell002` でリッスンしていることを通知されました
 。`attributes`, `lazy` 属性と、`static_attributes` もプロビジョニングできます。
 
-#### :two::one: リクエスト :
+#### 2️⃣1️⃣ リクエスト :
 
 ```console
 curl -iX POST \
@@ -1341,7 +1341,7 @@ curl -iX POST \
 プロビジョニングされたデバイスの詳細は、`/iot/devices/<device-id>` エンドポイン
 トに GET リクエストを行うことで読み取ることができます。
 
-#### :two::two: リクエスト :
+#### 2️⃣2️⃣ リクエスト :
 
 ```console
 curl -X GET \
@@ -1391,7 +1391,7 @@ curl -X GET \
 この例では、`/iot/devices` エンドポイントに GET リクエストを行うことによって、プ
 ロビジョニングされたすべてのデバイスを一覧表示します。
 
-#### :two::three: リクエスト :
+#### 2️⃣3️⃣ リクエスト :
 
 ```console
 curl -X GET \
@@ -1447,7 +1447,7 @@ curl -X GET \
 この例では、`/iot/devices/<device-id>` エンドポイントに PUT リクエストを行うこと
 によって、既存のプロビジョニングされたデバイスを更新します。
 
-#### :two::four: リクエスト :
+#### 2️⃣4️⃣ リクエスト :
 
 ```console
 curl -iX PUT \
@@ -1471,7 +1471,7 @@ curl -iX PUT \
 バイスがアクティブな測定を行っていると、関連付けられたサービスが削除されていない
 場合でも、デフォルト値で処理されます。
 
-#### :two::five: リクエスト :
+#### 2️⃣5️⃣ リクエスト :
 
 ```console
 curl -iX DELETE \
