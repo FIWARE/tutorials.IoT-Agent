@@ -1051,7 +1051,7 @@ IoT Agent を IoT デバイスに接続すると、Orion Context Broker にコ�
 
 ```console
 curl -iX PATCH \
-  'http://localhost:1026/v2/entities/urn:ngsi-ld:Bell:001/attrs' \
+  'http://localhost:1026/v2/entities/urn:ngsi-ld:Bell:001/attrs?type=Bell' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -1078,7 +1078,7 @@ curl -iX PATCH \
 
 ```console
 curl -iX PATCH \
-  'http://localhost:1026/v2/entities/urn:ngsi-ld:Door:001/attrs' \
+  'http://localhost:1026/v2/entities/urn:ngsi-ld:Door:001/attrs?type=Door' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
@@ -1101,7 +1101,7 @@ curl -iX PATCH \
 
 ```console
 curl -iX PATCH \
-  'http://localhost:1026/v2/entities/urn:ngsi-ld:Lamp:001/attrs' \
+  'http://localhost:1026/v2/entities/urn:ngsi-ld:Lamp:001/attrs?type=Lamp' \
   -H 'Content-Type: application/json' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
