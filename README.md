@@ -918,7 +918,7 @@ switch the **Smart Lamp** on and off by sending requests to the Orion Context Br
 requests directly the IoT devices as we did in the
 [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2)
 
-> ![NOTE]
+> [!NOTE]
 > If the device is provisioned, but no data concerning the Entity is present in the context yet, the invocation must
 > include the `type` of the Entity to succeed. However if the Entity `type` is already known
 > to the broker, this hint
