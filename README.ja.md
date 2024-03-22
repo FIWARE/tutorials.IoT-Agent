@@ -1,4 +1,4 @@
-# IoT Agents[<img src="https://img.shields.io/badge/NGSI-LD-d6604d.svg" width="90"  align="left" />](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.07.01_60/gs_cim009v010701p.pdf)[<img src="https://fiware.github.io/tutorials.IoT-Agent/img/fiware.png" align="left" width="162">](https://www.fiware.org/)<br/>
+# IoT Agents[<img src="https://img.shields.io/badge/NGSI-LD-d6604d.svg" width="90"  align="left" />](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.08.01_60/gs_cim009v010801p.pdf)[<img src="https://fiware.github.io/tutorials.IoT-Agent/img/fiware.png" align="left" width="162">](https://www.fiware.org/)<br/>
 
 [![FIWARE IoT Agents](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/iot-agents.svg)](https://github.com/FIWARE/catalogue/blob/master/iot-agents/README.md)
 [![License: MIT](https://img.shields.io/github/license/fiware/tutorials.Iot-Agent.svg)](https://opensource.org/licenses/MIT)
@@ -12,7 +12,7 @@
 [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 IoT デバイスを接続して、
 [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) のような NGSI-LD 準拠の Context Broker
-に送信された [NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.07.01_60/gs_cim009v010701p.pdf)
+に送信された [NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.08.01_60/gs_cim009v010801p.pdf)
 リクエストを使用して測定値を読み取り、コマンドを送信できるようにします。
 
 このチュートリアルでは、全体で [cUrl](https://ec.haxx.se/) コマンドを使用していますが、
@@ -593,7 +593,7 @@ IoT Agent は設定ファイルで定義された Context Broker URL を使用�
 
 ### センサのプロビジョニング
 
-NGSI-LD [specification](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.07.01_60/gs_cim009v010701p.pdf)
+NGSI-LD [specification](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.08.01_60/gs_cim009v010801p.pdf)
 は、コンテキスト・データ・エンティティの作成時に完全な URNs を要求しますが、デバイスからの着信メッセージはこの規則を
 認識しません。 さらに、コンテキスト・データ・エンティティの属性名は、関連付けられた `@context` ファイル内にある短い名前と
 一致する必要があります。これらのマッピングは、前のリクエストに見られるようにサービス・グループ・レベルで定義するか、
@@ -710,14 +710,14 @@ curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:te
 
 #### レスポンス:
 
-```jsonld
+```json
 {
     "@context": "http://context/ngsi-context.jsonld",
     "id": "urn:ngsi-ld:Device:temperature001",
     "type": "Device",
     "temperature": {
         "type": "Property",
-        "value": "3",
+        "value": 3,
         "unitCode": "CEL",
         "observedAt": "2020-09-14T15:23:12.263Z"
     }
@@ -760,7 +760,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
 
 #### レスポンス:
 
-```jsonld
+```json
 [
     {
         "@context": "http://context/ngsi-context.jsonld",
@@ -923,7 +923,6 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 -H 'fiware-service: openiot' \
 -H 'fiware-servicepath: /' \
 -H 'Content-Type: application/json' \
--H 'Cookie: _csrf=MAPTGFPcoPnewsGCWklHi4Mq' \
 --data-raw '{
   "devices": [
     {
