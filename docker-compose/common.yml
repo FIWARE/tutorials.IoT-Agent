@@ -58,7 +58,32 @@ services:
         mongo --quiet $host/test --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)' && echo 0 || echo 1    
       interval: 5s
 
-    # Tutorial acts as a series of dummy IoT Sensors over HTTP
+
+  farmer:
+    labels:
+      org.fiware: 'tutorial'
+    image: quay.io/fiware/tutorials.forwarder
+    hostname: 'farmer'
+    container_name: cb-farmer
+    ports:
+      - 1027:80
+    environment:
+      - TENANT=farmer
+      - DEBUG=broker:*
+
+  devices:
+    labels:
+      org.fiware: 'tutorial'
+    image: quay.io/fiware/tutorials.forwarder
+    hostname: 'farmer'
+    container_name: cb-devices
+    ports:
+      - 1028:80
+    environment:
+      - TENANT=openiot
+      - DEBUG=broker:*
+
+  # Tutorial acts as a series of dummy IoT Sensors over HTTP
   tutorial:
     labels:
       org.fiware: 'tutorial'

@@ -111,6 +111,12 @@ services:
       - IOTA_CB_PORT=${STELLIO_PORT} # port the context broker listens on to update context
 
 
+  farmer:
+    environment:
+      - CONTEXT_BROKER=http://stellio:${STELLIO_PORT}
+  devices:
+    environment:
+      - CONTEXT_BROKER=http://stellio:${STELLIO_PORT} 
   # Tutorial acts as a series of dummy IoT Sensors over HTTP and connects to the Stellio Broker
   tutorial:
     environment:
