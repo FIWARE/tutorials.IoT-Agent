@@ -21,8 +21,8 @@ The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also a
 **NGSI-v2** offers JSON based interoperability used in individual Smart Systems. To run this tutorial with **NGSI-v2**, use the `NGSI-v2` branch.
 
 ```console
-git clone https://github.com/FIWARE/tutorials.Identity-Management.git
-cd tutorials.Identity-Management
+git clone https://github.com/FIWARE/tutorials.IoT-Agent.git
+cd tutorials.IoT-Agent
 git checkout NGSI-v2
 
 ./services create
@@ -38,7 +38,7 @@ git checkout NGSI-v2
 **NGSI-LD** offers JSON-LD based interoperability used for Federations and Data Spaces. To run this tutorial with **NGSI-LD**, use the `NGSI-LD` branch.
 
 ```console
-git clone https://github.com/FIWARE/tutorials.Identity-Management.git
+git clone https://github.com/FIWARE/tutorials.IoT-Agent.git
 cd tutorials.IoT-Agent
 git checkout NGSI-LD
 
