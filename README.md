@@ -5,12 +5,11 @@
 [![Support badge](https://img.shields.io/badge/tag-fiware-orange.svg?logo=stackoverflow)](https://stackoverflow.com/questions/tagged/fiware)
 [![UltraLight 2.0](https://img.shields.io/badge/Payload-Ultralight-27ae60.svg)](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 
-This tutorial introduces the concept of an **IoT Agent** and wires up the dummy
+These tutorials introduce the concept of an **IoT Agent** and wires up the dummy
 [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) IoT
-devices created in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2) so that
-measurements can be read and commands can be sent using
-[NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) requests sent to the
-[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/).
+devices created in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors) so that
+measurements can be read and commands can be sent using NGSI-v2 or NGSI-LD requests sent to the
+Context Broker.
 
 The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also available as
 [Postman documentation](https://www.postman.com/downloads/).
@@ -30,7 +29,7 @@ git checkout NGSI-v2
 ./services start
 ```
 
-| [![NGSI v2](https://img.shields.io/badge/NGSI-v2-5dc0cf.svg)](https://fiware-ges.github.io/orion/api/v2/stable/) | :books: [Documentation](https://github.com/FIWARE/tutorials.Identity-Management/tree/NGSI-LD) | <img src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/postman.svg" height="15" width="15"> [Postman Collection](https://fiware.github.io/tutorials.Identity-Management/) |
+| [![NGSI v2](https://img.shields.io/badge/NGSI-v2-5dc0cf.svg)](https://fiware-ges.github.io/orion/api/v2/stable/) | :books: [Documentation](https://github.com/FIWARE/tutorials.IoT-Agent/tree/NGSI-v2) | <img src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/postman.svg" height="15" width="15"> [Postman Collection](https://fiware.github.io/tutorials.IoT-Agent/) |
 | --- | --- | --- |
 
 
@@ -40,14 +39,14 @@ git checkout NGSI-v2
 
 ```console
 git clone https://github.com/FIWARE/tutorials.Identity-Management.git
-cd tutorials.Identity-Management
+cd tutorials.IoT-Agent
 git checkout NGSI-LD
 
 ./services create
 ./services start
 ```
 
-| [![NGSI LD](https://img.shields.io/badge/NGSI-LD-d6604d.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.08.01_60/gs_cim009v010801p.pdf) | :books: [Documentation](https://github.com/FIWARE/tutorials.Identity-Management/tree/NGSI-LD) | <img  src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/postman.svg" height="15" width="15"> [Postman Collection](https://fiware.github.io/tutorials.Identity-Management/ngsi-ld.html) |
+| [![NGSI LD](https://img.shields.io/badge/NGSI-LD-d6604d.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.08.01_60/gs_cim009v010801p.pdf) | :books: [Documentation](https://github.com/FIWARE/tutorials.IoT-Agent/tree/NGSI-LD) | <img  src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/postman.svg" height="15" width="15"> [Postman Collection](https://fiware.github.io/tutorials.IoT-Agent/ngsi-ld.html) |
 | --- | --- | --- |
 
 
