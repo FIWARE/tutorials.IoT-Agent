@@ -35,7 +35,7 @@ IoT デバイスを接続して、
     -   [IoT Agent for UltraLight 2.0 の設定](#iot-agent-for-ultralight-20-configuration)
 -   [前提条件](#prerequisites)
     -   [Docker](#docker)
-    -   [Cygwin](#cygwin)
+    -   [WSL](#wsl)
 -   [起動](#start-up)
 -   [IoT Agent のプロビジョニング](#provisioning-an-iot-agent)
     -   [IoT Agent サービスの正常性の確認](#checking-the-iot-agent-service-health)
@@ -373,11 +373,11 @@ docker version
 Docker バージョン 20.10 以降と Docker Compose 1.29 以上を使用していることを確認し、
 必要に応じてアップグレードしてください。
 
-<a name="cygwin">
+<a name="wsl">
 
-## Cygwin
+## WSL
 
-シンプルな bash スクリプトを使用してサービスを開始します。Windows ユーザは [cygwin](http://www.cygwin.com/)
+シンプルな bash スクリプトを使用してサービスを開始します。Windows ユーザは [を使用して Windows に Linux をインストールする方法](https://learn.microsoft.com/ja-jp/windows/wsl/install)
 をダウンロードして、Windows 上の Linux ディストリビューションと同様のコマンドライン機能を提供する必要があります。
 
 <a name="start-up">
