@@ -155,8 +155,9 @@ For example for a real-life **Motion Sensor** to send a count measurement the fo
 -   Requests between **IoT-Agent** and **Context-Broker** use NGSI
 
 > [!NOTE]
->  Other more complex interactions are also possible, but this overview is sufficient to understand the basic
-> principles of an IoT Agent.
+>
+> Other more complex interactions are also possible, but this overview is sufficient to understand the basic principles
+> of an IoT Agent.
 
 ## Common Functionality
 
@@ -386,6 +387,7 @@ repository:
 ```
 
 > [!NOTE]
+>
 > If you want to clean up and start over again you can do so with the following command:
 >
 > ```console
@@ -545,8 +547,9 @@ Three types of measurement attributes can be provisioned:
     context broker.
 
 > [!NOTE]
-> In the case where individual `id`s are not required, or aggregated data is sufficient the `attributes` can
-> be defined within the provisioning service rather than individually.
+>
+> In the case where individual `id`s are not required, or aggregated data is sufficient the `attributes` can be defined
+> within the provisioning service rather than individually.
 
 #### 3️⃣ Request:
 
@@ -722,7 +725,7 @@ the device itself. Internally the difference is that this method relies on a sub
 
 > Note: This functionality has been removed in version 2.4.0 and higher.
 
-#### 7️⃣  Request:
+#### 7️⃣ Request:
 
 ```console
 curl -L -X POST 'http://localhost:4041/iot/devices' \
@@ -767,7 +770,7 @@ invoked by the context broker once we have connected it up.
 
 To test the configuration you can run the command directly as shown:
 
-#### 8️⃣  Request:
+#### 8️⃣ Request:
 
 ```console
 curl -iX POST \
@@ -923,10 +926,10 @@ requests directly the IoT devices as we did in the
 [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2)
 
 > [!NOTE]
+>
 > If the device is provisioned, but no data concerning the Entity is present in the context yet, the invocation must
-> include the `type` of the Entity to succeed. However if the Entity `type` is already known
-> to the broker, this hint
-> is not necessary. This is because the registration is matched on both `id` and `type`.
+> include the `type` of the Entity to succeed. However if the Entity `type` is already known to the broker, this hint is
+> not necessary. This is because the registration is matched on both `id` and `type`.
 
 ### Ringing the Bell
 
@@ -1036,7 +1039,7 @@ This example obtains the full details of a provisioned service with a given `res
 Service group details can be read by making a GET request to the `/iot/services` endpoint and providing a `resource`
 parameter.
 
-#### 1️⃣7️⃣  Request:
+#### 1️⃣7️⃣ Request:
 
 ```console
 curl -X GET \
@@ -1070,7 +1073,7 @@ commands or attribute mappings.
 
 This example lists all provisioned services by making a GET request to the `/iot/services` endpoint.
 
-#### 1️⃣8️⃣  Request:
+#### 1️⃣8️⃣ Request:
 
 ```console
 curl -X GET \
