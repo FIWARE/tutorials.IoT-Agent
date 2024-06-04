@@ -156,8 +156,9 @@ For example for a real-life **Soil Sensor** to send a humidity reading, the foll
 -   Requests between **IoT-Agent** and **Context-Broker** use NGSI-LD
 
 > [!NOTE]
-> Other more complex interactions are also possible, but this overview is sufficient to understand the basic
-> principles of an IoT Agent.
+>
+> Other more complex interactions are also possible, but this overview is sufficient to understand the basic principles
+> of an IoT Agent.
 
 ## Common Functionality
 
@@ -392,7 +393,8 @@ git checkout NGSI-LD
 ```
 
 > [!NOTE]
->  If you want to clean up and start over again you can do so with the following command:
+>
+> If you want to clean up and start over again you can do so with the following command:
 >
 > ```console
 > ./services stop
@@ -586,8 +588,9 @@ Three types of measurement attributes can be provisioned:
     context broker.
 
 > [!NOTE]
->  In the case where individual `id`s are not required, or aggregated data is sufficient the `attributes` can
-> be defined within the provisioning service rather than individually.
+>
+> In the case where individual `id`s are not required, or aggregated data is sufficient the `attributes` can be defined
+> within the provisioning service rather than individually.
 
 #### 3️⃣ Request:
 
