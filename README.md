@@ -880,14 +880,6 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:wat
         "type": "Relationship",
         "object": "urn:ngsi-ld:Building:barn001",
         "observedAt": "2020-09-14T15:27:11.066Z"
-    },
-    "on": {
-        "type": "Property",
-        "value": ""
-    },
-    "off": {
-        "type": "Property",
-        "value": ""
     }
 }
 ```
