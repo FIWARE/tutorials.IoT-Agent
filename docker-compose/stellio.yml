@@ -123,7 +123,7 @@ services:
   iot-agent:
     environment:
       - IOTA_DEFAULT_RESOURCE=/iot/d
-      - IOTA_CB_HOST=api-gateway # name of the context broker to update context
+      - IOTA_CB_HOST=stellio # name of the context broker to update context
       - IOTA_CB_PORT=${STELLIO_PORT} # port the context broker listens on to update context
 
 
