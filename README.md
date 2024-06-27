@@ -869,15 +869,15 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:wat
     "on_status": {
         "type": "Property",
         "value": {
-            "@type": "commandStatus",
-            "@value": "OK"
+            "type": "commandStatus",
+            "value": "OK"
         },
         "observedAt": "2020-09-14T15:27:11.066Z"
     },
     "on_info": {
         "type": "Property",
         "value": {
-            "@type": "commandResult",
+            "type": "commandResult",
             "@value": " on OK"
         },
         "observedAt": "2020-09-14T15:27:11.066Z"
