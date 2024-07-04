@@ -690,9 +690,9 @@ add the `fiware-service` and `fiware-service-path` headers.
 
 ```console
 curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:temperature001' \
-    -H 'fiware-service: openiot' \
-    -H 'fiware-servicepath: /' \
-    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'NGSILD-Tenant: openiot' \
+    -H 'Accept: application/ld+json' \
+    -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
     -d 'attrs=temperature'
 ```
 
@@ -744,9 +744,9 @@ based on the knowledge of the service group
 
 ```console
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
--H 'NGSILD-Tenant: openiot' \
--H 'NGSILD-Path: /' \
--H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
+    -H 'NGSILD-Tenant: openiot' \
+    -H 'Accept: application/ld+json' \
+    -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
 ```
 
 #### Response:
@@ -858,7 +858,7 @@ The result of the command to turn on the irrigation system can be read by queryi
 ```console
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001' \
     -H 'NGSILD-Tenant: openiot' \
-    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
     -H 'Accept: application/json'
 ```
 
@@ -1020,7 +1020,7 @@ To invoke the `on` command, the `on` attribute must be updated in the context.
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
 -H 'NGSILD-Tenant: openiot' \
 -H 'Content-Type: application/json' \
--H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 --data-raw '{
 
         "type": "Property",
@@ -1043,7 +1043,7 @@ To invoke the `start` command, the `start` attribute must be updated in the cont
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:tractor001/attrs/start' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Content-Type: application/json' \
-    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 --data-raw '{
 
         "type": "Property",
@@ -1062,7 +1062,7 @@ Change the state of the **Fillling System**, the `add` attribute must be updated
 curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:filling001/attrs/add' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Content-Type: application/json' \
-    -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+    -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 --data-raw '{
 
         "type": "Property",
