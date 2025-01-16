@@ -21,7 +21,7 @@ curl -s -o /dev/null -X POST 'http://'"${CONTEXT_BROKER}"'/ngsi-ld/v1/entityOper
   {
     "id": "urn:ngsi-ld:Building:farm001",
     "type": "Building",
-    "category": {"type": "Property", "value": ["farm"]},
+    "category": {"type": "VocabProperty", "vocab": ["farm"]},
     "address": {
         "type": "Property",
         "value": { "streetAddress": "Großer Stern 1", "addressRegion": "Berlin", "addressLocality": "Tiergarten", "postalCode": "10557"},
@@ -37,7 +37,7 @@ curl -s -o /dev/null -X POST 'http://'"${CONTEXT_BROKER}"'/ngsi-ld/v1/entityOper
   {
     "id": "urn:ngsi-ld:Building:barn002",
     "type": "Building",
-    "category": {"type": "Property", "value": ["barn"]},
+    "category": {"type": "VocabProperty", "vocab": ["barn"]},
     "address": {
         "type": "Property",
         "value": { "streetAddress": "Straße des 17. Juni", "addressRegion": "Berlin", "addressLocality": "Tiergarten", "postalCode": "10557"},
@@ -53,7 +53,7 @@ curl -s -o /dev/null -X POST 'http://'"${CONTEXT_BROKER}"'/ngsi-ld/v1/entityOper
   {
     "id": "urn:ngsi-ld:Building:tower003",
     "type": "Building",
-    "category": {"type": "Property", "value": ["water_tower"]},
+    "category": {"type": "VocabProperty", "vocab": ["water_tower"]},
     "address": {
         "type": "Property",
         "value": { "streetAddress": "John-Foster-Dulles-Allee", "addressRegion": "Berlin", "addressLocality": "Tiergarten", "postalCode": "10557"},
@@ -69,7 +69,7 @@ curl -s -o /dev/null -X POST 'http://'"${CONTEXT_BROKER}"'/ngsi-ld/v1/entityOper
   {
     "id": "urn:ngsi-ld:Building:farm002",
     "type": "Building",
-    "category": {"type": "Property", "value": ["farm"]},
+    "category": {"type": "VocabProperty", "vocab": ["farm"]},
     "address": {
         "type": "Property",
         "value": { "streetAddress": "Hardenbergplatz 8", "addressRegion": "Berlin", "addressLocality": "Tiergarten", "postalCode": "10787"},
