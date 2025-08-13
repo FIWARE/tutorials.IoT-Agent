@@ -150,6 +150,8 @@ services:
       start_period: 10s
     # IoT-Agent is configured for the JSON Protocol and connects to the Stellio Broker
   iot-agent:
+    depends_on:
+      - api-gateway
     environment:
       - IOTA_DEFAULT_RESOURCE=/iot/d
       - IOTA_CB_HOST=stellio # name of the context broker to update context
