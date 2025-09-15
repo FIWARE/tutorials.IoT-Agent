@@ -598,7 +598,8 @@ Three types of measurement attributes can be provisioned:
 #### 3️⃣ Request:
 
 ```console
-curl -L -X POST 'http://localhost:4041/iot/devices' \
+curl -L -X POST \
+  'http://localhost:4041/iot/devices' \
     -H 'fiware-service: openiot' \
     -H 'fiware-servicepath: /' \
     -H 'Content-Type: application/json' \
@@ -667,7 +668,8 @@ making the following request
 #### 4️⃣ Request:
 
 ```console
-curl -L -X POST 'http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=temperature001' \
+curl -L -X POST \
+  'http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=temperature001' \
     -H 'Content-Type: text/plain' \
     --data-raw 't|3'
 ```
@@ -689,11 +691,12 @@ add the `fiware-service` and `fiware-service-path` headers.
 #### 5️⃣ Request:
 
 ```console
-curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:temperature001' \
+curl -G -iX GET \
+  'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:temperature001' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Accept: application/ld+json' \
     -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
-    -d 'attrs=temperature'
+    -d 'pick=id,type,temperature'
 ```
 
 #### Response:
@@ -743,7 +746,8 @@ based on the knowledge of the service group
 #### 7️⃣ Request:
 
 ```console
-curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
+curl -L -X GET \
+  'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Accept: application/ld+json' \
     -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
@@ -794,7 +798,8 @@ communications protocol to be used.
 #### 8️⃣ Request:
 
 ```console
-curl -L -X POST 'http://localhost:4041/iot/devices' \
+curl -L -X POST \
+  'http://localhost:4041/iot/devices' \
     -H 'fiware-service: openiot' \
     -H 'fiware-servicepath: /' \
     -H 'Content-Type: application/json' \
@@ -835,7 +840,8 @@ command directly as shown:
 #### 9️⃣ Request:
 
 ```console
-curl -L -X PATCH 'http://localhost:4041/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
+curl -L -X PATCH \
+  'http://localhost:4041/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
     -H 'fiware-service: openiot' \
     -H 'fiware-servicepath: /' \
     -H 'Content-Type: application/json' \
@@ -856,7 +862,8 @@ The result of the command to turn on the irrigation system can be read by queryi
 #### 1️⃣0️⃣ Request:
 
 ```console
-curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001' \
+curl -L -X GET \
+  'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
     -H 'Accept: application/json'
@@ -903,7 +910,8 @@ both `attributes` and `command` attributes in the body of the request.
 #### 1️⃣1️⃣ Request:
 
 ```console
-curl -L -X POST 'http://localhost:4041/iot/devices' \
+curl -L -X POST \
+  'http://localhost:4041/iot/devices' \
 -H 'fiware-service: openiot' \
 -H 'fiware-servicepath: /' \
 -H 'Content-Type: application/json' \
@@ -959,7 +967,8 @@ Similarly, a **Tractor** with two commands (`start` and `stop`) and two attribut
 #### 1️⃣2️⃣ Request:
 
 ```console
-curl -L -X POST 'http://localhost:4041/iot/devices' \
+curl -L -X POST \
+  'http://localhost:4041/iot/devices' \
     -H 'fiware-service: openiot' \
     -H 'fiware-servicepath: /' \
     -H 'Content-Type: application/json' \
@@ -994,7 +1003,8 @@ The full list of provisioned devices can be obtained by making a GET request to 
 #### 1️⃣3️⃣ Request:
 
 ```console
-curl -L -X GET 'http://localhost:4041/iot/devices' \
+curl -L -X GET \
+  'http://localhost:4041/iot/devices' \
     -H 'fiware-service: openiot' \
     -H 'fiware-servicepath: /'
 ```
@@ -1017,7 +1027,8 @@ To invoke the `on` command, the `on` attribute must be updated in the context.
 #### 1️⃣4️⃣ Request:
 
 ```console
-curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
+curl -L -X PATCH \
+  'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
 -H 'NGSILD-Tenant: openiot' \
 -H 'Content-Type: application/json' \
 -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
@@ -1040,7 +1051,8 @@ To invoke the `start` command, the `start` attribute must be updated in the cont
 #### 1️⃣5️⃣ Request:
 
 ```console
-curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:tractor001/attrs/start' \
+curl -L -X PATCH \
+  'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:tractor001/attrs/start' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Content-Type: application/json' \
     -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
@@ -1059,7 +1071,8 @@ Change the state of the **Fillling System**, the `add` attribute must be updated
 #### 1️⃣6️⃣ Request:
 
 ```console
-curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:filling001/attrs/add' \
+curl -L -X PATCH \
+  'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:filling001/attrs/add' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Content-Type: application/json' \
     -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \

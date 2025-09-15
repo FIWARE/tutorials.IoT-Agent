@@ -613,7 +613,8 @@ NGSI-LD [specification](https://cim.etsi.org/NGSI-LD/official/front-page.html)
 #### 3️⃣ リクエスト:
 
 ```console
-curl -L -X POST 'http://localhost:4041/iot/devices' \
+curl -L -X POST \
+  'http://localhost:4041/iot/devices' \
     -H 'fiware-service: openiot' \
     -H 'fiware-servicepath: /' \
     -H 'Content-Type: application/json' \
@@ -682,7 +683,8 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 #### 4️⃣ リクエスト:
 
 ```console
-curl -L -X POST 'http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=temperature001' \
+curl -L -X POST \
+  'http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=temperature001' \
     -H 'Content-Type: text/plain' \
     --data-raw 't|3'
 ```
@@ -703,11 +705,12 @@ Context Broker からエンティティ・データを取得すると、測定�
 #### 5️⃣ リクエスト:
 
 ```console
-curl -G -iX GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:temperature001' \
+curl -G -iX GET \
+  'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:temperature001' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Accept: application/ld+json' \
     -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
-    -d 'attrs=temperature'
+    -d 'pick=id,type,temperature'
 ```
 
 #### レスポンス:
@@ -757,7 +760,8 @@ curl -iX POST 'http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=motion
 #### 7️⃣ リクエスト:
 
 ```console
-curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
+curl -L -X GET \
+  'http://localhost:1026/ngsi-ld/v1/entities/?type=Device' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Accept: application/ld+json' \
     -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
@@ -809,7 +813,8 @@ UltraLight コマンドを送信する必要がある場所を保持し、`comma
 #### 8️⃣ リクエスト:
 
 ```console
-curl -L -X POST 'http://localhost:4041/iot/devices' \
+curl -L -X POST \
+  'http://localhost:4041/iot/devices' \
     -H 'fiware-service: openiot' \
     -H 'fiware-servicepath: /' \
     -H 'Content-Type: application/json' \
@@ -850,7 +855,8 @@ Context Broker によって呼び出されるのはこのエンドポイント�
 #### 9️⃣ リクエスト:
 
 ```console
-curl -L -X PATCH 'http://localhost:4041/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
+curl -L -X PATCH \
+  'http://localhost:4041/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
     -H 'fiware-service: openiot' \
     -H 'fiware-servicepath: /' \
     -H 'Content-Type: application/json' \
@@ -871,7 +877,8 @@ Water sprinkler をオンにするコマンドの結果は、Context Broker 内�
 #### 1️⃣0️⃣ リクエスト:
 
 ```console
-curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001' \
+curl -L -X GET \
+  'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
     -H 'Accept: application/json'
@@ -920,7 +927,8 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:wat
 #### 1️⃣1️⃣ リクエスト:
 
 ```console
-curl -L -X POST 'http://localhost:4041/iot/devices' \
+curl -L -X POST \
+  'http://localhost:4041/iot/devices' \
 -H 'fiware-service: openiot' \
 -H 'fiware-servicepath: /' \
 -H 'Content-Type: application/json' \
@@ -979,7 +987,8 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 #### 1️⃣2️⃣ リクエスト:
 
 ```console
-curl -L -X POST 'http://localhost:4041/iot/devices' \
+curl -L -X POST \
+  'http://localhost:4041/iot/devices' \
     -H 'fiware-service: openiot' \
     -H 'fiware-servicepath: /' \
     -H 'Content-Type: application/json' \
@@ -1014,7 +1023,8 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
 #### 1️⃣3️⃣ リクエスト:
 
 ```console
-curl -L -X GET 'http://localhost:4041/iot/devices' \
+curl -L -X GET \
+  'http://localhost:4041/iot/devices' \
     -H 'fiware-service: openiot' \
     -H 'fiware-servicepath: /'
 ```
@@ -1041,7 +1051,8 @@ IoT Agent を IoT デバイスに接続すると、Orion Context Broker にコ�
 #### 1️⃣4️⃣ リクエスト:
 
 ```console
-curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
+curl -L -X PATCH \
+  'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:water001/attrs/on' \
 -H 'NGSILD-Tenant: openiot' \
 -H 'Content-Type: application/json' \
 -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
@@ -1066,7 +1077,8 @@ curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:w
 #### 1️⃣5️⃣ リクエスト:
 
 ```console
-curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:tractor001/attrs/start' \
+curl -L -X PATCH \
+  'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:tractor001/attrs/start' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Content-Type: application/json' \
     -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
@@ -1087,7 +1099,8 @@ curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:t
 #### 1️⃣6️⃣ リクエスト:
 
 ```console
-curl -L -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:filling001/attrs/add' \
+curl -L -X PATCH \
+  'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Device:filling001/attrs/add' \
     -H 'NGSILD-Tenant: openiot' \
     -H 'Content-Type: application/json' \
     -H 'Link: <http://context/user-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
