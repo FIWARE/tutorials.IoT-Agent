@@ -17,8 +17,7 @@
 This **NGSI-LD** tutorial introduces the concept of an **IoT Agent** and wires up the dummy
 [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual) IoT
 devices created in the [previous tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors) so that measurements can be
-read and commands can be sent using
-[NGSI LD](https://cim.etsi.org/NGSI-LD/official/front-page.html) requests sent to an
+read and commands can be sent using [NGSI LD](https://cim.etsi.org/NGSI-LD/official/front-page.html) requests sent to an
 NGSI-LD compliant context broker such as the [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/).
 
 The tutorial uses [cUrl](https://ec.haxx.se/) commands throughout, but is also available as
@@ -577,11 +576,11 @@ however it has been included here for completeness.
 
 ### Provisioning a Sensor
 
-The NGSI-LD [specification](https://cim.etsi.org/NGSI-LD/official/front-page.html)
-mandates full URNs when creating context data entities, however the incoming messages from the devices will not be aware
-of this convention. Furthermore the attribute name on the context data entity should match the short names found within
-the associated `@context` file. These mappings can be defined at the service group level as seen in the previous
-request, or they can be defined by provisioning each device individually.
+The NGSI-LD [specification](https://cim.etsi.org/NGSI-LD/official/front-page.html) mandates full URNs when creating
+context data entities, however the incoming messages from the devices will not be aware of this convention. Furthermore
+the attribute name on the context data entity should match the short names found within the associated `@context` file.
+These mappings can be defined at the service group level as seen in the previous request, or they can be defined by
+provisioning each device individually.
 
 Three types of measurement attributes can be provisioned:
 
@@ -1490,4 +1489,4 @@ the other [tutorials in this series](https://ngsi-ld-tutorials.rtfd.io)
 
 ## License
 
-[MIT](LICENSE) © 2020-2025 FIWARE Foundation e.V.
+[MIT](LICENSE) © 2020-2026 FIWARE Foundation e.V.
