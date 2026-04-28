@@ -4,7 +4,7 @@
 [![FIWARE IoT Agents](https://fiware.github.io/catalogue/badges/chapters/iot-agents.svg)](https://github.com/FIWARE/catalogue/blob/master/iot-agents/README.md)
 [![License: MIT](https://img.shields.io/github/license/fiware/tutorials.Iot-Agent.svg)](https://opensource.org/licenses/MIT)
 [![Support badge](https://img.shields.io/badge/tag-fiware-orange.svg?logo=stackoverflow)](https://stackoverflow.com/questions/tagged/fiware)
-[![UltraLight 2.0](https://img.shields.io/badge/Payload-Ultralight-27ae60.svg)](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
+[![JSON](https://img.shields.io/badge/Payload-JSON-27ae60.svg)](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 <br/> [![Documentation](https://img.shields.io/readthedocs/fiware-tutorials.svg)](https://fiware-tutorials.rtfd.io)
 
 <!-- prettier-ignore -->
@@ -12,7 +12,7 @@
 このチュートリアルでは、**IoT Agent** の概念を紹介し
 、[以前のチュートリアル](https://github.com/FIWARE/tutorials.Context-Providers/)で
 作成したダミーの
-[UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
+[JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
 IoT デバイスを接続し
 、[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) に送信
 された [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) リクエスト
@@ -36,7 +36,7 @@ IoT デバイスを接続し
     -   [共通の機能](#common-functionality)
 -   [アーキテクチャ](#architecture)
     -   [ダミー IoT デバイスの設定](#dummy-iot-devices-configuration)
-    -   [IoT Agent for UltraLight 2.0 の設定](#iot-agent-for-ultralight-20-configuration)
+    -   [IoT Agent for JSON の設定](#iot-agent-for-ultralight-20-configuration)
 -   [前提条件](#prerequisites)
     -   [Docker と Docker Compose](#docker-and-docker-compose)
     -   [WSL](#wsl)
@@ -105,8 +105,8 @@ IoT Agent はすでに存在しているか、多くの IoT コミュニケー�
 -   [IoTAgent-LWM2M](https://fiware-iotagent-lwm2m.readthedocs.io/en/latest) -
     [Lightweight M2M](https://www.omaspecworks.org/what-is-oma-specworks/iot/lightweight-m2m-lwm2m/)
     プロトコル と NGSI のブリッジ
--   [IoTAgent-UL](https://fiware-iotagent-ul.readthedocs.io/en/latest) -
-    UltraLight2.0 ペイロード を持つ HTTP/MQTT メッセージング と NGSI のブリッジ
+-   [IoTAgent-UL](https://fiware-iotagent-json.readthedocs.io/en/latest) -
+    JSON2.0 ペイロード を持つ HTTP/MQTT メッセージング と NGSI のブリッジ
 -   [IoTagent-LoRaWAN](https://fiware-lorawan.readthedocs.io/en/latest) -
     [LoRaWAN](https://www.thethingsnetwork.org/docs/lorawan/) プロトコルと NGSI
     のブリッジ
@@ -132,9 +132,9 @@ Context Broker から生成され、IoT Agent を介して、IoT デバイスに
     テキスト・プロビジョニングは **IoT Agnet** に委任されていることに注意します
 3.  **Context Broker** は、**IoT Agnet** のノース・ポートに NGSI リクエストを送
     信して、コマンドを呼び出します
-4.  **IoT Agnet** は、このサウス・バウンドのリクエストを受信し、UltraLight 2.0
+4.  **IoT Agnet** は、このサウス・バウンドのリクエストを受信し、JSON
     の構文に変換し、それを**スマート・ランプ** に渡します
-5.  **スマート・ランプ**はランプを点灯し、UltraLight 2.0 の構文で **IoT Agnet**
+5.  **スマート・ランプ**はランプを点灯し、JSON の構文で **IoT Agnet**
     にコマンドの結果を返します
 6.  **IoT Agnet** はこのノース・バウンドのリクエストを受け取り、それを解釈し
     、**Context Broker** に NGSI リクエストを行うことによって、インタラクション
@@ -201,7 +201,7 @@ IoT デバイスから生成され、IoT Agent を介して、Context Broker に
 このチュートリアルの目的のために、一連のダミーの IoT デバイスを作成し、Context
 Broker に接続します。使用するアーキテクチャとプロトコルの詳細については
 、[IoT Sensors tutorial](https://github.com/FIWARE/tutorials.IoT-Sensors/tree/NGSI-v2) を参照
-してください。各デバイスの状態は、次の UltraLight2.0 デバイスのモニタ Web ページ
+してください。各デバイスの状態は、次の JSON2.0 デバイスのモニタ Web ページ
 で確認できます : `http://localhost:3000/device/monitor`
 
 ![FIWARE Monitor](https://fiware.github.io/tutorials.IoT-Agent/img/device-monitor.png)
@@ -212,7 +212,7 @@ Broker に接続します。使用するアーキテクチャとプロトコル�
 
 このアプリケーションは
 、[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) と
-[IoT Agent for UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/)
+[IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/)
 の 2 つの FIWARE コンポーネントを使用します。アプリケーションが _“Powered by
 FIWARE”_ と認定されるには、Orion Context Broker を使用するだけで十分です。Orion
 Context Broker と IoT Agent はオープンソースの MongoDB 技術を利用して、保持して
@@ -227,9 +227,9 @@ Context Broker と IoT Agent はオープンソースの MongoDB 技術を利用
     [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/)
 -   [NGSI-v2](https://fiware.github.io/specifications/OpenAPI/ngsiv2) を使用してサ
     ウス・バウンドのリクエストを受信し、デバイスの
-    [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
+    [JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
     コマンドに変換する、FIWARE
-    [IoT Agent for UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/)
+    [IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/)
 -   基礎となる [MongoDB](https://www.mongodb.com/) データベース :
     -   **Orion Context Broker** が、データ・エンティティ、サブスクリプション、
         レジストレーションなどのコンテキスト・データの情報を保持するために使用し
@@ -248,7 +248,7 @@ Context Broker と IoT Agent はオープンソースの MongoDB 技術を利用
     -   各店舗で購入できる商品を表示します
     -   ユーザが製品を購入して在庫数を減らすことを許可します
 -   HTTP 上で動作する
-    [UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
+    [JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/usermanual/index.html#user-programmers-manual)
     プロトコルを使用して、ダミーの IoT デバイスのセットとして機能する Web サーバ
 
 要素間のすべての対話は HTTP リクエストによって開始されるため、エンティティはコン
@@ -291,7 +291,7 @@ tutorial:
 -   ポート`3000` が公開されているので、ダミー IoT デバイスを表示する Web ページ
     が表示されます
 -   ポート`3001` は純粋にチュートリアルのアクセスのために公開されているため
-    、cUrl または Postman は同じネットワーク以外からも、UltraLight コマンドを作
+    、cUrl または Postman は同じネットワーク以外からも、JSON コマンドを作
     成できます
 
 `tutorial` コンテナは、次のように環境変数によって設定値を指定できます :
@@ -303,7 +303,7 @@ tutorial:
 | IOTA_HTTP_HOST          | `iot-agent`                  | Ultra Light 2.0 用 IoT Agent のホスト名 - 下記を参照                                                                                            |
 | IOTA_HTTP_PORT          | `7896`                       | Ultra Light 2.0 の IoT Agent がリッスンするポート。`7896` は、Ultra Light over HTTP の一般的なデフォルトです                                    |
 | DUMMY_DEVICES_PORT      | `3001`                       | コマンドを受信するためにダミー IoT デバイスが使用するポート                                                                                     |
-| DUMMY_DEVICES_API_KEY   | `4jggokgpepnvsb2uv4s40d59ov` | UltraLight インタラクションに使用されるランダムなセキュリティキー - デバイスと IoT Agent 間のインタラクションの完全性を保証するために使用します |
+| DUMMY_DEVICES_API_KEY   | `4jggokgpepnvsb2uv4s40d59ov` | JSON インタラクションに使用されるランダムなセキュリティキー - デバイスと IoT Agent 間のインタラクションの完全性を保証するために使用します |
 | DUMMY_DEVICES_TRANSPORT | `HTTP`                       | ダミー IoT デバイスによって使用されるトランスポート・プロトコル                                                                                 |
 
 このチュートリアルでは、YAML ファイルで説明されている他の `tutorial` コンテナの
@@ -311,16 +311,16 @@ tutorial:
 
 <a name="iot-agent-for-ultralight-20-configuration"></a>
 
-## IoT Agent for UltraLight 2.0 の設定
+## IoT Agent for JSON の設定
 
-[IoT Agent for UltraLight 2.0](https://fiware-iotagent-ul.readthedocs.io/en/latest/)
+[IoT Agent for JSON](https://fiware-iotagent-json.readthedocs.io/en/latest/)
 は 、Docker コンテナ内でインスタンス化できます。公式の Docker イメージは
-、[Docker Hub](https://hub.docker.com/r/fiware/iotagent-ul/) で
-、`fiware/iotagent-ul` とタグ付けされています。必要な構成を以下に示します:
+、[Docker Hub](https://hub.docker.com/r/fiware/iotagent-json/) で
+、`fiware/iotagent-json` とタグ付けされています。必要な構成を以下に示します:
 
 ```yaml
 iot-agent:
-    image: quay.io/fiware/iotagent-ul:latest
+    image: quay.io/fiware/iotagent-json:latest
     hostname: iot-agent
     container_name: fiware-iot-agent
     depends_on:
@@ -353,10 +353,10 @@ iot-agent:
 用して、デバイスの URL やキーなどのデバイス情報を保持します。コンテナが 2 つのポ
 ートをリッスンしています:
 
--   ポート `7896` は、ダミー IoT デバイスから HTTP 経由で Ultralight の測定値を
+-   ポート `7896` は、ダミー IoT デバイスから HTTP 経由で JSON の測定値を
     受けるために公開されています
 -   ポート `4041` は、チュートリアルのアクセスのためだけに公開されているため
-    、cUrl または Postman は同じネットワーク以外からも、UltraLight コマンドを作
+    、cUrl または Postman は同じネットワーク以外からも、JSON コマンドを作
     成できます
 
 `iot-agent` コンテナは、次のように環境変数によって設定値を指定できます :
@@ -370,7 +370,7 @@ iot-agent:
 | IOTA_LOG_LEVEL       | `DEBUG`                 | IoT Agent のログレベル                                                                                                                 |
 | IOTA_TIMESTAMP       | `true`                  | 接続されたデバイスから受信した各測定値にタイムスタンプ情報を提供するかどうかを指定                                                     |
 | IOTA_CB_NGSI_VERSION | `v2`                    | アクティブな属性の更新を送信するときにNGSI v2 を使用するように指定するかどうか                                                         |
-| IOTA_AUTOCAST        | `true`                  | Ultralight の数値が文字列ではなく数値として読み取られるようにする                                                                      |
+| IOTA_AUTOCAST        | `true`                  | JSON の数値が文字列ではなく数値として読み取られるようにする                                                                      |
 | IOTA_MONGO_HOST      | `context-db`            | mongoDB のホスト名 - デバイス情報を保持するために使用                                                                                  |
 | IOTA_MONGO_PORT      | `27017`                 | mongoDB はリッスンしているポート                                                                                                       |
 | IOTA_MONGO_DB        | `iotagentul`            | mongoDB で使用されるデータベースの名前                                                                                                 |
@@ -462,7 +462,7 @@ Bash スクリプトを実行することによって、コマンドラインか
 
 チュートリアルを正しく実行するには、ブラウザのデバイス・モニタ・ページが表示され
 ていることを確認し、ページをクリックして cUrl コマンドを入力する前にオーディオを
-有効にしてください。デバイス・モニタには、Ultralight 2.0 構文を使用してダミー・
+有効にしてください。デバイス・モニタには、JSON 構文を使用してダミー・
 デバイスのアレイの現在の状態が表示されます。
 
 #### デバイス・モニタ
@@ -602,7 +602,7 @@ curl -iX POST \
 
 この例では、`/iot/d` エンドポイントが使用され、デバイスがトークン
 `4jggokgpepnvsb2uv4s40d59ov` を含めることによって自身を認証することが IoT Agent
-に通知されます。UltraLight IoT Agent の場合、これはデバイスが GET リクエストまた
+に通知されます。JSON IoT Agent の場合、これはデバイスが GET リクエストまた
 は POST リクエストを次の宛先に送信していることを意味します:
 
 ```
@@ -781,7 +781,7 @@ curl -X GET \
 ### コマンドを介したアクチュエータのプロビジョニング
 
 アクチュエータのプロビジョニングは、センサのプロビジョニングと同様です。今回
-、`endpoint` 属性には、IoT Agent が UltraLight コマンドを送信する必要がある場所
+、`endpoint` 属性には、IoT Agent が JSON コマンドを送信する必要がある場所
 が格納され、`commands` 配列には呼び出すことができる各コマンドのリストが含まれて
 います。以下の例では、`deviceId=bell001` のベルがプロビジョニングされています。
 エンドポイントは `http://iot-sensors:3001/iot/bell001` であり、`ring` コマンドを
@@ -802,7 +802,7 @@ curl -iX POST \
       "entity_name": "urn:ngsi-ld:Bell:001",
       "entity_type": "Bell",
       "apikey":      "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-UltraLight",
+      "protocol": "PDI-IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/bell001",
       "commands": [
@@ -822,7 +822,7 @@ curl -iX POST \
 ### 双方向属性 (bidirectional attribute) を介したアクチュエータのプロビジョニング
 
 アクチュエータは、双方向属性を使用してプロビジョニングすることもできます。 ここでも、`endpoint` 属性は、IoT Agent が
-UltraLight コマンドを送信する必要がある場所を保持します。`ring` 属性は `expression` を使用して定義され、`reverse`
+JSON コマンドを送信する必要がある場所を保持します。`ring` 属性は `expression` を使用して定義され、`reverse`
 方向にそれ自体にマップされます。 `ring` 属性の更新を受信すると、それはデバイス自体にも送信されます。内部的な違いは、
 この方法がレジストレーションではなくサブスクリプションに依存していることです。
 
@@ -841,7 +841,7 @@ curl -L -X POST 'http://localhost:4041/iot/devices' \
       "entity_name": "urn:ngsi-ld:Bell:002",
       "entity_type": "Bell",
       "apikey":      "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-UltraLight",
+      "protocol": "PDI-IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/bell002",
       "attributes": [
@@ -953,7 +953,7 @@ curl -iX POST \
       "entity_name": "urn:ngsi-ld:Door:001",
       "entity_type": "Door",
       "apikey":      "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-UltraLight",
+      "protocol": "PDI-IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/door001",
       "commands": [
@@ -996,7 +996,7 @@ curl -iX POST \
       "entity_name": "urn:ngsi-ld:Lamp:001",
       "entity_type": "Lamp",
       "apikey":      "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-UltraLight",
+      "protocol": "PDI-IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/lamp001",
       "commands": [
@@ -1318,7 +1318,7 @@ curl -iX POST \
       "entity_name": "urn:ngsi-ld:Bell:002",
       "entity_type": "Bell",
       "apikey":      "4jggokgpepnvsb2uv4s40d59ov",
-      "protocol": "PDI-IoTA-UltraLight",
+      "protocol": "PDI-IoTA-JSON",
       "transport": "HTTP",
       "endpoint": "http://iot-sensors:3001/iot/bell002",
       "commands": [
@@ -1384,7 +1384,7 @@ curl -X GET \
             "value": "urn:ngsi-ld:Store:002"
         }
     ],
-    "protocol": "PDI-IoTA-UltraLight"
+    "protocol": "PDI-IoTA-JSON"
 }
 ```
 
@@ -1438,7 +1438,7 @@ curl -X GET \
                   "value": "urn:ngsi-ld:Store:002"
               }
           ],
-          "protocol": "PDI-IoTA-UltraLight"
+          "protocol": "PDI-IoTA-JSON"
       },
       etc...
     ]
