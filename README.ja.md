@@ -308,7 +308,7 @@ iot-agent:
         - IOTA_PROVIDER_URL=http://iot-agent:4041
         - IOTA_JSON_LD_CONTEXT=http://context/user-context.jsonld
         - IOTA_FALLBACK_TENANT=openiot
-        - IOTA_MULTI_CORE=true
+        - IOTA_MULTI_CORE=false
 ```
 
 `iot-agent` コンテナは、Orion Context Broker の存在に依存し、MongoDB データベースを使用して、デバイスの
